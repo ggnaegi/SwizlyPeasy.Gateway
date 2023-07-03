@@ -6,4 +6,5 @@ SwizlyPeasy.Gateway is a small API gateway project. This gateway should support 
 - The microservices are registered to consul. The gateway retrieve them by using the service names (using "MetaData" in yarp config file)
   
 https://microsoft.github.io/reverse-proxy/articles/config-files.html
+
 https://microsoft.github.io/reverse-proxy/articles/authn-authz.html
