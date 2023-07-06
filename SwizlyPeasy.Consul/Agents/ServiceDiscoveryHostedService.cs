@@ -3,14 +3,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 
-namespace SwizlyPeasy.Consul.Client
+namespace SwizlyPeasy.Consul.Agents
 {
     /// <summary>
     /// </summary>
     public class ServiceDiscoveryHostedService : IHostedService
     {
         private readonly IConsulClient _client;
-        private readonly IOptions<ServiceDiscoveryConfigDto> _config;
+        private readonly IOptions<ServiceDiscoveryConfig> _config;
         private string _registrationId;
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace SwizlyPeasy.Consul.Client
         /// <param name="client"></param>
         /// <param name="config"></param>
         /// <param name="registrationId"></param>
-        public ServiceDiscoveryHostedService(IConsulClient client, IOptions<ServiceDiscoveryConfigDto> config, string registrationId)
+        public ServiceDiscoveryHostedService(IConsulClient client, IOptions<ServiceDiscoveryConfig> config, string registrationId)
         {
             _client = client;
             _config = config;

@@ -46,7 +46,7 @@ namespace SwizlyPeasy.Common.Auth
         /// <param name="configuration"></param>
         public static void AddSwizlyPeasyOpenIdConnect(this IServiceCollection services, IConfiguration configuration)
         {
-            var config = new OidcConfigDto();
+            var config = new OidcConfig();
             configuration.GetSection(Constants.OidcConfigSection).Bind(config);
 
             services.ConfigureDiscoveryCache(config);
@@ -69,7 +69,7 @@ namespace SwizlyPeasy.Common.Auth
         /// <param name="builder"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        private static AuthenticationBuilder ConfigureCookies(this AuthenticationBuilder builder, OidcConfigDto config)
+        private static AuthenticationBuilder ConfigureCookies(this AuthenticationBuilder builder, OidcConfig config)
         {
             builder.AddCookie(Constants.CookiesAuthenticationProviderKey, options =>
             {
@@ -112,7 +112,7 @@ namespace SwizlyPeasy.Common.Auth
         /// </summary>
         /// <param name="services"></param>
         /// <param name="config"></param>
-        private static void ConfigureCors(this IServiceCollection services, OidcConfigDto config)
+        private static void ConfigureCors(this IServiceCollection services, OidcConfig config)
         {
             //specify origins
             services.AddCors(options =>
@@ -135,7 +135,7 @@ namespace SwizlyPeasy.Common.Auth
         /// </summary>
         /// <param name="services"></param>
         /// <param name="config"></param>
-        private static void ConfigureDiscoveryCache(this IServiceCollection services, OidcConfigDto config)
+        private static void ConfigureDiscoveryCache(this IServiceCollection services, OidcConfig config)
         {
             //Adding discovery document cache
             //avoiding requesting discovery document for every api call
@@ -153,7 +153,7 @@ namespace SwizlyPeasy.Common.Auth
         /// <param name="builder"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        private static AuthenticationBuilder ConfigureOpenIdConnect(this AuthenticationBuilder builder, OidcConfigDto config)
+        private static AuthenticationBuilder ConfigureOpenIdConnect(this AuthenticationBuilder builder, OidcConfig config)
         {
             builder.AddOpenIdConnect(Constants.OpenIdConnect, options =>
             {
@@ -217,7 +217,7 @@ namespace SwizlyPeasy.Common.Auth
         /// <param name="context"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        private static async Task OnValidatePrincipal(CookieValidatePrincipalContext context, OidcConfigDto config)
+        private static async Task OnValidatePrincipal(CookieValidatePrincipalContext context, OidcConfig config)
         {
             if (HasExpired(context.Properties.GetTokenValue("expires_at"), config.RefreshThresholdMinutes))
             {
