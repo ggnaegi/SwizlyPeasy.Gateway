@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Auth;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Middlewares;
-using SwizlyPeasy.Consul.Agents;
+using SwizlyPeasy.Consul.ClientConfig;
 using SwizlyPeasy.Gateway.Mediator;
 using SwizlyPeasy.Gateway.Mediator.handler;
 using SwizlyPeasy.Gateway.Services;
@@ -17,6 +17,16 @@ namespace SwizlyPeasy.Gateway.Extensions;
 
 public static class SetupServices
 {
+    /// <summary>
+    /// Adding services to the service collection.
+    /// - Authorization Policy OIDC
+    /// - SwizlyPeasy OIDC
+    /// - Consul
+    /// - YARP, with custom configuration provider (retrieving routes from consul KV store, and agents from consul)
+    /// - MediatR
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
     public static void SetupGatewayServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
@@ -28,13 +38,17 @@ public static class SetupServices
         }).AddNewtonsoftJson(opt => { opt.UseMemberCasing(); });
         services.AddAuthorizationPolicy();
         services.AddSwizlyPeasyOpenIdConnect(configuration);
-        services.ConfigureConsul(configuration);
+        services.ConfigureConsulClient(configuration);
         services.AddReverseProxy().LoadFromConsul();
         services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
         services.AddTransient<IRequestHandler<LogoutRequest, Unit>, LogoutHandler>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
+    /// <summary>
+    /// Setting up pipeline
+    /// </summary>
+    /// <param name="app"></param>
     public static void SetupMiddleWares(this WebApplication app)
     {
         app.UseRouting();
@@ -46,6 +60,13 @@ public static class SetupServices
         app.MapReverseProxy();
     }
 
+    /// <summary>
+    /// Custom configuration load mechanism.
+    /// Inspired by
+    /// https://tanzu.vmware.com/developer/blog/build-api-gateway-csharp-yarp-eureka/
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
     public static IReverseProxyBuilder LoadFromConsul(this IReverseProxyBuilder builder)
     {
         builder.Services.AddSingleton<IClusterConfigService, ClusterConfigService>();
@@ -63,11 +84,17 @@ public static class SetupServices
         return builder;
     }
 
+    /// <summary>
+    /// Adding authorization policy for oidc.
+    /// This policy only require authenticated users.
+    /// The micro services are responsible for the users authorization.
+    /// </summary>
+    /// <param name="services"></param>
     public static void AddAuthorizationPolicy(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("oidc", policy => policy.RequireAuthenticatedUser());
+            options.AddPolicy(Common.Constants.OidcPolicy, policy => policy.RequireAuthenticatedUser());
         });
     }
 

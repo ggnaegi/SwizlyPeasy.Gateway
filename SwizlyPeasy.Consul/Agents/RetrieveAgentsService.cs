@@ -3,10 +3,6 @@ using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Consul.Agents
 {
-    /// <summary>
-    ///     Service used to retrieve host ip/dns name and port
-    ///     using consul, with micro service name as parameter
-    /// </summary>
     public class RetrieveAgentsService : IRetrieveAgentsService
     {
         private readonly IConsulClient _consulClient;

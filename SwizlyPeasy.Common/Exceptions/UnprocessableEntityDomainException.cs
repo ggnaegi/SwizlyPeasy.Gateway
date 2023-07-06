@@ -1,7 +1,5 @@
 ﻿namespace SwizlyPeasy.Common.Exceptions
 {
-    /// <summary>
-    /// </summary>
     public class UnprocessableEntityDomainException : DomainException
     {
         /// <summary>

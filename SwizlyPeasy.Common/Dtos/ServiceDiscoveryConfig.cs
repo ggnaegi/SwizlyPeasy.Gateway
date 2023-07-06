@@ -1,29 +1,38 @@
 ﻿namespace SwizlyPeasy.Common.Dtos
 {
+    /// <summary>
+    /// Consul service discovery config
+    /// By default using localhost:8500
+    /// </summary>
     public class ServiceDiscoveryConfig
     {
-        public string Scheme { get; set; } = "http";
-        public int RefreshIntervalInSeconds { get; set; } = 120;
-        public string LoadBalancingPolicy { get; set; } = "Random";
-        public string KeyValueStoreKey { get; set; } = "SwizlyPeasy.Gateway";
         /// <summary>
-        ///     consul service address
+        /// Scheme, could be http or https
+        /// </summary>
+        public string Scheme { get; set; } = "http";
+
+        /// <summary>
+        /// Refresh interval of the list of services referenced in consul.
+        /// </summary>
+        public int RefreshIntervalInSeconds { get; set; } = 120;
+
+        /// <summary>
+        /// The load Balancing policy, by default "Random",
+        /// could be: "FirstAlphabetical", "PowerOfTwoChoices", "RoundRobin", "LeastRequests"
+        /// https://microsoft.github.io/reverse-proxy/articles/load-balancing.html
+        /// </summary>
+        public string LoadBalancingPolicy { get; set; } = "Random";
+
+        /// <summary>
+        /// Key used for routes configuration data in consul
+        /// KV store
+        /// https://developer.hashicorp.com/consul/docs/dynamic-app-config/kv
+        /// </summary>
+        public string KeyValueStoreKey { get; set; } = "SwizlyPeasy.Gateway";
+
+        /// <summary>
+        ///  consul service address
         /// </summary>
         public Uri ServiceDiscoveryAddress { get; set; } = new Uri("http://localhost:8500");
-
-        /// <summary>
-        ///     current service address
-        /// </summary>
-        public Uri ServiceAddress { get; set; } = new Uri("http://localhost:8001");
-
-        /// <summary>
-        ///     current service name
-        /// </summary>
-        public string ServiceName { get; set; } = "SwizlyPeasy.Gateway";
-
-        /// <summary>
-        ///     service's instance Id (load balancing)
-        /// </summary>
-        public string ServiceId { get; set; } = "1";
     }
 }

@@ -3,14 +3,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 
-namespace SwizlyPeasy.Consul.Agents
+namespace SwizlyPeasy.Consul.ServiceRegistration
 {
-    /// <summary>
-    /// </summary>
     public class ServiceDiscoveryHostedService : IHostedService
     {
         private readonly IConsulClient _client;
-        private readonly IOptions<ServiceDiscoveryConfig> _config;
+        private readonly IOptions<ServiceRegistrationConfig> _config;
         private string _registrationId;
 
         /// <summary>
@@ -18,7 +16,7 @@ namespace SwizlyPeasy.Consul.Agents
         /// <param name="client"></param>
         /// <param name="config"></param>
         /// <param name="registrationId"></param>
-        public ServiceDiscoveryHostedService(IConsulClient client, IOptions<ServiceDiscoveryConfig> config, string registrationId)
+        public ServiceDiscoveryHostedService(IConsulClient client, IOptions<ServiceRegistrationConfig> config, string registrationId)
         {
             _client = client;
             _config = config;
@@ -26,21 +24,25 @@ namespace SwizlyPeasy.Consul.Agents
         }
 
         /// <summary>
-        ///     Hosted service for consul client
-        ///     with health checks (look at zoom.Services.Common.Base.HealthChecks for further information)
+        /// registering service to consul.
+        /// The registration id is defined by "service name" and "service id".
+        /// This allows load balancing, with services grouped by service name.
+        /// The service id must therefore be unique for a given service name.
         /// </summary>
         /// <param name="cancellationToken"></param>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _registrationId = $"{_config.Value.ServiceName}-{_config.Value.ServiceId}";
 
-            var registration = new AgentServiceRegistration {
+            var registration = new AgentServiceRegistration
+            {
                 ID = _registrationId,
                 Name = _config.Value.ServiceName,
-                Address = _config.Value.ServiceAddress?.Host,
+                Address = _config.Value.ServiceAddress.Host,
                 Port = _config.Value.ServiceAddress.Port,
-                Check = new AgentCheckRegistration {
-                    HTTP = $"http://{_config.Value.ServiceAddress?.Host}:{_config.Value.ServiceAddress.Port}/health",
+                Check = new AgentCheckRegistration
+                {
+                    HTTP = $"{_config.Value.ServiceAddress.Scheme}://{_config.Value.ServiceAddress.Host}:{_config.Value.ServiceAddress.Port}/{_config.Value.HealthCheckPath}",
                     Interval = TimeSpan.FromSeconds(10)
                 }
             };
@@ -50,6 +52,7 @@ namespace SwizlyPeasy.Consul.Agents
         }
 
         /// <summary>
+        /// unregistering the service from consul
         /// </summary>
         /// <param name="cancellationToken"></param>
         public async Task StopAsync(CancellationToken cancellationToken)
