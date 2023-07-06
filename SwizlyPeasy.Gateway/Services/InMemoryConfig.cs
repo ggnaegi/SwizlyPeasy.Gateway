@@ -3,6 +3,9 @@ using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Gateway.Services
 {
+    /// <summary>
+    /// Custom proxy config
+    /// </summary>
     public class InMemoryConfig : IProxyConfig
     {
         private readonly CancellationTokenSource _cts = new();

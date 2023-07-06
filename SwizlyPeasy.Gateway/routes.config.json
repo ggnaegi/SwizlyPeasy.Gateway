@@ -1,11 +1,17 @@
 {
   "Routes": {
     "route1": {
-      "ClusterId": "cluster1",
+      "ClusterId": "ZoomServicesMasterDataApi",
+      "AuthorizationPolicy": "oidc",
       "Match": {
-        "Path": "{**catch-all}",
-        "Hosts": [ "www.aaaaa.com", "www.bbbbb.com" ]
-      }
+        "Path": "master-data/v1/credit-types"
+      },
+      "Transforms": [
+        {
+          "RequestHeader": "Accept-Language",
+          "Set": "de-CH"
+        }
+      ]
     }
   }
 }

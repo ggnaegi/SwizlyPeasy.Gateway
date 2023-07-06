@@ -1,5 +1,9 @@
 ﻿namespace SwizlyPeasy.Common.Dtos
 {
+    /// <summary>
+    /// Open Id Connect configuration section.
+    /// By default, a demo server "demo.duendesoftware.com" (IdentityServer) is used as the IDP.
+    /// </summary>
     public class OidcConfig
     {
         public int RefreshTokenExpirationInHours { get; set; } = 1;

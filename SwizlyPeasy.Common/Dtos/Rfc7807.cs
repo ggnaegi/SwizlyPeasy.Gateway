@@ -1,5 +1,8 @@
 ﻿namespace SwizlyPeasy.Common.Dtos
 {
+    /// <summary>
+    /// RFC 7807 standard properties
+    /// </summary>
     public class Rfc7807
     {
         public string? Type { get; set; }

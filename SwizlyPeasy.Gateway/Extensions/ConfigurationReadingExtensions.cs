@@ -3,6 +3,10 @@ using System.Globalization;
 
 namespace SwizlyPeasy.Gateway.Extensions
 {
+    /// <summary>
+    /// I have used part of the configuration reading mechanism implemented by Microsoft
+    /// https://github.com/microsoft/reverse-proxy/blob/5cad42d60a514f2b93fc47968d4405c6d06d39f2/src/ReverseProxy/Configuration/ConfigProvider/ConfigurationReadingExtensions.cs
+    /// </summary>
     public static class ConfigurationReadingExtensions
     {
         internal static int? ReadInt32(this IConfiguration configuration, string name)

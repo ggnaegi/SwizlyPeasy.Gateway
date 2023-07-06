@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    ///     Convenience method for login, redirecting user to login page
+    ///  Convenience method for login, redirecting user to a dashboard or another front-end url
     /// </summary>
     /// <returns></returns>
     [Authorize]
@@ -41,6 +41,11 @@ public class AuthController : ControllerBase
         return Redirect(_redirectOptions.Value.MainUrl);
     }
 
+    /// <summary>
+    /// Convenience method for user logout, revoking tokens
+    /// redirecting the user after the logout process
+    /// </summary>
+    /// <returns></returns>
     [AllowAnonymous]
     [HttpGet("/logout")]
     public async Task<ActionResult> Logout()

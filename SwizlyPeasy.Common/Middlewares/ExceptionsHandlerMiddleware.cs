@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 namespace SwizlyPeasy.Common.Middlewares
 {
     /// <summary>
-    /// Middleware for exception parsing, returning
-    /// user friendly exceptions.
+    /// Middleware for exception handling, returning
+    /// user friendly exceptions, according to the RFC 7807 standard.
     /// </summary>
     public class ExceptionsHandlerMiddleware
     {
