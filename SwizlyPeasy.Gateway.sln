@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Gateway", "SwizlyPeasy.Gateway\SwizlyPeasy.Gateway.csproj", "{A2531E2E-8425-4EDA-9997-7AC629E34CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Gateway", "SwizlyPeasy.Gateway\SwizlyPeasy.Gateway.csproj", "{A2531E2E-8425-4EDA-9997-7AC629E34CA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Consul", "SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj", "{83D45F52-9429-4936-BB61-ABFA78720281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Consul", "SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj", "{83D45F52-9429-4936-BB61-ABFA78720281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Common", "SwizlyPeasy.Common\SwizlyPeasy.Common.csproj", "{AAC2BFBA-2809-4A29-86F8-12441B7D8087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Common", "SwizlyPeasy.Common\SwizlyPeasy.Common.csproj", "{AAC2BFBA-2809-4A29-86F8-12441B7D8087}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{10715FAA-0EDE-4A36-B2F7-50AAEB23F271}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Test.UnitTest", "Test\SwizlyPeasy.Test.UnitTest\SwizlyPeasy.Test.UnitTest.csproj", "{03158A84-B39D-476D-A331-5C976E3BB816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Test.UnitTest", "Test\SwizlyPeasy.Test.UnitTest\SwizlyPeasy.Test.UnitTest.csproj", "{03158A84-B39D-476D-A331-5C976E3BB816}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Demo.API", "Demo\SwizlyPeasy.Demo.API\SwizlyPeasy.Demo.API.csproj", "{5E331BF0-13D9-4237-9017-25F3493410E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{5D4F0889-145A-4DA6-B2C1-E148D64A25FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +39,17 @@ Global
 		{03158A84-B39D-476D-A331-5C976E3BB816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03158A84-B39D-476D-A331-5C976E3BB816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03158A84-B39D-476D-A331-5C976E3BB816}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E331BF0-13D9-4237-9017-25F3493410E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E331BF0-13D9-4237-9017-25F3493410E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E331BF0-13D9-4237-9017-25F3493410E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E331BF0-13D9-4237-9017-25F3493410E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{03158A84-B39D-476D-A331-5C976E3BB816} = {10715FAA-0EDE-4A36-B2F7-50AAEB23F271}
+		{5E331BF0-13D9-4237-9017-25F3493410E4} = {5D4F0889-145A-4DA6-B2C1-E148D64A25FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C67E7CD-91CF-45A8-8F21-F51E1B13B477}

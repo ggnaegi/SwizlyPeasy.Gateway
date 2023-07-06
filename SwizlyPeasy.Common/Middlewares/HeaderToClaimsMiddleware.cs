@@ -1,5 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SwizlyPeasy.Common.Middlewares
 {
@@ -46,7 +50,7 @@ namespace SwizlyPeasy.Common.Middlewares
                 claims.Add(new Claim(ClaimTypes.Email, values[0]));
             }
 
-            httpContext.User.AddIdentity(new ClaimsIdentity(claims));
+            await httpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)));
             await _next(httpContext);
         }
     }

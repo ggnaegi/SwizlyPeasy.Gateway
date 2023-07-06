@@ -1,10 +1,23 @@
 {
   "Routes": {
     "route1": {
-      "ClusterId": "ZoomServicesMasterDataApi",
+      "ClusterId": "DemoAPI",
       "AuthorizationPolicy": "oidc",
       "Match": {
-        "Path": "master-data/v1/credit-types"
+        "Path": "/api/v1/demo/weather"
+      },
+      "Transforms": [
+        {
+          "RequestHeader": "Accept-Language",
+          "Set": "de-CH"
+        }
+      ]
+    },
+    "route2": {
+      "ClusterId": "DemoAPI",
+      "AuthorizationPolicy": "oidc",
+      "Match": {
+        "Path": "/api/v1/demo/weather-with-authorization"
       },
       "Transforms": [
         {
