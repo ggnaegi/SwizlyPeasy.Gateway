@@ -15,13 +15,13 @@ namespace SwizlyPeasy.Gateway.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IOptions<AuthRedirectionDto> _redirectOptions;
+    private readonly IOptions<AuthRedirectionConfig> _redirectOptions;
 
     /// <summary>
     /// </summary>
     /// <param name="mediator"></param>
     /// <param name="redirectOptions"></param>
-    public AuthController(IMediator mediator, IOptions<AuthRedirectionDto> redirectOptions)
+    public AuthController(IMediator mediator, IOptions<AuthRedirectionConfig> redirectOptions)
     {
         _redirectOptions = redirectOptions ?? throw new ArgumentNullException(nameof(redirectOptions));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

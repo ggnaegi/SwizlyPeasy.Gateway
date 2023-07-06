@@ -21,4 +21,10 @@
     <ProjectReference Include="..\SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="routes.config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace SwizlyPeasy.Common.Dtos
 {
-    public class OidcConfigDto
+    public class OidcConfig
     {
         public int RefreshTokenExpirationInHours { get; set; } = 1;
         public int RefreshThresholdMinutes { get; set; } = 1;

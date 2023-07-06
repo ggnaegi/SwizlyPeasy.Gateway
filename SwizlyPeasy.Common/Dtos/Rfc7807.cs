@@ -1,6 +1,6 @@
 ﻿namespace SwizlyPeasy.Common.Dtos
 {
-    public class Rfc7807Dto
+    public class Rfc7807
     {
         public string? Type { get; set; }
 

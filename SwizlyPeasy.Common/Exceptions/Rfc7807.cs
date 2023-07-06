@@ -11,9 +11,9 @@ namespace SwizlyPeasy.Common.Exceptions
         /// <param name="appException"></param>
         /// <param name="httpRequestPath"></param>
         /// <returns></returns>
-        public static Rfc7807Dto ExceptionFactory(Exception appException, string httpRequestPath)
+        public static Dtos.Rfc7807 ExceptionFactory(Exception appException, string httpRequestPath)
         {
-            var currentException = new Rfc7807Dto
+            var currentException = new Dtos.Rfc7807
             {
                 Title = "Internal Server Error",
                 Type = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500",

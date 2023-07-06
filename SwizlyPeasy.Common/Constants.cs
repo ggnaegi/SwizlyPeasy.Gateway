@@ -8,5 +8,6 @@
         public const string CookiesAuthenticationProviderKey = "CookiesAuthentication";
         public const string OidcConfigSection = "OidcConfig";
         public const string ReverseProxyConfigSection = "ReverseProxy";
+        public const string ServiceDiscoveryConfigSection = "ServiceDiscovery";
     }
 }
