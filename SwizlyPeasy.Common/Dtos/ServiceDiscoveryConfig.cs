@@ -4,6 +4,7 @@
     {
         public string Scheme { get; set; } = "http";
         public int RefreshIntervalInSeconds { get; set; } = 120;
+        public string LoadBalancingPolicy { get; set; } = "Random";
         public string KeyValueStoreKey { get; set; } = "SwizlyPeasy.Gateway";
         /// <summary>
         ///     consul service address

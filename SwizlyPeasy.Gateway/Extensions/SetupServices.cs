@@ -1,19 +1,17 @@
 ﻿using System.Reflection;
-using Consul;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Auth;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.Agents;
-using SwizlyPeasy.Consul.KeyValueStore;
 using SwizlyPeasy.Gateway.Mediator;
 using SwizlyPeasy.Gateway.Mediator.handler;
 using SwizlyPeasy.Gateway.Services;
 using Yarp.ReverseProxy.Configuration;
+using InMemoryConfigProvider = SwizlyPeasy.Gateway.Services.InMemoryConfigProvider;
 
 namespace SwizlyPeasy.Gateway.Extensions;
 
@@ -28,6 +26,7 @@ public static class SetupServices
             options.ReturnHttpNotAcceptable = true;
             options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
         }).AddNewtonsoftJson(opt => { opt.UseMemberCasing(); });
+        services.AddAuthorizationPolicy();
         services.AddSwizlyPeasyOpenIdConnect(configuration);
         services.ConfigureConsul(configuration);
         services.AddReverseProxy().LoadFromConsul();
@@ -45,7 +44,6 @@ public static class SetupServices
         app.UseMiddleware<ExceptionsHandlerMiddleware>();
         app.MapControllers();
         app.MapReverseProxy();
-        
     }
 
     public static IReverseProxyBuilder LoadFromConsul(this IReverseProxyBuilder builder)
@@ -53,16 +51,24 @@ public static class SetupServices
         builder.Services.AddSingleton<IClusterConfigService, ClusterConfigService>();
         builder.Services.AddSingleton<IRoutesConfigService, RoutesConfigService>();
 
-        builder.Services.AddSingleton<Services.InMemoryConfigProvider>(sp => 
-            new Services.InMemoryConfigProvider(
-                sp.GetRequiredService<IClusterConfigService>(), 
-                sp.GetRequiredService<IRoutesConfigService>(), 
+        builder.Services.AddSingleton(sp =>
+            new InMemoryConfigProvider(
+                sp.GetRequiredService<IClusterConfigService>(),
+                sp.GetRequiredService<IRoutesConfigService>(),
                 sp.GetRequiredService<IOptions<ServiceDiscoveryConfig>>()));
 
-        builder.Services.AddSingleton<IHostedService>(ctx => ctx.GetRequiredService<Services.InMemoryConfigProvider>());
-        builder.Services.AddSingleton<IProxyConfigProvider>(ctx => ctx.GetRequiredService<Services.InMemoryConfigProvider>());
+        builder.Services.AddSingleton<IHostedService>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
+        builder.Services.AddSingleton<IProxyConfigProvider>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
 
         return builder;
+    }
+
+    public static void AddAuthorizationPolicy(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("oidc", policy => policy.RequireAuthenticatedUser());
+        });
     }
 
     /// <summary>
