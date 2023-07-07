@@ -23,8 +23,9 @@ namespace SwizlyPeasy.Demo.API.Authorization
             if (identifierClaim != null && identifierClaim.Value == requirement.GetBobSub)
             {
                 context.Succeed(requirement);
+                return Task.CompletedTask;
             }
-
+            
             throw new ForbiddenDomainException("You're not Bob!");
         }
     }
