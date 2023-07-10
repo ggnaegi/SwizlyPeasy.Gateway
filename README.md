@@ -2,7 +2,7 @@
 SwizlyPeasy.Gateway is a small API gateway based on YARP Reverse Proxy. This gateway should support OIDC authentication and service discovery with Consul.
 
 ## Introduction
-Currently, YARP is the most advanced reverse proxy in .NET. The version 1 of this proxy was introduced by Microsoft at the end of 2021 (on my birthday...). Until now, I have used various API Gateways, including Ocelot, but the product hasn't evolved for some time. That's why I wondered if it was possible to graft the minimal functionalities to propose an API Gateway based on YARP.
+Currently, YARP is the most advanced reverse proxy in .NET. The version 1 of this proxy was introduced by Microsoft at the end of 2021 (on my birthday...). Until now, I have used various API Gateways, including Ocelot. I wondered if it was possible to graft the minimal functionalities to propose an API Gateway based on YARP.
 https://devblogs.microsoft.com/dotnet/announcing-yarp-1-0-release/
 
 The solution proposed here, "SwizlyPeasy.Gateway", is for now a PoC (Proof of Concept), but who knows, the results are promising so far, maybe I will be able to propose something more robust later on.
@@ -37,6 +37,8 @@ https://developer.hashicorp.com/consul/downloads
 ### Start the SwizlyPeasy.Gateway and the Swizly.Demo.API projects
 
 You should clone the repository, open the solution in visual studio and start the Gateway and Demo Projects (Multiple Startup Projects) in debug mode with IIS Express
+**FIRST START -> Please start the Swizly.Demo.API project first, wait 10-20 seconds before starting the gateway, so the demo service will be registered to consul**
+
 ![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/d7b80a8f-cded-4703-92e9-8fcfb9cf00a8)
 
 You should see this when starting the gateway...
