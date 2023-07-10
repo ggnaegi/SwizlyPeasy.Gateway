@@ -13,13 +13,6 @@ public class DemoController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly ILogger<DemoController> _logger;
-
-    public DemoController(ILogger<DemoController> logger)
-    {
-        _logger = logger;
-    }
-
     [HttpGet("weather")]
     public IEnumerable<WeatherForecast> Get()
     {
