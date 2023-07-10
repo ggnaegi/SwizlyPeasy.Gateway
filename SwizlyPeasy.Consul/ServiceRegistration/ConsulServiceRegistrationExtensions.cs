@@ -1,8 +1,6 @@
-﻿using Consul;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Dtos;
 
@@ -17,13 +15,8 @@ public static class ConsulServiceRegistrationExtensions
 {
     public static void RegisterService(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<IOptions<ServiceRegistrationConfig>>(
+        services.Configure<ServiceRegistrationConfig>(
             configuration.GetSection(Constants.ServiceRegistrationConfigSection));
-
-        var serviceRegistrationConfig = new ServiceRegistrationConfig();
-        configuration.GetSection(Constants.ServiceRegistrationConfigSection).Bind(serviceRegistrationConfig);
-
-        services.AddSingleton<IHostedService, ServiceDiscoveryHostedService>(sp =>
-            new ServiceDiscoveryHostedService(sp.GetRequiredService<IConsulClient>(), serviceRegistrationConfig));
+        services.AddSingleton<IHostedService, ServiceDiscoveryHostedService>();
     }
 }

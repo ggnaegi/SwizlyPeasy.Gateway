@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Consul.Agents;
 using SwizlyPeasy.Consul.KeyValueStore;
@@ -25,10 +26,9 @@ namespace SwizlyPeasy.Consul.ClientConfig
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            services.Configure<IOptions<ServiceDiscoveryConfig>>(configuration.GetSection(Common.Constants.ServiceDiscoveryConfigSection));
-
+            services.Configure<ServiceDiscoveryConfig>(configuration.GetSection(Constants.ServiceDiscoveryConfigSection));
             var serviceDiscoveryConfig = new ServiceDiscoveryConfig();
-            configuration.GetSection(Common.Constants.ServiceDiscoveryConfigSection).Bind(serviceDiscoveryConfig);
+            configuration.GetSection(Constants.ServiceDiscoveryConfigSection).Bind(serviceDiscoveryConfig);
 
             var consulClient = CreateConsulClient(serviceDiscoveryConfig);
             services.AddSingleton<IConsulClient, ConsulClient>(p => consulClient);
