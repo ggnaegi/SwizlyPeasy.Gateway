@@ -2,7 +2,7 @@
 
 namespace SwizlyPeasy.Test.UnitTest.Consul;
 
-public class Agents
+public class AgentsTest
 {
     [Fact]
     public async Task GetServices_NoRegistered_ReturnsEmptyDictionary()
