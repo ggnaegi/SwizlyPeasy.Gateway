@@ -13,5 +13,7 @@
         public NotFoundDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public NotFoundDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }

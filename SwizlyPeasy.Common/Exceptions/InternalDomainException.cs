@@ -15,5 +15,7 @@
         public InternalDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public InternalDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }

@@ -9,5 +9,7 @@
         public UnprocessableEntityDomainException(string msg) : base(msg) { }
 
         public UnprocessableEntityDomainException(string msg, object? context) : base(msg, context) { }
+
+        public UnprocessableEntityDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }
