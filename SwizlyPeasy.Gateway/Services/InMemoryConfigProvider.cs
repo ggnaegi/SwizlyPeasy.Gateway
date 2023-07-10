@@ -104,7 +104,7 @@ namespace SwizlyPeasy.Gateway.Services
             if (_disposedValue) return;
             if (disposing)
             {
-                _timer.Dispose();
+                _timer?.Dispose();
             }
 
             _disposedValue = true;
