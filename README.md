@@ -1,6 +1,6 @@
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ggnaegi_SwizlyPeasy.Gateway)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=ggnaegi_SwizlyPeasy.Gateway)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=security_rating)](https://sonarcloud.io/dashboard?id=ggnaegi_SwizlyPeasy.Gateway)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=sqale_rating)](https://sonarcloud.io/project/overview?id=ggnaegi_SwizlyPeasy.Gateway)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=reliability_rating)](https://sonarcloud.io/project/overview?id=ggnaegi_SwizlyPeasy.Gateway)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=security_rating)](https://sonarcloud.io/project/overview?id=ggnaegi_SwizlyPeasy.Gateway)
 
 # SwizlyPeasy.Gateway
 SwizlyPeasy.Gateway is a small API gateway based on YARP Reverse Proxy. This gateway should support OIDC authentication and service discovery with Consul.
