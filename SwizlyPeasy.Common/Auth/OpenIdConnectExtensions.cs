@@ -227,7 +227,7 @@ namespace SwizlyPeasy.Common.Auth
                 var discoveryCache = context.HttpContext.RequestServices.GetService<IDiscoveryCache>();
                 if (discoveryCache == null)
                 {
-                    throw new InternalDomainException("Discovery cache misconfiguration");
+                    throw new InternalDomainException("Discovery cache misconfiguration", null);
                 }
 
                 var discoveryDocument = await discoveryCache.GetAsync();

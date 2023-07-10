@@ -6,10 +6,7 @@
         /// Exception with status 422
         /// </summary>
         /// <param name="msg"></param>
-        public UnprocessableEntityDomainException(string msg) : base(msg) { }
-
-        public UnprocessableEntityDomainException(string msg, object? context) : base(msg, context) { }
-
-        public UnprocessableEntityDomainException(string msg, Exception innerException) : base(msg, innerException) { }
+        /// <param name="innerException"></param>
+        public UnprocessableEntityDomainException(string? msg, Exception? innerException) : base(msg, innerException) { }
     }
 }

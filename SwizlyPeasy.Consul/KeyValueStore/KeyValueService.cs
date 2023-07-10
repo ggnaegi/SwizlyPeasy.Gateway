@@ -22,7 +22,7 @@ namespace SwizlyPeasy.Consul.KeyValueStore
             var writeResult = await _consulClient.KV.Put(kvPair);
             if (!writeResult.Response)
             {
-                throw new InternalDomainException("Unable to save data to key value store...");
+                throw new InternalDomainException("Unable to save data to key value store...", null);
             }
         }
 
@@ -32,7 +32,7 @@ namespace SwizlyPeasy.Consul.KeyValueStore
 
             if (result.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new InternalDomainException($"Key: {key} not found in key value store...");
+                throw new InternalDomainException($"Key: {key} not found in key value store...", null);
             }
 
             return result.Response.Value;

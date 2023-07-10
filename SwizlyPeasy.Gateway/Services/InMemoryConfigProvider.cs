@@ -36,7 +36,7 @@ namespace SwizlyPeasy.Gateway.Services
 
             if (_inMemoryConfig == null)
             {
-                throw new InternalDomainException("IProxyConfig can't be null!");
+                throw new InternalDomainException("IProxyConfig can't be null!", null);
             }
 
             return _inMemoryConfig;

@@ -3,19 +3,6 @@
     public abstract class DomainException : Exception
     {
         /// <summary>
-        /// Base class for domain exceptions
-        /// </summary>
-        /// <param name="msg"></param>
-        protected DomainException(string msg) : base(msg)
-        {
-        }
-
-        protected DomainException(string msg, object? context) : base(msg)
-        {
-            Context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        /// <summary>
         /// Should implement this constructor to be compliant
         /// with standards.
         /// From Microsoft's source code.

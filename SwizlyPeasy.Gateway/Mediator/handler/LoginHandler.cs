@@ -23,7 +23,7 @@ namespace SwizlyPeasy.Gateway.Mediator.handler
             //http context can't be null
             if (_contextAccessor.HttpContext == null)
             {
-                throw new InternalDomainException("Http context is null");
+                throw new InternalDomainException("Http context is null", null);
             }
             _logger.LogInformation("Handling new login from ip {RemoteIpAddress}.", _contextAccessor.HttpContext.Connection.RemoteIpAddress);
 
