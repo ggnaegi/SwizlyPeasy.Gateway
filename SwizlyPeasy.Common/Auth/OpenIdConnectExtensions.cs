@@ -219,7 +219,7 @@ namespace SwizlyPeasy.Common.Auth
         /// <returns></returns>
         private static async Task OnValidatePrincipal(CookieValidatePrincipalContext context, OidcConfig config)
         {
-            if (HasExpired(context.Properties.GetTokenValue("expires_at"), config.RefreshThresholdMinutes))
+            if (HasExpired(context.Properties.GetTokenValue("expires_at") ?? throw new InvalidOperationException(), config.RefreshThresholdMinutes))
             {
                 //getting discovery document, avoiding hard coding the token endpoint uri
                 //somewhere, using discovery cache to improve performance
