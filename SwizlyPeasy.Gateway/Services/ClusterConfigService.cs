@@ -20,6 +20,11 @@ public class ClusterConfigService : IClusterConfigService
     {
         var agentsDic = await _agentsService.RetrieveAgents();
 
+        if (!agentsDic.Any())
+        {
+            return new List<ClusterConfig>();
+        }
+
         return agentsDic.Keys
             .Select(serviceName => new ClusterConfig
             {

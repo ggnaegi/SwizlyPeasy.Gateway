@@ -17,12 +17,12 @@ namespace SwizlyPeasy.Consul.Agents
             var queryResult = await _consulClient.Agent.Services();
             var services = queryResult.Response;
 
+            var servicesDic = new Dictionary<string, IList<AgentService>>();
             if (!services.Any())
             {
-                throw new InternalDomainException("No services configured!");
+                return servicesDic;
             }
 
-            var servicesDic = new Dictionary<string, IList<AgentService>>();
             foreach (var service in services.Values)
             {
                 if (!servicesDic.ContainsKey(service.Service))
