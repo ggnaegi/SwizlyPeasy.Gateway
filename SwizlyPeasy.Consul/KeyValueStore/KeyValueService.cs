@@ -1,4 +1,5 @@
-﻿using Consul;
+﻿using System.Net;
+using Consul;
 using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Consul.KeyValueStore
@@ -28,9 +29,13 @@ namespace SwizlyPeasy.Consul.KeyValueStore
         public async Task<byte[]> GetFromKeyValueStore(string key)
         {
             var result = await _consulClient.KV.Get(key);
-            return result == null
-                ? throw new InternalDomainException($"Key: {key} not found in key value store...")
-                : result.Response.Value;
+
+            if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new InternalDomainException($"Key: {key} not found in key value store...");
+            }
+
+            return result.Response.Value;
         }
     }
 }
