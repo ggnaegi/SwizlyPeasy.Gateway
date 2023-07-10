@@ -26,7 +26,7 @@ namespace SwizlyPeasy.Demo.API.Authorization
                 return Task.CompletedTask;
             }
             
-            throw new ForbiddenDomainException("You're not Bob!");
+            throw new ForbiddenDomainException("You're not Bob!", null);
         }
     }
 }

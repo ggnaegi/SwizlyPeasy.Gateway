@@ -8,12 +8,7 @@
         /// Exception with status 404
         /// </summary>
         /// <param name="msg"></param>
-        public NotFoundDomainException(string msg) : base(msg) { }
-
-        public NotFoundDomainException(string msg, object? context) : base(msg, context)
-        {
-        }
-
-        public NotFoundDomainException(string msg, Exception innerException) : base(msg, innerException) { }
+        /// <param name="innerException"></param>
+        public NotFoundDomainException(string? msg, Exception? innerException) : base(msg, innerException) { }
     }
 }

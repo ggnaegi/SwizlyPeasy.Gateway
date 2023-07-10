@@ -19,7 +19,7 @@ namespace SwizlyPeasy.Common.Extensions
                 {
                     if (ctx.HttpContext.Response.StatusCode == 404)
                     {
-                        throw new NotFoundDomainException("Uuuups, path not found...");
+                        throw new NotFoundDomainException("Uuuups, path not found...", null);
                     }
                     return Task.CompletedTask;
                 }
