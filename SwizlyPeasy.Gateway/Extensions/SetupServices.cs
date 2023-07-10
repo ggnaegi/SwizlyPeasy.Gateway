@@ -1,15 +1,12 @@
 ﻿using System.Reflection;
 using System.Security.Claims;
 using MediatR;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Auth;
 using SwizlyPeasy.Common.Dtos;
-using SwizlyPeasy.Common.Exceptions;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.ClientConfig;
@@ -19,7 +16,6 @@ using SwizlyPeasy.Gateway.Services;
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
 using InMemoryConfigProvider = SwizlyPeasy.Gateway.Services.InMemoryConfigProvider;
-using Rfc7807 = SwizlyPeasy.Common.Exceptions.Rfc7807;
 
 namespace SwizlyPeasy.Gateway.Extensions;
 
@@ -44,12 +40,13 @@ public static class SetupServices
             options.ReturnHttpNotAcceptable = true;
             options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
         }).AddNewtonsoftJson(opt => { opt.UseMemberCasing(); });
+
         services.AddAuthorizationPolicy();
         services.AddSwizlyPeasyOpenIdConnect(configuration);
         services.ConfigureConsulClient(configuration);
         services
             .AddReverseProxy()
-            .LoadFromConsul()
+            .LoadFromConsul(configuration)
             .AddAuthorizationHeaders();
 
         services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
@@ -113,15 +110,9 @@ public static class SetupServices
     {
         builder.Services.AddSingleton<IClusterConfigService, ClusterConfigService>();
         builder.Services.AddSingleton<IRoutesConfigService, RoutesConfigService>();
-
-        builder.Services.AddSingleton(sp =>
-            new InMemoryConfigProvider(
-                sp.GetRequiredService<IClusterConfigService>(),
-                sp.GetRequiredService<IRoutesConfigService>(),
-                sp.GetRequiredService<IOptions<ServiceDiscoveryConfig>>()));
-
-        builder.Services.AddSingleton<IHostedService>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
-        builder.Services.AddSingleton<IProxyConfigProvider>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
+        builder.Services.AddSingleton<InMemoryConfigProvider>();
+        builder.Services.AddSingleton<IHostedService, InMemoryConfigProvider>();
+        builder.Services.AddSingleton<IProxyConfigProvider, InMemoryConfigProvider>();
 
         return builder;
     }

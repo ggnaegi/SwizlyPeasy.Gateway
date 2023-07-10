@@ -20,8 +20,7 @@ namespace SwizlyPeasy.Gateway.Services
         // To detect redundant calls
         private bool _disposedValue;
 
-        public InMemoryConfigProvider(IClusterConfigService clusterConfigService,
-            IRoutesConfigService routesConfigService, IOptions<ServiceDiscoveryConfig> serviceDiscoveryConfig)
+        public InMemoryConfigProvider(IClusterConfigService clusterConfigService, IRoutesConfigService routesConfigService, IOptions<ServiceDiscoveryConfig> serviceDiscoveryConfig)
         {
             _clusterConfigService = clusterConfigService ?? throw new ArgumentNullException(nameof(clusterConfigService));
             _routesConfigService = routesConfigService ?? throw new ArgumentNullException(nameof(routesConfigService));

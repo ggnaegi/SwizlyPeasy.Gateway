@@ -1,5 +1,6 @@
 ﻿using Consul;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 
 namespace SwizlyPeasy.Consul.ServiceRegistration;
@@ -7,14 +8,14 @@ namespace SwizlyPeasy.Consul.ServiceRegistration;
 public class ServiceDiscoveryHostedService : IHostedService
 {
     private readonly IConsulClient _client;
-    private readonly ServiceRegistrationConfig _config;
+    private readonly IOptions<ServiceRegistrationConfig> _config;
     private string _registrationId = "";
 
     /// <summary>
     /// </summary>
     /// <param name="client"></param>
     /// <param name="config"></param>
-    public ServiceDiscoveryHostedService(IConsulClient client, ServiceRegistrationConfig config)
+    public ServiceDiscoveryHostedService(IConsulClient client, IOptions<ServiceRegistrationConfig> config)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -29,18 +30,18 @@ public class ServiceDiscoveryHostedService : IHostedService
     /// <param name="cancellationToken"></param>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _registrationId = $"{_config.ServiceName}-{_config.ServiceId}";
+        _registrationId = $"{_config.Value.ServiceName}-{_config.Value.ServiceId}";
 
         var registration = new AgentServiceRegistration
         {
             ID = _registrationId,
-            Name = _config.ServiceName,
-            Address = _config.ServiceAddress.Host,
-            Port = _config.ServiceAddress.Port,
+            Name = _config.Value.ServiceName,
+            Address = _config.Value.ServiceAddress.Host,
+            Port = _config.Value.ServiceAddress.Port,
             Check = new AgentCheckRegistration
             {
                 HTTP =
-                    $"{_config.ServiceAddress.Scheme}://{_config.ServiceAddress.Host}:{_config.ServiceAddress.Port}/{_config.HealthCheckPath}",
+                    $"{_config.Value.ServiceAddress.Scheme}://{_config.Value.ServiceAddress.Host}:{_config.Value.ServiceAddress.Port}/{_config.Value.HealthCheckPath}",
                 Interval = TimeSpan.FromSeconds(10)
             }
         };
