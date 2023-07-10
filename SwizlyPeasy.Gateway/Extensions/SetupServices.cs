@@ -46,7 +46,7 @@ public static class SetupServices
         services.ConfigureConsulClient(configuration);
         services
             .AddReverseProxy()
-            .LoadFromConsul(configuration)
+            .LoadFromConsul()
             .AddAuthorizationHeaders();
 
         services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
