@@ -1,6 +1,6 @@
 ﻿namespace SwizlyPeasy.Common.Exceptions
 {
-    public abstract class DomainException : ApplicationException
+    public abstract class DomainException : Exception
     {
         /// <summary>
         /// Base class for domain exceptions
