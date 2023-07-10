@@ -13,5 +13,7 @@
         public UnAuthorizedDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public UnAuthorizedDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }

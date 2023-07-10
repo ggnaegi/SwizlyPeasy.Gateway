@@ -15,5 +15,7 @@
         public ConflictDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public ConflictDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }

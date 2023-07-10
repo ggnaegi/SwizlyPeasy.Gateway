@@ -13,5 +13,7 @@
         public ForbiddenDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public ForbiddenDomainException(string msg, Exception innerException) : base(msg, innerException) { }
     }
 }

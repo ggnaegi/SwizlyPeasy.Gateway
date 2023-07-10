@@ -15,5 +15,7 @@
         public BadRequestDomainException(string msg, object? context) : base(msg, context)
         {
         }
+
+        public BadRequestDomainException(string msg,  Exception innerException) : base(msg, innerException) { }
     }
 }
