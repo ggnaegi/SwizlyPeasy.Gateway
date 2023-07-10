@@ -6,11 +6,11 @@
     {
         /// <summary>
         /// </summary>
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         /// <summary>
         /// </summary>
-        public IEnumerable<HealthCheckResponseItem> HealthChecks { get; set; }
+        public IEnumerable<HealthCheckResponseItem>? HealthChecks { get; set; }
 
         /// <summary>
         /// </summary>
