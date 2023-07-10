@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj" />
+    <ProjectReference Include="..\..\SwizlyPeasy.Gateway\SwizlyPeasy.Gateway.csproj" />
   </ItemGroup>
 
 </Project>

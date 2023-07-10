@@ -2,7 +2,6 @@
 using Consul;
 using SwizlyPeasy.Consul.Agents;
 using SwizlyPeasy.Consul.KeyValueStore;
-using SwizlyPeasy.Test.UnitTest.Consul;
 
 namespace SwizlyPeasy.Test.UnitTest
 {
@@ -34,7 +33,9 @@ namespace SwizlyPeasy.Test.UnitTest
             return new AgentService
             {
                 Service = serviceName,
-                ID = instanceId
+                ID = instanceId,
+                Address = "localhost",
+                Port = 8020
             };
         }
     }

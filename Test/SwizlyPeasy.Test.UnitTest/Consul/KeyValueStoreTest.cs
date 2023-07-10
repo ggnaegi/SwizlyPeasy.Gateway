@@ -3,7 +3,7 @@ using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Test.UnitTest.Consul;
 
-public class KeyValueStore
+public class KeyValueStoreTest
 {
     [Fact]
     public async Task SaveToKeyValueStore_DoesNotThrowException()
