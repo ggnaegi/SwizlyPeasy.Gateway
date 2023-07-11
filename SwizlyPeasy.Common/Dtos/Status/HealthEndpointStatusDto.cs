@@ -44,15 +44,15 @@ public class Meta
 public class HealthEndpointStatusDto
 {
     public string? AggregatedStatus { get; set; }
-    public ServiceData Service { get; set; }
-    public List<Check> Checks { get; set; }
+    public ServiceData? Service { get; set; }
+    public List<Check>? Checks { get; set; }
 }
 
 public class ServiceData
 {
     public string? ID { get; set; }
     public string? Service { get; set; }
-    public List<object> Tags { get; set; }
+    public List<object>? Tags { get; set; }
     public Meta? Meta { get; set; }
     public int Port { get; set; }
     public string? Address { get; set; }
