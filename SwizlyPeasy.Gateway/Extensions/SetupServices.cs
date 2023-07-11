@@ -10,6 +10,7 @@ using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.ClientConfig;
+using SwizlyPeasy.Consul.Health;
 using SwizlyPeasy.Gateway.Mediator;
 using SwizlyPeasy.Gateway.Mediator.handler;
 using SwizlyPeasy.Gateway.Services;
@@ -47,7 +48,8 @@ public static class SetupServices
         services
             .AddReverseProxy()
             .LoadFromConsul()
-            .AddAuthorizationHeaders();
+            .AddAuthorizationHeaders()
+            .AddStatusService();
 
         services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
         services.AddTransient<IRequestHandler<LogoutRequest, Unit>, LogoutHandler>();
@@ -95,6 +97,14 @@ public static class SetupServices
                     return ValueTask.CompletedTask;
                 });
         });
+
+        return builder;
+    }
+
+    public static IReverseProxyBuilder AddStatusService(this IReverseProxyBuilder builder)
+    {
+        builder.Services.AddScoped<IHealthCheckService, HealthCheckService>();
+        builder.Services.AddScoped<IStatusService, StatusService>();
 
         return builder;
     }
