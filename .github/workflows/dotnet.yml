@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore dotnet restore SwizlyPeasy.Gateway.sln
+      run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
     - name: Test
