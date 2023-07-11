@@ -255,3 +255,4 @@ _templates/
 
 # Test Results
 *.trx
+/Test/SwizlyPeasy.Test.UnitTest/TestResults/coverage.opencover.xml
