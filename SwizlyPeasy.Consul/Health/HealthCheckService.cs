@@ -22,8 +22,9 @@ public class HealthCheckService : IHealthCheckService
         if (serviceHealth.StatusCode == HttpStatusCode.NotFound)
             throw new InternalDomainException($"No Health Checks for service with Id {serviceId} can be found.", null);
 
-        if(serviceHealth.Response == null)
-            throw new InternalDomainException($"Consul returned an empty response for service with Id {serviceId}", null);
+        if (serviceHealth.Response == null)
+            throw new InternalDomainException($"Consul returned an empty response for service with Id {serviceId}",
+                null);
 
         HealthEndpointStatusDto status = serviceHealth.Response.ToObject(typeof(HealthEndpointStatusDto));
 

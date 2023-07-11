@@ -5,11 +5,11 @@ var logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurr
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.SetupGatewayServices(builder.Configuration);
+    builder.Services.AddSwizlyPeasyGateway(builder.Configuration);
 
     var app = builder.Build();
 
-    app.SetupMiddleWares();
+    app.UseSwizlyPeasyGateway();
     app.Run();
 }
 catch (Exception e)

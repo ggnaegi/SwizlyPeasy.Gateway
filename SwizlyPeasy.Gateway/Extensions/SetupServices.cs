@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
 using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Auth;
@@ -32,7 +36,7 @@ public static class SetupServices
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
-    public static void SetupGatewayServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddSwizlyPeasyGateway(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
         services.AddHttpClient();
@@ -60,7 +64,7 @@ public static class SetupServices
     ///     Setting up pipeline
     /// </summary>
     /// <param name="app"></param>
-    public static void SetupMiddleWares(this WebApplication app)
+    public static void UseSwizlyPeasyGateway(this WebApplication app)
     {
         app.UseMiddleware<ExceptionsHandlerMiddleware>();
         app.Use404AsException();

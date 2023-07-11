@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using SwizlyPeasy.Consul.KeyValueStore;
 using SwizlyPeasy.Gateway.Extensions;
 using Yarp.ReverseProxy.Configuration;
