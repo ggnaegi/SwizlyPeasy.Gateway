@@ -4,47 +4,49 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
-namespace SwizlyPeasy.Common.HealthChecks
+namespace SwizlyPeasy.Common.HealthChecks;
+
+/// <summary>
+///     Health check extension for
+///     micro services configuration
+/// </summary>
+public static class HealthCheckExtensions
 {
     /// <summary>
-    ///     Health check extension for
-    ///     micro services configuration
+    ///     health check for services
+    ///     not using database connection
     /// </summary>
-    public static class HealthCheckExtensions
+    /// <param name="services"></param>
+    public static void AddSwizlyPeasyHealthChecks(this IServiceCollection services)
     {
-        /// <summary>
-        ///     health check for services
-        ///     not using database connection
-        /// </summary>
-        /// <param name="services"></param>
-        public static void AddSwizlyPeasyHealthChecks(this IServiceCollection services)
-        {
-            services.AddHealthChecks();
-        }
+        services.AddHealthChecks();
+    }
 
-        /// <summary>
-        ///     Configuring health endpoint
-        /// </summary>
-        /// <param name="app"></param>
-        public static void UseSwizlyPeasyHealthChecks(this IApplicationBuilder app)
+    /// <summary>
+    ///     Configuring health endpoint
+    /// </summary>
+    /// <param name="app"></param>
+    public static void UseSwizlyPeasyHealthChecks(this IApplicationBuilder app)
+    {
+        app.UseHealthChecks("/health", new HealthCheckOptions
         {
-            app.UseHealthChecks("/health", new HealthCheckOptions {
-                ResponseWriter = async (context, report) =>
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                var response = new HealthCheckResponse
                 {
-                    context.Response.ContentType = "application/json";
-                    var response = new HealthCheckResponse {
-                        Status = report.Status.ToString(),
-                        HealthChecks = report.Entries.Select(x => new HealthCheckResponseItem {
-                            Components = x.Key,
-                            Status = x.Value.Status.ToString(),
-                            Description = x.Value.Description,
-                            ExceptionMessage = x.Value.Exception?.Message
-                        }),
-                        HealthCheckDuration = report.TotalDuration
-                    };
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-                }
-            });
-        }
+                    Status = report.Status.ToString(),
+                    HealthChecks = report.Entries.Select(x => new HealthCheckResponseItem
+                    {
+                        Components = x.Key,
+                        Status = x.Value.Status.ToString(),
+                        Description = x.Value.Description,
+                        ExceptionMessage = x.Value.Exception?.Message
+                    }),
+                    HealthCheckDuration = report.TotalDuration
+                };
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+            }
+        });
     }
 }

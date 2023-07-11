@@ -1,9 +1,10 @@
-﻿namespace SwizlyPeasy.Common.Exceptions
+﻿namespace SwizlyPeasy.Common.Exceptions;
+
+/// <summary>
+/// </summary>
+public class BadRequestDomainException : DomainException
 {
-    /// <summary>
-    /// </summary>
-    public class BadRequestDomainException : DomainException
+    public BadRequestDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
-        public BadRequestDomainException(string? msg,  Exception? innerException) : base(msg, innerException) { }
     }
 }

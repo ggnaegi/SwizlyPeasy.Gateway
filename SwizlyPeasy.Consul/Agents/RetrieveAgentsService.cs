@@ -1,38 +1,31 @@
 ﻿using Consul;
-using SwizlyPeasy.Common.Exceptions;
 
-namespace SwizlyPeasy.Consul.Agents
+namespace SwizlyPeasy.Consul.Agents;
+
+public class RetrieveAgentsService : IRetrieveAgentsService
 {
-    public class RetrieveAgentsService : IRetrieveAgentsService
+    private readonly IConsulClient _consulClient;
+
+    public RetrieveAgentsService(IConsulClient consulClient)
     {
-        private readonly IConsulClient _consulClient;
+        _consulClient = consulClient;
+    }
 
-        public RetrieveAgentsService(IConsulClient consulClient)
+    public async Task<Dictionary<string, IList<AgentService>>> RetrieveAgents()
+    {
+        var queryResult = await _consulClient.Agent.Services();
+        var services = queryResult.Response;
+
+        var servicesDic = new Dictionary<string, IList<AgentService>>();
+        if (!services.Any()) return servicesDic;
+
+        foreach (var service in services.Values)
         {
-            _consulClient = consulClient;
+            if (!servicesDic.ContainsKey(service.Service)) servicesDic.Add(service.Service, new List<AgentService>());
+
+            servicesDic[service.Service].Add(service);
         }
 
-        public async Task<Dictionary<string, IList<AgentService>>> RetrieveAgents()
-        {
-            var queryResult = await _consulClient.Agent.Services();
-            var services = queryResult.Response;
-
-            var servicesDic = new Dictionary<string, IList<AgentService>>();
-            if (!services.Any())
-            {
-                return servicesDic;
-            }
-
-            foreach (var service in services.Values)
-            {
-                if (!servicesDic.ContainsKey(service.Service))
-                {
-                    servicesDic.Add(service.Service, new List<AgentService>());
-                }
-
-                servicesDic[service.Service].Add(service);
-            }
-            return servicesDic;
-        }
+        return servicesDic;
     }
 }

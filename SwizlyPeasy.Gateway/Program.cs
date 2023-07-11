@@ -1,4 +1,3 @@
-
 using NLog;
 using SwizlyPeasy.Gateway.Extensions;
 
@@ -21,4 +20,3 @@ finally
 {
     LogManager.Shutdown();
 }
-

@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    ///  Convenience method for login, redirecting user to a dashboard or another front-end url
+    ///     Convenience method for login, redirecting user to a dashboard or another front-end url
     /// </summary>
     /// <returns></returns>
     [Authorize]
@@ -42,8 +42,8 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Convenience method for user logout, revoking tokens
-    /// redirecting the user after the logout process
+    ///     Convenience method for user logout, revoking tokens
+    ///     redirecting the user after the logout process
     /// </summary>
     /// <returns></returns>
     [AllowAnonymous]
