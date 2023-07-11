@@ -41,12 +41,14 @@ https://developer.hashicorp.com/consul/downloads
 ### Start the SwizlyPeasy.Gateway and the Swizly.Demo.API projects
 
 You should clone the repository, open the solution in visual studio and start the Gateway and Demo Projects (Multiple Startup Projects) in debug mode with IIS Express
+
 **FIRST START -> Please start the Swizly.Demo.API project first, wait 10-20 seconds before starting the gateway, so the demo service will be registered to consul**
 
 ![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/d7b80a8f-cded-4703-92e9-8fcfb9cf00a8)
 
-You should see this when starting the gateway...
-![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/50cea2ea-8d50-4151-a739-50456b93a19c)
+You should see this when starting the gateway! 
+![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/603aa135-b5dd-4b1a-8d98-1368fdf3b820)
+
 
 Now, you could try the two routes configured in YARP:
 
