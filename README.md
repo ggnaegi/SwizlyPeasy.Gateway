@@ -50,8 +50,6 @@ Or open a powershell in the cloned folder...
 And execute the following command:
 ```docker compose -f docker-compose.yml -f docker-compose.override.yml up```
 
-![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/d7b80a8f-cded-4703-92e9-8fcfb9cf00a8)
-
 #### Now you should be able to call the services...
 - Consul service, http://localhost:8500
 - SwizlyPeasy.Gateway.API, https://localhost:8001
