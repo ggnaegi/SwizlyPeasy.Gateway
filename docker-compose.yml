@@ -11,16 +11,15 @@ services:
   swizlypeasy.demo.api:
     image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
     hostname: demo
-    environment: 
-        - ASPNETCORE_ENVIRONMENT=Development
     build:
         context: .
         dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile
   swizlypeasy.gateway.api:
     image: ${DOCKER_REGISTRY-}swizlypeasygatewayapi
     hostname: gateway
-    environment: 
-        - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+        - "8000:80"
+        - "8001:443"
     build:
       context: .
       dockerfile: SwizlyPeasy.Gateway.API/Dockerfile

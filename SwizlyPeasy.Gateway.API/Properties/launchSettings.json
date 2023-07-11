@@ -33,7 +33,9 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "httpPort": 8000,
+      "sslPort": 8001
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",
