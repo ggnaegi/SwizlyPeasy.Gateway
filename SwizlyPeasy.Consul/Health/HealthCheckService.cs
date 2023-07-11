@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Consul;
 using SwizlyPeasy.Common.Dtos.Status;
+using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Consul.Health;
 
@@ -18,9 +19,11 @@ public class HealthCheckService : IHealthCheckService
         var serviceHealth =
             await _consulClient.Raw.Query($"/v1/agent/health/service/id/{serviceId}", new QueryOptions());
 
-        if (serviceHealth.StatusCode != HttpStatusCode.OK) return false;
+        if (serviceHealth.StatusCode == HttpStatusCode.NotFound)
+            throw new InternalDomainException($"No Health Checks for service with Id {serviceId} can be found.", null);
 
-        if (serviceHealth.Response == null) return false;
+        if(serviceHealth.Response == null)
+            throw new InternalDomainException($"Consul returned an empty response for service with Id {serviceId}", null);
 
         HealthEndpointStatusDto status = serviceHealth.Response.ToObject(typeof(HealthEndpointStatusDto));
 
