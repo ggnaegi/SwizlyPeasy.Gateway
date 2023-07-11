@@ -34,7 +34,8 @@ public class ClusterConfigServiceTest
             { "MegaService_1", TestFactories.GetAgentService("MegaService_1", "MegaService") }
         };
 
-        var clusterConfigService = new ClusterConfigService(TestFactories.GetRetrieveAgentsService(agentsServicesDic), settings);
+        var clusterConfigService =
+            new ClusterConfigService(TestFactories.GetRetrieveAgentsService(agentsServicesDic), settings);
         var result = await clusterConfigService.RetrieveClustersConfig();
 
         Assert.NotNull(result);
@@ -52,7 +53,8 @@ public class ClusterConfigServiceTest
 
             var matchingAgentService = agentsServicesDic.Values.First(x => x.Service == clusterConfig.ClusterId);
 
-            Assert.Equal($"{discoveryConfig.Scheme}://{matchingAgentService.Address}:{matchingAgentService.Port}", destination.Address);
+            Assert.Equal($"{discoveryConfig.Scheme}://{matchingAgentService.Address}:{matchingAgentService.Port}",
+                destination.Address);
         }
     }
 
@@ -88,8 +90,6 @@ public class ClusterConfigServiceTest
                 Assert.Equal($"{discoveryConfig.Scheme}://{matchingAgentService.Address}:{matchingAgentService.Port}",
                     destination.Value.Address);
             }
-
         }
     }
-
 }

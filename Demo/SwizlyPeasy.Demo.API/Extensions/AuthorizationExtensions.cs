@@ -9,7 +9,7 @@ namespace SwizlyPeasy.Demo.API.Extensions;
 public static class AuthorizationExtensions
 {
     /// <summary>
-    /// Adding demo authorization policy, checking if user's uid/sub matches bob's one
+    ///     Adding demo authorization policy, checking if user's uid/sub matches bob's one
     /// </summary>
     /// <param name="services"></param>
     public static void SetAuthenticationAndAuthorization(this IServiceCollection services)

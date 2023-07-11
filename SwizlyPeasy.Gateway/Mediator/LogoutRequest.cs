@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace SwizlyPeasy.Gateway.Mediator
+namespace SwizlyPeasy.Gateway.Mediator;
+
+public class LogoutRequest : IRequest<Unit>
 {
-    public class LogoutRequest : IRequest<Unit>
-    {
-    }
 }

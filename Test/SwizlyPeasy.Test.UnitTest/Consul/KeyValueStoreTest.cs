@@ -27,6 +27,7 @@ public class KeyValueStoreTest
     public async Task GetToKeyValueStore_UsingNotExistingKey_ThrowsException()
     {
         var keyValueService = TestFactories.GetKeyValueService();
-        await Assert.ThrowsAsync<InternalDomainException>(async() => await keyValueService.GetFromKeyValueStore("test"));
+        await Assert.ThrowsAsync<InternalDomainException>(
+            async () => await keyValueService.GetFromKeyValueStore("test"));
     }
 }

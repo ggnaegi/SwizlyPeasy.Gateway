@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace SwizlyPeasy.Demo.API.Authorization
+namespace SwizlyPeasy.Demo.API.Authorization;
+
+public class BobRequirement : IAuthorizationRequirement
 {
-    public class BobRequirement : IAuthorizationRequirement
-    {
-        public string GetBobSub => "2";
-    }
+    public string GetBobSub => "2";
 }

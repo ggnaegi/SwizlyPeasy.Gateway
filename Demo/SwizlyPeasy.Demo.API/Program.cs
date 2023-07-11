@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.HealthChecks;
 using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.ClientConfig;
 using SwizlyPeasy.Consul.ServiceRegistration;
 using SwizlyPeasy.Demo.API.Extensions;
-using System.Net;
-using SwizlyPeasy.Common.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

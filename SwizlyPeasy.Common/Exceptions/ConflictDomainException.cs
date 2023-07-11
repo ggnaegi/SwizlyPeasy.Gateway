@@ -1,14 +1,15 @@
-﻿namespace SwizlyPeasy.Common.Exceptions
+﻿namespace SwizlyPeasy.Common.Exceptions;
+
+/// <summary>
+/// </summary>
+public class ConflictDomainException : DomainException
 {
     /// <summary>
+    ///     Error 409
     /// </summary>
-    public class ConflictDomainException : DomainException
+    /// <param name="msg"></param>
+    /// <param name="innerException"></param>
+    public ConflictDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
-        /// <summary>
-        /// Error 409
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="innerException"></param>
-        public ConflictDomainException(string? msg, Exception? innerException) : base(msg, innerException) { }
     }
 }

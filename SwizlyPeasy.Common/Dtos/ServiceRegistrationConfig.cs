@@ -1,7 +1,7 @@
 ﻿namespace SwizlyPeasy.Common.Dtos;
 
 /// <summary>
-/// Consul service registration
+///     Consul service registration
 /// </summary>
 public class ServiceRegistrationConfig
 {

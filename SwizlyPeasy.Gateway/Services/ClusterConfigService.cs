@@ -20,15 +20,12 @@ public class ClusterConfigService : IClusterConfigService
     {
         var agentsDic = await _agentsService.RetrieveAgents();
 
-        if (!agentsDic.Any())
-        {
-            return new List<ClusterConfig>();
-        }
+        if (!agentsDic.Any()) return new List<ClusterConfig>();
 
         return agentsDic.Keys
             .Select(serviceName => new ClusterConfig
             {
-                ClusterId = serviceName, 
+                ClusterId = serviceName,
                 LoadBalancingPolicy = _config.Value.LoadBalancingPolicy,
                 Destinations = agentsDic[serviceName]
                     .Select(x => (x.ID,
