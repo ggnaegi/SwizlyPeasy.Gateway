@@ -1,6 +1,8 @@
 ﻿using IdentityModel.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SwizlyPeasy.Common;
 using SwizlyPeasy.Common.Exceptions;
 

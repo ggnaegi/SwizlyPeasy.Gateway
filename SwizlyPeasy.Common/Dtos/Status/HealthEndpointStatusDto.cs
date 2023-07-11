@@ -1,4 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
+
 namespace SwizlyPeasy.Common.Dtos.Status;
 
 public class Check

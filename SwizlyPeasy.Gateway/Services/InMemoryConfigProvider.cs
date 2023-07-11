@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Exceptions;
