@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Consul;
 using Moq;
+using Newtonsoft.Json.Linq;
 
 namespace SwizlyPeasy.Test.UnitTest;
 
@@ -46,6 +47,35 @@ internal class ConsulClientFactory
             {
                 StatusCode = HttpStatusCode.OK,
                 Response = agentsDic
+            });
+
+        return clientMock.Object;
+    }
+
+    internal static IConsulClient GetRawConsulClient()
+    {
+        var clientMock = new Mock<IConsulClient>();
+        clientMock.Setup(x => x.Raw.Query(It.Is<string>(s => s.Equals(TestFactories.ServiceUrl)),
+                It.IsAny<QueryOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new QueryResult<dynamic>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Response = JObject.Parse(TestFactories.HealthCheckOkResult)
+            });
+
+        clientMock.Setup(x => x.Raw.Query(It.Is<string>(s => s.Equals(TestFactories.WrongUrl)),
+                It.IsAny<QueryOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new QueryResult<dynamic>
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Response = JObject.Parse(TestFactories.HealthCheckNotFoundResult)
+            });
+
+        clientMock.Setup(x => x.Raw.Query(It.Is<string>(s => s.Equals(TestFactories.EmptyUrl)),
+                It.IsAny<QueryOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new QueryResult<dynamic>
+            {
+                StatusCode = HttpStatusCode.OK
             });
 
         return clientMock.Object;
