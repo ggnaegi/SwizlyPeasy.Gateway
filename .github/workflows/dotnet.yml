@@ -22,7 +22,7 @@ jobs:
       run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
-    - name: Test
+    - name: UnitTest
       run: dotnet test --no-build SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master

@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  consul-service:
+    image: "consul:latest"
+    command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
+    hostname: consul
+    ports:
+        - "8500:8500"
+        - "8600:8600"
+  swizlypeasy.demo.api:
+    image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
+    hostname: demo
+    build:
+        context: .
+        dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile
+  swizlypeasy.gateway.api:
+    image: ${DOCKER_REGISTRY-}swizlypeasygatewayapi
+    hostname: gateway
+    ports:
+        - "8000:80"
+        - "8001:443"
+    build:
+      context: .
+      dockerfile: SwizlyPeasy.Gateway.API/Dockerfile
+    depends_on:
+        - consul-service
