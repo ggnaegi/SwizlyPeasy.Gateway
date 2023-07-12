@@ -125,8 +125,8 @@ public static class SetupServices
         builder.Services.AddSingleton<IClusterConfigService, ClusterConfigService>();
         builder.Services.AddSingleton<IRoutesConfigService, RoutesConfigService>();
         builder.Services.AddSingleton<InMemoryConfigProvider>();
-        builder.Services.AddSingleton<IHostedService, InMemoryConfigProvider>();
-        builder.Services.AddSingleton<IProxyConfigProvider, InMemoryConfigProvider>();
+        builder.Services.AddSingleton<IHostedService>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
+        builder.Services.AddSingleton<IProxyConfigProvider>(ctx => ctx.GetRequiredService<InMemoryConfigProvider>());
 
         return builder;
     }
