@@ -34,20 +34,21 @@ public class TestHttpClient : IDisposable
                 .Build().Start();
 
             Thread.Sleep(10000);
-        }
-
-        public HttpClient Client { get; }
-
-        public void Dispose()
-        {
-            Client.Dispose();
-            _svc.Dispose();
-        }
     }
 
-    [CollectionDefinition("TestHttpClient")]
-    public class TestHttpClientCollection : ICollectionFixture<TestHttpClient>
+    public HttpClient Client { get; }
+
+    public void Dispose()
     {
-        // This class has no code, and is never created. Its purpose is simply
-        // to be the place to apply [CollectionDefinition] and all the
-        // ICollectionFixture<> interfaces.}
+        Client.Dispose();
+        _svc.Dispose();
+    }
+}
+
+[CollectionDefinition("TestHttpClient")]
+public class TestHttpClientCollection : ICollectionFixture<TestHttpClient>
+{
+    // This class has no code, and is never created. Its purpose is simply
+    // to be the place to apply [CollectionDefinition] and all the
+    // ICollectionFixture<> interfaces.}
+}
