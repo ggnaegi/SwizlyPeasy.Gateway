@@ -13,7 +13,7 @@ services:
     hostname: demo
     build:
         context: .
-        dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile
+        dockerfile: ../../../../../../Demo/SwizlyPeasy.Demo.API/Dockerfile
   swizlypeasy.gateway.api:
     image: ${DOCKER_REGISTRY-}swizlypeasygatewayapi
     hostname: gateway
@@ -22,6 +22,6 @@ services:
         - "8001:443"
     build:
       context: .
-      dockerfile: SwizlyPeasy.Gateway.API/Dockerfile
+      dockerfile: ../../../../../../SwizlyPeasy.Gateway.API/Dockerfile
     depends_on:
         - consul-service
