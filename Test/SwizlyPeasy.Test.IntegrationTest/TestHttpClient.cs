@@ -2,27 +2,28 @@
 using Ductus.FluentDocker.Model.Common;
 using Ductus.FluentDocker.Services;
 
-namespace SwizlyPeasy.Test.IntegrationTest
+namespace SwizlyPeasy.Test.IntegrationTest;
+
+/// <summary>
+///     Http client fixture used in several test classes
+///     avoiding creating a new test client every time.
+/// </summary>
+public class TestHttpClient : IDisposable
 {
-    /// <summary>
-    ///     Http client fixture used in several test classes
-    ///     avoiding creating a new test client every time.
-    /// </summary>
-    public class TestHttpClient : IDisposable
+    private readonly ICompositeService _svc;
+
+    public TestHttpClient()
     {
-        private readonly ICompositeService _svc;
-        public TestHttpClient()
+        Client = new HttpClient
         {
-            Client = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:8001")
-            };
+            BaseAddress = new Uri("https://localhost:8001")
+        };
 
-            var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
-                (TemplateString)"Docker/docker-compose.yml");
+        var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
+            (TemplateString)"Docker/docker-compose.yml");
 
-            var overrideComposeFile = Path.Combine(Directory.GetCurrentDirectory(),
-                (TemplateString)"Docker/docker-compose.override.yml");
+        var overrideComposeFile = Path.Combine(Directory.GetCurrentDirectory(),
+            (TemplateString)"Docker/docker-compose.override.yml");
 
             // @formatter:off
             _svc = new Builder()
@@ -49,6 +50,4 @@ namespace SwizlyPeasy.Test.IntegrationTest
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the
-        // ICollectionFixture<> interfaces.
-    }
-}
+        // ICollectionFixture<> interfaces.}
