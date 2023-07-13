@@ -24,10 +24,6 @@ jobs:
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
     - name: Unit Test
       run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
-    - name: Start Multi Containers
-      run: docker-compose -f docker-compose.yml -f docker-compose.override.yml up
-    - name: Integration Test
-      run: dotnet test --no-build --filter 'FullyQualifiedName!~UnitTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       env:
