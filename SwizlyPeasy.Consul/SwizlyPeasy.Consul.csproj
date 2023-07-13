@@ -1,21 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <PackageId>SwizlyPeasy.Consul</PackageId>
-	  <Version>0.0.1</Version>
-	  <Authors>Guillaume Gnaegi</Authors>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageId>SwizlyPeasy.Consul</PackageId>
+		<Version>0.0.2</Version>
+		<Authors>Guillaume Gnaegi</Authors>
+		<PackageDescription>This package contains the extension methods for service registration to consul and other consul services (agents, health, kv)</PackageDescription>
+		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Consul" Version="1.6.10.9" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Consul" Version="1.6.10.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
+	</ItemGroup>
 
 </Project>
