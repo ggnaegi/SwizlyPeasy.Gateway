@@ -5,8 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>SwizlyPeasy.Consul</PackageId>
-		<Version>0.0.2</Version>
+		<Version>0.0.3</Version>
 		<Authors>Guillaume Gnaegi</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageDescription>This package contains the extension methods for service registration to consul and other consul services (agents, health, kv)</PackageDescription>
 		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
 	</PropertyGroup>
@@ -18,6 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
+		<None Include="docs\README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 </Project>
