@@ -21,7 +21,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
-      run: dotnet build --no-restore -c Release SwizlyPeasy.Gateway.sln
+      run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
     - name: Unit Test
       run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: SonarCloud Scan
