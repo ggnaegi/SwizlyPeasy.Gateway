@@ -6,6 +6,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>fc61b5e3-488e-4be2-a3ea-236cd64c6123</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<PackageId>SwizlyPeasy.Gateway</PackageId>
+		<Version>0.0.1</Version>
+		<Authors>Guillaume Gnaegi</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
