@@ -1,7 +1,6 @@
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.HealthChecks;
 using SwizlyPeasy.Common.Middlewares;
-using SwizlyPeasy.Consul.ClientConfig;
 using SwizlyPeasy.Consul.ServiceRegistration;
 using SwizlyPeasy.Demo.API.Extensions;
 
@@ -15,14 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // swizly peasy consul & health checks
-builder.Services.ConfigureConsulClient(builder.Configuration);
-builder.Services.RegisterService(builder.Configuration);
-builder.Services.AddSwizlyPeasyHealthChecks();
+builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
 builder.Services.SetAuthenticationAndAuthorization();
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionsHandlerMiddleware>();
-app.Use404AsException();
+app.UseSwizlyPeasyExceptions();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
