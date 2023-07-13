@@ -17,8 +17,12 @@ jobs:
       run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln -c Release
-    - name: Pack nugets
-      run: dotnet pack -c Release --no-build --output .
+    - name: Pack SwizlyPeasy.Common
+      run: dotnet pack -c Release --no-build --output . SwizlyPeasy.Common/SwizlyPeasy.Common.csproj
+    - name: Pack SwizlyPeasy.Consul
+      run: dotnet pack -c Release --no-build --output . SwizlyPeasy.Consul/SwizlyPeasy.Consul.csproj
+    - name: Pack SwizlyPeasy.Gateway
+      run: dotnet pack -c Release --no-build --output . SwizlyPeasy.Gateway/SwizlyPeasy.Gateway.csproj
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key NUGET_TOKEN --source https://api.nuget.org/v3/index.json
       env:
