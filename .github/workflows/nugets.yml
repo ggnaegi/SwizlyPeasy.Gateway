@@ -1,6 +1,12 @@
 name: SwizlyPeasy.Gateway Nugets
 
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
   release:
     types: [published]
 
