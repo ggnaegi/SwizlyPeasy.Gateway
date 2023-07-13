@@ -7,6 +7,7 @@
 		<PackageId>SwizlyPeasy.Common</PackageId>
 		<Version>0.0.2</Version>
 		<Authors>Guillaume Gnaegi</Authors>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageDescription>This package contains the common classes (Exceptions) and Extension methods (health checks and OIDC configuration) for SwizlyPeasy.Gateway.</PackageDescription>
 		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
 	</PropertyGroup>
@@ -18,6 +19,11 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Docs\" />
+	  <None Include="docs\README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 </Project>
