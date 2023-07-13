@@ -30,7 +30,7 @@ jobs:
     - name: Pack SwizlyPeasy.Gateway
       run: dotnet pack -c Release SwizlyPeasy.Gateway/SwizlyPeasy.Gateway.csproj --no-build --output .
     - name: Push to NuGet
-      run: dotnet nuget push "*.nupkg" --api-key NUGET_TOKEN --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
