@@ -8,9 +8,12 @@
 		<Version>0.0.3</Version>
 		<Authors>Guillaume Gnaegi</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageDescription>This package contains the extension methods for service registration to consul and other consul services (agents, health, kv)</PackageDescription>
 		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +23,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
-		<None Include="docs\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

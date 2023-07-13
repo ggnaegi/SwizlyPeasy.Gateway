@@ -7,9 +7,12 @@
 		<PackageId>SwizlyPeasy.Common</PackageId>
 		<Version>0.0.3</Version>
 		<Authors>Guillaume Gnaegi</Authors>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageDescription>This package contains the common classes (Exceptions) and Extension methods (health checks and OIDC configuration) for SwizlyPeasy.Gateway.</PackageDescription>
 		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,8 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="docs\" />
-	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
+	  <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
