@@ -22,6 +22,7 @@ public static class OpenIdConnectExtensions
     /// <returns></returns>
     private static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
     {
+        context.Response.Headers["Location"] = context.RedirectUri;
         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
         return Task.CompletedTask;
     }

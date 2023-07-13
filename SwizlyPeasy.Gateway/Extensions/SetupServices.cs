@@ -141,7 +141,10 @@ public static class SetupServices
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Constants.OidcPolicy, policy => policy.RequireAuthenticatedUser());
+            options.AddPolicy(Constants.OidcPolicy, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+            });
         });
     }
 

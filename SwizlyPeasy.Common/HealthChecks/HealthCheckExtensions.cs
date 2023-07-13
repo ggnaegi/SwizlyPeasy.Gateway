@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SwizlyPeasy.Common.Dtos;
 
 namespace SwizlyPeasy.Common.HealthChecks;
 
@@ -17,7 +20,8 @@ public static class HealthCheckExtensions
     ///     not using database connection
     /// </summary>
     /// <param name="services"></param>
-    public static void AddSwizlyPeasyHealthChecks(this IServiceCollection services)
+    /// <param name="configuration"></param>
+    public static void AddSwizlyPeasyHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks();
     }
@@ -28,7 +32,8 @@ public static class HealthCheckExtensions
     /// <param name="app"></param>
     public static void UseSwizlyPeasyHealthChecks(this IApplicationBuilder app)
     {
-        app.UseHealthChecks("/health", new HealthCheckOptions
+        var config = app.ApplicationServices.GetService<IOptions<ServiceRegistrationConfig>>();
+        app.UseHealthChecks($"/{(config == null ? "health": config.Value.HealthCheckPath)}", new HealthCheckOptions
         {
             ResponseWriter = async (context, report) =>
             {
