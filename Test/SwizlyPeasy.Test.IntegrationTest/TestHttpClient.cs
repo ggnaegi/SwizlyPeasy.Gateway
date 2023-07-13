@@ -10,16 +10,16 @@ namespace SwizlyPeasy.Test.IntegrationTest;
 /// </summary>
 public class TestHttpClient : IDisposable
 {
-    private readonly ICompositeService _svc;
+    //private readonly ICompositeService _svc;
 
     public TestHttpClient()
     {
         Client = new HttpClient
         {
-            BaseAddress = new Uri("http://localhost:8000")
+            BaseAddress = new Uri("https://localhost:8001")
         };
 
-        var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
+        /*var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
             (TemplateString)"Docker/docker-compose.yml");
 
         var overrideComposeFile = Path.Combine(Directory.GetCurrentDirectory(),
@@ -31,7 +31,7 @@ public class TestHttpClient : IDisposable
                 .UseCompose()
                 .FromFile(composeFile, overrideComposeFile)
                 .RemoveOrphans()
-                .Build().Start();
+                .Build().Start();*/
 
             Thread.Sleep(10000);
     }
@@ -41,7 +41,7 @@ public class TestHttpClient : IDisposable
     public void Dispose()
     {
         Client.Dispose();
-        _svc.Dispose();
+        // _svc.Dispose();
     }
 }
 

@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Demo.API", "Dem
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{5D4F0889-145A-4DA6-B2C1-E148D64A25FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Test.IntegrationTest", "Test\SwizlyPeasy.Test.IntegrationTest\SwizlyPeasy.Test.IntegrationTest.csproj", "{151EAC64-D2C7-4571-8681-69D96FB37E0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Test.IntegrationTest", "Test\SwizlyPeasy.Test.IntegrationTest\SwizlyPeasy.Test.IntegrationTest.csproj", "{151EAC64-D2C7-4571-8681-69D96FB37E0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Gateway.API", "SwizlyPeasy.Gateway.API\SwizlyPeasy.Gateway.API.csproj", "{B6D036C4-79A5-455B-9E20-FC601B6424AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Gateway.API", "SwizlyPeasy.Gateway.API\SwizlyPeasy.Gateway.API.csproj", "{B6D036C4-79A5-455B-9E20-FC601B6424AD}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E6726E42-D12B-4340-8301-7987F98C2FA4}"
 EndProject
