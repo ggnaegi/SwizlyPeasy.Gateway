@@ -14,3 +14,6 @@ services:
   swizlypeasy.demo.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+      - "443" 

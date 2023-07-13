@@ -8,12 +8,23 @@ services:
     ports:
         - "8500:8500"
         - "8600:8600"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8500"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
   swizlypeasy.demo.api:
     image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
     hostname: demo
+    ports:
+        - "8002:80"
+        - "8003:443"
     build:
         context: .
         dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile
+    depends_on:
+        consul-service:
+         condition: service_healthy
   swizlypeasy.gateway.api:
     image: ${DOCKER_REGISTRY-}swizlypeasygatewayapi
     hostname: gateway
@@ -24,4 +35,5 @@ services:
       context: .
       dockerfile: SwizlyPeasy.Gateway.API/Dockerfile
     depends_on:
-        - consul-service
+        consul-service:
+         condition: service_healthy
