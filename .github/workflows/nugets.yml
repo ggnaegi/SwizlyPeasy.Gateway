@@ -16,7 +16,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
-      run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
+      run: dotnet build --no-restore SwizlyPeasy.Gateway.sln -c Release
     - name: Pack nugets
       run: dotnet pack -c Release --no-build --output .
     - name: Push to NuGet
