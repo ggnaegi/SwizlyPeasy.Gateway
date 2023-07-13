@@ -16,7 +16,7 @@ public class TestHttpClient : IDisposable
     {
         Client = new HttpClient
         {
-            BaseAddress = new Uri("https://localhost:8001")
+            BaseAddress = new Uri("http://localhost:8000")
         };
 
         var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
