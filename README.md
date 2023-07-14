@@ -77,4 +77,162 @@ And with weather-with-authorization...
 
 You're obviously not Bob...
 
+## Configuring the gateway
 
+You should have a look at the SwizlyPeasy.Gateway.API project.
+
+The setup is straight forward
+
+- Use the provided extension methods in ```program.cs``` 
+
+```
+var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddSwizlyPeasyGateway(builder.Configuration);
+
+    var app = builder.Build();
+
+    app.UseSwizlyPeasyGateway();
+    app.Run();
+```
+
+- Provide a ```routes.config.json``` file (please have a look at the SwizlyPeasy.Gateway.API demo project).
+The syntax is the same as YARP configuration for routes.
+```
+{
+  "Routes": {
+    "route1": {
+      "ClusterId": "DemoAPI",
+      "AuthorizationPolicy": "oidc",
+      "Match": {
+        "Path": "/api/v1/demo/weather"
+      },
+      "Transforms": [
+        {
+          "RequestHeader": "Accept-Language",
+          "Set": "de-CH"
+        }
+      ]
+    },
+    "route2": {
+      "ClusterId": "DemoAPI",
+      "AuthorizationPolicy": "oidc",
+      "Match": {
+        "Path": "/api/v1/demo/weather-with-authorization"
+      },
+      "Transforms": [
+        {
+          "RequestHeader": "Accept-Language",
+          "Set": "de-CH"
+        }
+      ]
+    }
+  }
+}
+```
+- Define your configuration in appsettings
+```
+{
+  "OidcConfig": {
+    "RefreshThresholdMinutes": 1,
+    "Origins": [],
+    "Authority": "https://demo.duendesoftware.com/",
+    "CallbackUri": "/signin-oidc",
+    "ClientId": "interactive.confidential.short",
+    "ClientSecret": "secret",
+    "RedirectUri": "",
+    "Scopes": [ "openid", "profile", "email", "offline_access" ]
+  },
+  "ServiceDiscovery": {
+    "Scheme": "http",
+    "RefreshIntervalInSeconds": 120,
+    "LoadBalancingPolicy": "Random",
+    "KeyValueStoreKey": "SwizlyPeasy.Gateway",
+    "ServiceDiscoveryAddress": "http://consul:8500"
+  },
+  "ClaimsConfig": {
+    "ClaimsHeaderPrefix": "SWIZLY-PEASY",
+    "ClaimsAsHeaders": [
+      "sub",
+      "email",
+      "name",
+      "family_name"
+    ],
+    "JwtToIdentityClaimsMappings": {
+      "sub": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+      "email": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+    }
+  }
+}
+```
+
+## Registering a client
+
+You should have a look at the SwizlyPeasy.DEMO.API project.
+
+Production: Make sure you can't reached the client from the web (encapsulated like in docker), otherwise all this makes no sense.
+
+The setup is a bit more complicated than for the gateway itself, because of the middlewares ordering...
+
+First, use the extension method ```RegisterServiceToSwizlyPeasyGateway```, this will configure the consul client, the service registration to consul and configure the health checks.
+Then, add a "dummy" authentication method using ```SetSwizlyPeasyAuthentication```, as the claims will be provided as headers.
+
+MiddleWares:
+- ```app.UseSwizlyPeasyExceptions();``` Handling exceptions and returning them in RFC 7807 format
+- ```app.UseSwizlyPeasyHealthChecks();``` Formating the output from health endpoint
+- ```app.UseMiddleware<HeaderToClaimsMiddleware>();``` Middleware transforming the auth headers to claims and then signing in the user
+
+Example:
+```
+// swizly peasy consul & health checks
+builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
+builder.Services.SetSwizlyPeasyAuthentication();
+
+...
+
+var app = builder.Build();
+app.UseSwizlyPeasyExceptions();
+
+...
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+//--------- Swizly Peasy MiddleWares ----------
+// swizly peasy health checks middleware
+app.UseSwizlyPeasyHealthChecks();
+// mapping the headers as claims
+app.UseMiddleware<HeaderToClaimsMiddleware>();
+//---------------------------------------------
+app.UseAuthorization();
+app.MapControllers();
+```
+
+Configuration (appsettings):
+```
+"ServiceDiscovery": {
+    "Scheme": "http",
+    "RefreshIntervalInSeconds": 120,
+    "LoadBalancingPolicy": "Random",
+    "KeyValueStoreKey": "SwizlyPeasy.Gateway",
+    "ServiceDiscoveryAddress": "http://consul:8500"
+  },
+  "ServiceRegistration": {
+    "ServiceName": "DemoAPI",
+    "ServiceId": "1",
+    "ServiceAddress": "http://demo",
+    "HealthCheckPath": "health"
+  },
+  "ClaimsConfig": {
+    "ClaimsHeaderPrefix": "SWIZLY-PEASY",
+    "ClaimsAsHeaders": [
+      "sub",
+      "email",
+      "name",
+      "family_name"
+    ],
+    "JwtToIdentityClaimsMappings": {
+      "sub": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+      "email": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+    }
+  }
+}
+```

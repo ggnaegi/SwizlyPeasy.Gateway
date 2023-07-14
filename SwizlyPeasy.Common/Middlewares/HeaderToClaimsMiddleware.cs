@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using SwizlyPeasy.Common.Dtos;
 
 namespace SwizlyPeasy.Common.Middlewares;
 
@@ -10,42 +13,55 @@ namespace SwizlyPeasy.Common.Middlewares;
 /// </summary>
 public class HeaderToClaimsMiddleware
 {
+    private readonly IConfiguration _config;
     private readonly RequestDelegate _next;
 
     /// <summary>
     /// </summary>
     /// <param name="next"></param>
-    public HeaderToClaimsMiddleware(RequestDelegate next)
+    /// <param name="config"></param>
+    public HeaderToClaimsMiddleware(RequestDelegate next, IConfiguration config)
     {
         _next = next;
+        _config = config ?? throw new ArgumentNullException(nameof(config));
     }
 
     /// <summary>
     ///     We are expecting the following headers from SwizlyPeasy.Gateway
     ///     "sub" & "email".
-    ///     Of course, it is possible to add more headers. this can be modified (SwizlyPeasy.Common.Auth)
+    ///     Of course, it is possible to add more headers. this can be modified using the claims config dto
     /// </summary>
     /// <param name="httpContext"></param>
     /// <returns></returns>
     public async Task Invoke(HttpContext httpContext)
     {
+        var claimsConfig = new ClaimsConfig();
+        _config.GetSection(Constants.ClaimsConfigSection).Bind(claimsConfig);
+        var matchingClaims = httpContext.Request.Headers.Where(x => x.Key.Contains(claimsConfig.ClaimsHeaderPrefix));
+
         var claims = new List<Claim>();
-
-        //in case we are calling the service directly, without gateway
-        if (!httpContext.Request.Headers.ContainsKey("sub"))
+        foreach (var matchingClaim in matchingClaims)
         {
-            await _next(httpContext);
-            return;
+            var claimType = matchingClaim.Key[(claimsConfig.ClaimsHeaderPrefix.Length + 1)..];
+            AddToClaims(claims, claimType, matchingClaim.Value, claimsConfig);
         }
-
-        if (httpContext.Request.Headers.TryGetValue("sub", out var values))
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, values[0] ?? throw new InvalidOperationException()));
-
-        if (httpContext.Request.Headers.TryGetValue("email", out values))
-            claims.Add(new Claim(ClaimTypes.Email, values[0] ?? throw new InvalidOperationException()));
 
         await httpContext.SignInAsync(
             new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme)));
         await _next(httpContext);
+    }
+
+    //An identity can contain multiple claims with multiple values and can contain multiple claims of the same type.
+    private void AddToClaims(IList<Claim> claims, string claimType, StringValues values, ClaimsConfig claimsConfig)
+    {
+        foreach (var value in values)
+        {
+            if (value == null) continue;
+
+            if (claimsConfig.JwtToIdentityClaimsMappings.TryGetValue(claimType, out var alternateClaim))
+                claims.Add(new Claim(alternateClaim, value));
+
+            claims.Add(new Claim(claimType, value));
+        }
     }
 }

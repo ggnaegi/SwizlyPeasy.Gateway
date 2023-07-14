@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Security.Claims;
+using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -178,12 +179,6 @@ public static class OpenIdConnectExtensions
             var scopes = config.Scopes;
             foreach (var scope in scopes) options.Scope.Add(scope);
 
-            //Mapping claims for later usage, accessing them over context.User
-            options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-            options.ClaimActions.MapJsonKey("sub", "sub");
-            options.ClaimActions.MapJsonKey("email", "email");
-
             options.GetClaimsFromUserInfoEndpoint = true;
 
             //fix for production environment
@@ -196,7 +191,6 @@ public static class OpenIdConnectExtensions
             };
 
             //options.Events.OnMessageReceived
-
             options.BackchannelHttpHandler = new HttpClientHandler { UseCookies = false };
         });
 

@@ -32,5 +32,5 @@ The parameters in Service Discovery part are irrelevant for a client API, except
 
 - ServiceName: The service type name (the services will be grouped by service name)
 - ServiceId: The service id (for load balancing) -> Key is then "DemoAPI-1"
-- ServiceAddress: The started service address
+- ServiceAddress: The current service address
 - HealthCheckPath: The health endpoint path (you could use the health extension methods in SwizlyPeasy.Common)

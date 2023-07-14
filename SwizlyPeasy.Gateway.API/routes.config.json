@@ -25,6 +25,18 @@
           "Set": "de-CH"
         }
       ]
+    },
+    "route3": {
+      "ClusterId": "DemoAPI",
+      "Match": {
+        "Path": "/api/v1/demo/weather-anonymous"
+      },
+      "Transforms": [
+        {
+          "RequestHeader": "Accept-Language",
+          "Set": "de-CH"
+        }
+      ]
     }
   }
 }
