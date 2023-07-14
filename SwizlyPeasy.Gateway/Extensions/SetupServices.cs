@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Security.Claims;
+using IdentityModel;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,7 @@ public static class SetupServices
         services
             .AddReverseProxy()
             .LoadFromConsul()
-            .AddAuthorizationHeaders()
+            .AddAuthorizationHeaders(configuration)
             .AddStatusService();
 
         services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
@@ -81,8 +82,9 @@ public static class SetupServices
     ///     in micro services
     /// </summary>
     /// <param name="builder"></param>
+    /// <param name="config"></param>
     /// <returns></returns>
-    public static IReverseProxyBuilder AddAuthorizationHeaders(this IReverseProxyBuilder builder)
+    public static IReverseProxyBuilder AddAuthorizationHeaders(this IReverseProxyBuilder builder, IConfiguration config)
     {
         builder.AddTransforms(builderContext =>
         {
@@ -90,13 +92,31 @@ public static class SetupServices
             if (!string.IsNullOrEmpty(builderContext.Route.AuthorizationPolicy))
                 builderContext.AddRequestTransform(transformContext =>
                 {
+                    var claimsConfig = new ClaimsConfig();
+                    config.GetSection(Constants.ClaimsConfigSection).Bind(claimsConfig);
+
                     var userClaims = transformContext.HttpContext.User.Claims.ToArray();
 
-                    var foundClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-                    if (foundClaim != null) transformContext.ProxyRequest.Headers.Add("sub", foundClaim.Value);
+                    // even with options.ClaimActions.MapJsonKey, system can't provide the key sub
+                    // that is mapped to ClaimTypes.NameIdentifier
+                    foreach (var claimAsHeader in claimsConfig.ClaimsAsHeaders)
+                    {
+                        var foundClaim = userClaims.FirstOrDefault(x => x.Type == claimAsHeader);
 
-                    var emailClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
-                    if (emailClaim != null) transformContext.ProxyRequest.Headers.Add("email", emailClaim.Value);
+                        if (claimAsHeader == JwtClaimTypes.Subject)
+                        {
+                            foundClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                            if (foundClaim == null) continue;
+
+                            foundClaim = new Claim(JwtClaimTypes.Subject, foundClaim.Value);
+                        }
+
+                        if (foundClaim == null) continue;
+
+                        var headerKey = $"{claimsConfig.ClaimsHeaderPrefix}-{foundClaim.Type}";
+                        transformContext.ProxyRequest.Headers.Add(headerKey, foundClaim.Value);
+                    }
 
                     return ValueTask.CompletedTask;
                 });
@@ -141,10 +161,7 @@ public static class SetupServices
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Constants.OidcPolicy, policy =>
-            {
-                policy.RequireAuthenticatedUser();
-            });
+            options.AddPolicy(Constants.OidcPolicy, policy => { policy.RequireAuthenticatedUser(); });
         });
     }
 
