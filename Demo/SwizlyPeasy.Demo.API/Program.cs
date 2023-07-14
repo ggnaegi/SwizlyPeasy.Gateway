@@ -1,3 +1,4 @@
+using SwizlyPeasy.Common.Auth;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.HealthChecks;
 using SwizlyPeasy.Common.Middlewares;
@@ -15,7 +16,8 @@ builder.Services.AddSwaggerGen();
 
 // swizly peasy consul & health checks
 builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
-builder.Services.SetAuthenticationAndAuthorization();
+builder.Services.SetSwizlyPeasyAuthentication();
+builder.Services.SetAuthorization();
 
 var app = builder.Build();
 app.UseSwizlyPeasyExceptions();
@@ -35,7 +37,6 @@ app.UseSwizlyPeasyHealthChecks();
 // mapping the headers as claims
 app.UseMiddleware<HeaderToClaimsMiddleware>();
 //---------------------------------------------
-
 app.UseAuthorization();
 app.MapControllers();
 
