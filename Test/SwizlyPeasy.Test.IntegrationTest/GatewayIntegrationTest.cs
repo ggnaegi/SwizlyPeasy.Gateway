@@ -28,7 +28,7 @@ public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Program>>
 
         Assert.NotNull(serverStatus);
 
-        var storedStatus = JsonConvert.DeserializeObject<StatusDto>(Constants.GatewayRootResponse);
+        var storedStatus = JsonConvert.DeserializeObject<StatusDto>(Constants.GatewayRootResponseNoServices);
 
         Assert.NotNull(storedStatus);
 
