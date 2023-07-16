@@ -6,11 +6,11 @@ using SwizlyPeasy.Common.Dtos.Status;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class GatewayIntegrationTest : IClassFixture<TestHttpClient>
+public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Program>>
 {
-    private readonly TestHttpClient _httpClient;
+    private readonly TestHttpClient<Program> _httpClient;
 
-    public GatewayIntegrationTest(TestHttpClient httpClient)
+    public GatewayIntegrationTest(TestHttpClient<Program> httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }

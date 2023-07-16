@@ -1,6 +1,6 @@
-﻿using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Model.Common;
-using Ductus.FluentDocker.Services;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Testing;
+using SwizlyPeasy.Test.IntegrationTest.Factories;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -8,7 +8,8 @@ namespace SwizlyPeasy.Test.IntegrationTest;
 ///     Http client fixture used in several test classes
 ///     avoiding creating a new test client every time.
 /// </summary>
-public class TestHttpClient : IDisposable
+public class TestHttpClient<TProgram> : IDisposable
+    where TProgram : class
 {
     //private readonly ICompositeService _svc;
 
@@ -19,21 +20,15 @@ public class TestHttpClient : IDisposable
             BaseAddress = new Uri("https://localhost:8001")
         };
 
-        /*var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
-            (TemplateString)"Docker/docker-compose.yml");
+        var factory = new CustomWebApplicationFactory<TProgram>();
 
-        var overrideComposeFile = Path.Combine(Directory.GetCurrentDirectory(),
-            (TemplateString)"Docker/docker-compose.override.yml");
+        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
 
-            // @formatter:off
-            _svc = new Builder()
-                .UseContainer()
-                .UseCompose()
-                .FromFile(composeFile, overrideComposeFile)
-                .RemoveOrphans()
-                .Build().Start();*/
-
-            Thread.Sleep(10000);
+        Client.DefaultRequestHeaders.Accept.Clear();
+        Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     public HttpClient Client { get; }
@@ -41,12 +36,11 @@ public class TestHttpClient : IDisposable
     public void Dispose()
     {
         Client.Dispose();
-        // _svc.Dispose();
     }
 }
 
 [CollectionDefinition("TestHttpClient")]
-public class TestHttpClientCollection : ICollectionFixture<TestHttpClient>
+public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<Program>>
 {
     // This class has no code, and is never created. Its purpose is simply
     // to be the place to apply [CollectionDefinition] and all the
