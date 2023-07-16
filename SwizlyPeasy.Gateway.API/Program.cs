@@ -20,3 +20,10 @@ finally
 {
     LogManager.Shutdown();
 }
+
+/// <summary>
+/// For Integration Tests...
+/// </summary>
+public partial class Program
+{
+}
