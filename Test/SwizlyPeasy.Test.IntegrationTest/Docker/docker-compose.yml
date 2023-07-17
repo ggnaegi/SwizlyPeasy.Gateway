@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  consul-service:
+    image: "hashicorp/consul:latest"
+    command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
+    network_mode: host
+  swizlypeasy.demo.api1:
+    image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
+    network_mode: host
+    build:
+        context: ../../../
+        dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile
+  swizlypeasy.demo.api2:
+    image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
+    network_mode: host
+    build:
+        context: ../../../
+        dockerfile: Demo/SwizlyPeasy.Demo.API/Dockerfile

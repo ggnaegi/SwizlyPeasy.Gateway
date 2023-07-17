@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  swizlypeasy.demo.api1:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=IntegrationTest
+      - ASPNETCORE_URLS=http://+:8020
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  swizlypeasy.demo.api2:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=IntegrationTest2
+      - ASPNETCORE_URLS=http://+:8030
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
