@@ -45,7 +45,7 @@ jobs:
         sonarOrganization: ggnaegi
         dotnetBuildArguments: SwizlyPeasy.Gateway.sln
         dotnetDisableTests: true
-        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml"
+        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml" /d:sonar.verbose=true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
