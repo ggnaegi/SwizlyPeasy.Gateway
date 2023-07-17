@@ -43,7 +43,7 @@ jobs:
         sonarProjectKey: ggnaegi_SwizlyPeasy.Gateway
         sonarProjectName:  SwizlyPeasy.Gateway
         sonarOrganization: ggnaegi
-        dotnetBuildArguments: --no-restore SwizlyPeasy.Gateway.sln
+        dotnetBuildArguments: SwizlyPeasy.Gateway.sln
         dotnetDisableTests: true
         sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml"
       env:
