@@ -29,14 +29,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
     - name: Unit Test
-      run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/result.json
     - name: Start Multi Containers
       run: docker-compose -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.yml -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.override.yml up -d
     - name: Sleep for 20 seconds
       run: sleep 20s
       shell: bash
     - name: Integration Test
-      run: dotnet test --no-build --filter 'FullyQualifiedName!~UnitTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
+      run: dotnet test --no-build --filter 'FullyQualifiedName!~UnitTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/result.json
     - name: SonarScanner for .NET 7 with pull request decoration support
       uses: highbyte/sonarscan-dotnet@v2.2.2
       with:
@@ -45,7 +45,7 @@ jobs:
         sonarOrganization: ggnaegi
         dotnetBuildArguments: SwizlyPeasy.Gateway.sln
         dotnetDisableTests: true
-        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml" /d:sonar.verbose=true /d:sonar.scm.exclusions.disabled=true
+        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/result.json" /d:sonar.verbose=true /d:sonar.scm.exclusions.disabled=true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
