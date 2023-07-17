@@ -1,6 +1,4 @@
 ﻿using System.Net;
-using System.Security.Claims;
-using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

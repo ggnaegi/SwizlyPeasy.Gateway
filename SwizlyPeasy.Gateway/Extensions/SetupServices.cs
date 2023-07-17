@@ -100,29 +100,41 @@ public static class SetupServices
                     // even with options.ClaimActions.MapJsonKey, system can't provide the key sub
                     // that is mapped to ClaimTypes.NameIdentifier
                     foreach (var claimAsHeader in claimsConfig.ClaimsAsHeaders)
-                    {
-                        var foundClaim = userClaims.FirstOrDefault(x => x.Type == claimAsHeader);
-
-                        if (claimAsHeader == JwtClaimTypes.Subject)
-                        {
-                            foundClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-                            if (foundClaim == null) continue;
-
-                            foundClaim = new Claim(JwtClaimTypes.Subject, foundClaim.Value);
-                        }
-
-                        if (foundClaim == null) continue;
-
-                        var headerKey = $"{claimsConfig.ClaimsHeaderPrefix}-{foundClaim.Type}";
-                        transformContext.ProxyRequest.Headers.Add(headerKey, foundClaim.Value);
-                    }
+                        AddClaimToHeader(userClaims, claimAsHeader, transformContext, claimsConfig.ClaimsHeaderPrefix);
 
                     return ValueTask.CompletedTask;
                 });
         });
 
         return builder;
+    }
+
+    /// <summary>
+    /// Adding claim to request's header
+    /// reducing methods complexity
+    /// </summary>
+    /// <param name="userClaims"></param>
+    /// <param name="claimAsHeader"></param>
+    /// <param name="transformContext"></param>
+    /// <param name="claimHeaderPrefix"></param>
+    private static void AddClaimToHeader(Claim[] userClaims, string claimAsHeader,
+        RequestTransformContext transformContext, string claimHeaderPrefix)
+    {
+        var foundClaim = userClaims.FirstOrDefault(x => x.Type == claimAsHeader);
+
+        if (claimAsHeader == JwtClaimTypes.Subject)
+        {
+            foundClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+            if (foundClaim == null) return;
+
+            foundClaim = new Claim(JwtClaimTypes.Subject, foundClaim.Value);
+        }
+
+        if (foundClaim == null) return;
+
+        var headerKey = $"{claimHeaderPrefix}-{foundClaim.Type}";
+        transformContext.ProxyRequest.Headers.Add(headerKey, foundClaim.Value);
     }
 
     public static IReverseProxyBuilder AddStatusService(this IReverseProxyBuilder builder)

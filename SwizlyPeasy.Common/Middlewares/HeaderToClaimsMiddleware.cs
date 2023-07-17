@@ -52,7 +52,7 @@ public class HeaderToClaimsMiddleware
     }
 
     //An identity can contain multiple claims with multiple values and can contain multiple claims of the same type.
-    private void AddToClaims(IList<Claim> claims, string claimType, StringValues values, ClaimsConfig claimsConfig)
+    private static void AddToClaims(IList<Claim> claims, string claimType, StringValues values, ClaimsConfig claimsConfig)
     {
         foreach (var value in values)
         {
