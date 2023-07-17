@@ -32,6 +32,9 @@ jobs:
       run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: Start Multi Containers
       run: docker-compose -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.yml -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.override.yml up -d
+    - name: Sleep for 20 seconds
+      run: sleep 20s
+      shell: bash
     - name: Integration Test
       run: dotnet test --no-build --filter 'FullyQualifiedName!~UnitTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: SonarScanner for .NET 7 with pull request decoration support
