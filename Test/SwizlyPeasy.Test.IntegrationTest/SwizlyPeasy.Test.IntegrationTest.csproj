@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Consul" Version="1.6.10.9" />
 		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,8 +30,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Demo\SwizlyPeasy.Demo.API\SwizlyPeasy.Demo.API.csproj" />
 		<ProjectReference Include="..\..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
+		<ProjectReference Include="..\..\SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj" />
 		<ProjectReference Include="..\..\SwizlyPeasy.Gateway.API\SwizlyPeasy.Gateway.API.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Docker\" />
 	</ItemGroup>
 
 </Project>

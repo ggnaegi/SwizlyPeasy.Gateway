@@ -11,15 +11,8 @@ namespace SwizlyPeasy.Test.IntegrationTest;
 public class TestHttpClient<TProgram> : IDisposable
     where TProgram : class
 {
-    //private readonly ICompositeService _svc;
-
     public TestHttpClient()
     {
-        Client = new HttpClient
-        {
-            BaseAddress = new Uri("https://localhost:8001")
-        };
-
         var factory = new CustomWebApplicationFactory<TProgram>();
 
         Client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -40,7 +33,7 @@ public class TestHttpClient<TProgram> : IDisposable
 }
 
 [CollectionDefinition("TestHttpClient")]
-public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<Program>>
+public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<Gateway.API.Program>>
 {
     // This class has no code, and is never created. Its purpose is simply
     // to be the place to apply [CollectionDefinition] and all the

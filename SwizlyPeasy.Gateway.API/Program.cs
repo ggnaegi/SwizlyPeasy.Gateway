@@ -21,9 +21,12 @@ finally
     LogManager.Shutdown();
 }
 
-/// <summary>
-/// For Integration Tests...
-/// </summary>
-public partial class Program
+namespace SwizlyPeasy.Gateway.API
 {
+    /// <summary>
+    /// For Integration Tests...
+    /// </summary>
+    public partial class Program
+    {
+    }
 }
