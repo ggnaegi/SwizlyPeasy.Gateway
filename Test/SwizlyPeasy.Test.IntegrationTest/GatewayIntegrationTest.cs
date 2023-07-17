@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Dtos.Status;
+using SwizlyPeasy.Demo.API.Dtos;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -28,7 +29,7 @@ public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Gateway.API.P
 
         Assert.NotNull(serverStatus);
 
-        var storedStatus = JsonConvert.DeserializeObject<StatusDto>(Constants.GatewayRootResponseNoServices);
+        var storedStatus = JsonConvert.DeserializeObject<StatusDto>(Constants.GatewayRootResponse);
 
         Assert.NotNull(storedStatus);
 
@@ -55,5 +56,21 @@ public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Gateway.API.P
         Assert.NotNull(rfcNotFound);
 
         Assert.Equal(404, rfcNotFound.Status);
+    }
+
+    [Fact]
+    public async Task Gateway_GetAnonymousWeatherPath_Ok()
+    {
+        var response = await _httpClient.Client.GetAsync("/api/v1/demo/weather-anonymous");
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadAsStringAsync();
+
+        Assert.NotNull(result);
+
+        var weatherObjects = JsonConvert.DeserializeObject<WeatherForecast[]>(result);
+
+        Assert.NotNull(weatherObjects);
     }
 }
