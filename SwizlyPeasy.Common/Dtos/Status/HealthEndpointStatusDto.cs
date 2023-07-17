@@ -38,10 +38,6 @@ public class Definition
     public bool GRPCUseTLS { get; set; }
 }
 
-public class Meta
-{
-}
-
 public class HealthEndpointStatusDto
 {
     public string? AggregatedStatus { get; set; }
@@ -54,7 +50,7 @@ public class ServiceData
     public string? ID { get; set; }
     public string? Service { get; set; }
     public List<object>? Tags { get; set; }
-    public Meta? Meta { get; set; }
+    public object? Meta { get; set; }
     public int Port { get; set; }
     public string? Address { get; set; }
     public Weights? Weights { get; set; }
