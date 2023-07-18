@@ -31,7 +31,7 @@ public class DynamicConfigIntegrationTest : IClassFixture<TestHttpClient<Program
         await kvService.SaveToKeyValueStore("SwizlyPeasy.Gateway",
             Encoding.UTF8.GetBytes(Constants.GatewayConfigWithPathSet));
 
-        Thread.Sleep(30000);
+        await Task.Delay(30000);
 
         response = await _httpClient.Client.GetAsync("/newpath");
         response.EnsureSuccessStatusCode();
@@ -47,7 +47,7 @@ public class DynamicConfigIntegrationTest : IClassFixture<TestHttpClient<Program
 
         await kvService.SaveToKeyValueStore("SwizlyPeasy.Gateway", Encoding.UTF8.GetBytes(Constants.GatewayBaseConfig));
 
-        Thread.Sleep(30000);
+        await Task.Delay(30000);
 
         response = await _httpClient.Client.GetAsync("/newpath");
 
