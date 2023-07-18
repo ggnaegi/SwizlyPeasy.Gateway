@@ -31,7 +31,7 @@ jobs:
     - name: Unit Test
       run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: Rename paths in coverage file
-      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway||g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.UnitTest/TestResults/coverage.opencover.xml
+      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.UnitTest/TestResults/coverage.opencover.xml
     - name: Start Multi Containers
       run: docker-compose -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.yml -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.override.yml up -d
     - name: Sleep for 20 seconds
@@ -40,7 +40,7 @@ jobs:
     - name: Integration Test
       run: dotnet test --no-build --filter 'FullyQualifiedName!~UnitTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
     - name: Rename paths in coverage file
-      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway||g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.IntegrationTest/TestResults/coverage.opencover.xml
+      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.IntegrationTest/TestResults/coverage.opencover.xml
     - name: SonarScanner for .NET 7 with pull request decoration support
       uses: highbyte/sonarscan-dotnet@v2.2.2
       with:
