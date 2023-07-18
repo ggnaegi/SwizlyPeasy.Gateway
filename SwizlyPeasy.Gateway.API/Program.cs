@@ -1,4 +1,5 @@
 using NLog;
+using NLog.Web;
 using SwizlyPeasy.Gateway.Extensions;
 
 var logger = LogManager.Setup().LoadConfigurationFromFile("NLog.config").GetCurrentClassLogger();
@@ -6,6 +7,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSwizlyPeasyGateway(builder.Configuration);
+
+    builder.Host.UseNLog();
 
     var app = builder.Build();
 
@@ -19,4 +22,14 @@ catch (Exception e)
 finally
 {
     LogManager.Shutdown();
+}
+
+namespace SwizlyPeasy.Gateway.API
+{
+    /// <summary>
+    /// For Integration Tests...
+    /// </summary>
+    public partial class Program
+    {
+    }
 }

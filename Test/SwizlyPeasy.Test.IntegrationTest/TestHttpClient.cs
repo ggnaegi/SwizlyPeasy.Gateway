@@ -1,6 +1,7 @@
-﻿using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Model.Common;
-using Ductus.FluentDocker.Services;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Testing;
+using SwizlyPeasy.Gateway.API;
+using SwizlyPeasy.Test.IntegrationTest.Factories;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -8,45 +9,45 @@ namespace SwizlyPeasy.Test.IntegrationTest;
 ///     Http client fixture used in several test classes
 ///     avoiding creating a new test client every time.
 /// </summary>
-public class TestHttpClient : IDisposable
+public class TestHttpClient<TProgram> : IDisposable
+    where TProgram : class
 {
-    //private readonly ICompositeService _svc;
+    // To detect redundant calls
+    private bool _disposedValue;
 
     public TestHttpClient()
     {
-        Client = new HttpClient
+        var factory = new CustomWebApplicationFactory<TProgram>();
+
+        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            BaseAddress = new Uri("https://localhost:8001")
-        };
+            AllowAutoRedirect = false
+        });
 
-        /*var composeFile = Path.Combine(Directory.GetCurrentDirectory(),
-            (TemplateString)"Docker/docker-compose.yml");
-
-        var overrideComposeFile = Path.Combine(Directory.GetCurrentDirectory(),
-            (TemplateString)"Docker/docker-compose.override.yml");
-
-            // @formatter:off
-            _svc = new Builder()
-                .UseContainer()
-                .UseCompose()
-                .FromFile(composeFile, overrideComposeFile)
-                .RemoveOrphans()
-                .Build().Start();*/
-
-            Thread.Sleep(10000);
+        Client.DefaultRequestHeaders.Accept.Clear();
+        Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
     public HttpClient Client { get; }
 
     public void Dispose()
     {
-        Client.Dispose();
-        // _svc.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Protected implementation of Dispose pattern.
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposedValue) return;
+        if (disposing) Client.Dispose();
+
+        _disposedValue = true;
     }
 }
 
 [CollectionDefinition("TestHttpClient")]
-public class TestHttpClientCollection : ICollectionFixture<TestHttpClient>
+public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<Program>>
 {
     // This class has no code, and is never created. Its purpose is simply
     // to be the place to apply [CollectionDefinition] and all the

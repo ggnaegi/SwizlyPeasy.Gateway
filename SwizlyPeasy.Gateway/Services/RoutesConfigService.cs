@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Configuration;
+using SwizlyPeasy.Common.Exceptions;
 using SwizlyPeasy.Consul.KeyValueStore;
 using SwizlyPeasy.Gateway.Extensions;
 using Yarp.ReverseProxy.Configuration;
@@ -31,8 +32,8 @@ public class RoutesConfigService : IRoutesConfigService
     private static RouteConfig CreateRoute(IConfigurationSection section)
     {
         if (!string.IsNullOrEmpty(section["RouteId"]))
-            throw new Exception(
-                "The route config format has changed, routes are now objects instead of an array. The route id must be set as the object name, not with the 'RouteId' field.");
+            throw new InternalDomainException(
+                "The route config format has changed, routes are now objects instead of an array. The route id must be set as the object name, not with the 'RouteId' field.", null);
 
         return new RouteConfig
         {

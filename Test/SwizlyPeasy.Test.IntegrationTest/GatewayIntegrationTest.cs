@@ -2,15 +2,16 @@
 using Newtonsoft.Json;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Dtos.Status;
+using SwizlyPeasy.Demo.API.Dtos;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class GatewayIntegrationTest : IClassFixture<TestHttpClient>
+public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Gateway.API.Program>>
 {
-    private readonly TestHttpClient _httpClient;
+    private readonly TestHttpClient<Gateway.API.Program> _httpClient;
 
-    public GatewayIntegrationTest(TestHttpClient httpClient)
+    public GatewayIntegrationTest(TestHttpClient<Gateway.API.Program> httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
@@ -55,5 +56,21 @@ public class GatewayIntegrationTest : IClassFixture<TestHttpClient>
         Assert.NotNull(rfcNotFound);
 
         Assert.Equal(404, rfcNotFound.Status);
+    }
+
+    [Fact]
+    public async Task Gateway_GetAnonymousWeatherPath_Ok()
+    {
+        var response = await _httpClient.Client.GetAsync("/api/v1/demo/weather-anonymous");
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadAsStringAsync();
+
+        Assert.NotNull(result);
+
+        var weatherObjects = JsonConvert.DeserializeObject<WeatherForecast[]>(result);
+
+        Assert.NotNull(weatherObjects);
     }
 }
