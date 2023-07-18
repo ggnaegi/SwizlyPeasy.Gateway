@@ -19,7 +19,7 @@ public class ConflictDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private ConflictDomainException(SerializationInfo info, StreamingContext context)
+    protected ConflictDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...

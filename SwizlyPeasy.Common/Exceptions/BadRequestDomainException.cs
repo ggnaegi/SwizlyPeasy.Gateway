@@ -19,7 +19,7 @@ public class BadRequestDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private BadRequestDomainException(SerializationInfo info, StreamingContext context)
+    protected BadRequestDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...
