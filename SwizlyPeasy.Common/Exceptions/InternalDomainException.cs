@@ -19,7 +19,7 @@ public class InternalDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private InternalDomainException(SerializationInfo info, StreamingContext context)
+    protected InternalDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...

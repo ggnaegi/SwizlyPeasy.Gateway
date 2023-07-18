@@ -19,7 +19,7 @@ public class NotFoundDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private NotFoundDomainException(SerializationInfo info, StreamingContext context)
+    protected NotFoundDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...

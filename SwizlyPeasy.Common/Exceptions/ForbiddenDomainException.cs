@@ -19,7 +19,7 @@ public class ForbiddenDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private ForbiddenDomainException(SerializationInfo info, StreamingContext context)
+    protected ForbiddenDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...

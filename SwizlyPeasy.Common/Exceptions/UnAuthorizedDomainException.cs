@@ -19,7 +19,7 @@ public class UnAuthorizedDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private UnAuthorizedDomainException(SerializationInfo info, StreamingContext context)
+    protected UnAuthorizedDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...

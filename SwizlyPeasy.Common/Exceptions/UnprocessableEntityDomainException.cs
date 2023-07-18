@@ -19,7 +19,7 @@ public class UnprocessableEntityDomainException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    private UnprocessableEntityDomainException(SerializationInfo info, StreamingContext context)
+    protected UnprocessableEntityDomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
         // ...
