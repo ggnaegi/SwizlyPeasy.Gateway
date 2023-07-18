@@ -1,9 +1,10 @@
 ﻿#region
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebMotions.Fake.Authentication.JwtBearer;
 
 #endregion
 
@@ -22,8 +23,18 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     /// <exception cref="Exception"></exception>
     protected override void ConfigureWebHost(IWebHostBuilder webHostBuilder)
     {
+        webHostBuilder.ConfigureServices(services =>
+        {
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType ==
+                     typeof(AuthenticationBuilder));
+
+            if(descriptor != null)
+                services.Remove(descriptor);
+
+            services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
+        });
 
         webHostBuilder.UseEnvironment("IntegrationTest");
-
     }
 }
