@@ -24,14 +24,30 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+    - name: Start Multi Containers
+      run: docker-compose -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.yml -f Test/SwizlyPeasy.Test.IntegrationTest/Docker/docker-compose.override.yml up -d
+    - name: Sleep for 20 seconds
+      run: sleep 20s
+      shell: bash
     - name: Restore dependencies
       run: dotnet restore SwizlyPeasy.Gateway.sln
     - name: Build
       run: dotnet build --no-restore SwizlyPeasy.Gateway.sln
-    - name: Unit Test
-      run: dotnet test --no-build --filter 'FullyQualifiedName!~IntegrationTest' SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
+    - name: Unit & Integration Test
+      run: dotnet test --no-build SwizlyPeasy.Gateway.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover
+    - name: Rename paths in coverage file (Unit Tests)
+      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.UnitTest/TestResults/coverage.opencover.xml
+    - name: Rename paths in coverage file (Integration Test)
+      run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.IntegrationTest/TestResults/coverage.opencover.xml
+    - name: SonarScanner for .NET 7 with pull request decoration support
+      uses: highbyte/sonarscan-dotnet@v2.2.2
+      with:
+        sonarProjectKey: ggnaegi_SwizlyPeasy.Gateway
+        sonarProjectName:  SwizlyPeasy.Gateway
+        sonarOrganization: ggnaegi
+        dotnetBuildArguments: SwizlyPeasy.Gateway.sln
+        dotnetDisableTests: true
+        sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml" /d:sonar.verbose=true /d:sonar.scm.exclusions.disabled=true /d:sonar.coverage.exclusions="**Test*.cs"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

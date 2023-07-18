@@ -16,8 +16,19 @@ public class HealthCheckService : IHealthCheckService
 
     public async Task<bool> IsServiceHealthy(string serviceId)
     {
-        var serviceHealth =
-            await _consulClient.Raw.Query($"/v1/agent/health/service/id/{serviceId}", new QueryOptions());
+        QueryResult<dynamic>? serviceHealth;
+
+        // handling exceptions from consul client
+        // consul could throw a ConsulRequestException with status 503
+        try
+        {
+            serviceHealth = await _consulClient.Raw.Query($"/v1/agent/health/service/id/{serviceId}", new QueryOptions());
+        }
+        catch (ConsulRequestException)
+        {
+            return false;
+        }
+        
 
         if (serviceHealth.StatusCode == HttpStatusCode.NotFound)
             throw new InternalDomainException($"No Health Checks for service with Id {serviceId} can be found.", null);

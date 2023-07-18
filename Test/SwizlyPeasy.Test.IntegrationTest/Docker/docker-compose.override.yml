@@ -1,16 +1,17 @@
 version: '3.4'
 
 services:
-  swizlypeasy.gateway.api:
+  swizlypeasy.demo.api1:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
+      - ASPNETCORE_ENVIRONMENT=IntegrationTest
+      - ASPNETCORE_URLS=http://+:8020
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  swizlypeasy.demo.api:
+  swizlypeasy.demo.api2:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=IntegrationTest2
+      - ASPNETCORE_URLS=http://+:8030
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 

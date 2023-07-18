@@ -15,4 +15,5 @@ public class OidcConfig
     public string ClientSecret { get; set; } = "secret";
     public string RedirectUri { get; set; } = "";
     public string[] Scopes { get; set; } = { "openid", "profile", "email", "offline_access" };
+    public bool DisableOidc { get; set; } = false;
 }

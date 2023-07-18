@@ -46,7 +46,6 @@ public class ServiceDiscoveryHostedService : IHostedService
             }
         };
 
-        await _client.Agent.ServiceDeregister(registration.ID, cancellationToken);
         await _client.Agent.ServiceRegister(registration, cancellationToken);
     }
 

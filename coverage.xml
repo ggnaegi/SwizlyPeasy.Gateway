@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<results>
+  <skipped_modules>
+    <skipped_module name="microsoft.applicationinsights.dll" path="microsoft.applicationinsights.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.templateengine.edge.dll" path="microsoft.templateengine.edge.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.build.dll" path="microsoft.build.dll" reason="no_symbols" />
+    <skipped_module name="system.diagnostics.diagnosticsource.dll" path="system.diagnostics.diagnosticsource.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.templateengine.abstractions.dll" path="microsoft.templateengine.abstractions.dll" reason="no_symbols" />
+    <skipped_module name="system.commandline.dll" path="system.commandline.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.extensions.logging.abstractions.dll" path="microsoft.extensions.logging.abstractions.dll" reason="no_symbols" />
+    <skipped_module name="msbuild.dll" path="msbuild.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.templateengine.cli.resources.dll" path="microsoft.templateengine.cli.resources.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.templateengine.cli.dll" path="microsoft.templateengine.cli.dll" reason="no_symbols" />
+    <skipped_module name="system.net.nameresolution.dll" path="system.net.nameresolution.dll" reason="no_symbols" />
+    <skipped_module name="system.private.uri.dll" path="system.private.uri.dll" reason="no_symbols" />
+    <skipped_module name="netstandard.dll" path="netstandard.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.dotnet.cli.utils.dll" path="microsoft.dotnet.cli.utils.dll" reason="no_symbols" />
+    <skipped_module name="nuget.common.dll" path="nuget.common.dll" reason="no_symbols" />
+    <skipped_module name="system.text.json.dll" path="system.text.json.dll" reason="no_symbols" />
+    <skipped_module name="system.text.encodings.web.dll" path="system.text.encodings.web.dll" reason="no_symbols" />
+    <skipped_module name="system.private.xml.dll" path="system.private.xml.dll" reason="no_symbols" />
+    <skipped_module name="system.diagnostics.stacktrace.dll" path="system.diagnostics.stacktrace.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.dotnet.templatelocator.dll" path="microsoft.dotnet.templatelocator.dll" reason="no_symbols" />
+    <skipped_module name="system.private.corelib.dll" path="system.private.corelib.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.win32.primitives.dll" path="microsoft.win32.primitives.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.templatesearch.common.dll" path="microsoft.templatesearch.common.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.dotnet.configurer.dll" path="microsoft.dotnet.configurer.dll" reason="no_symbols" />
+    <skipped_module name="system.componentmodel.primitives.dll" path="system.componentmodel.primitives.dll" reason="no_symbols" />
+    <skipped_module name="system.runtime.dll" path="system.runtime.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.deployment.dotnet.releases.dll" path="microsoft.deployment.dotnet.releases.dll" reason="no_symbols" />
+    <skipped_module name="system.collections.immutable.dll" path="system.collections.immutable.dll" reason="no_symbols" />
+    <skipped_module name="system.collections.concurrent.dll" path="system.collections.concurrent.dll" reason="no_symbols" />
+    <skipped_module name="system.private.xml.linq.dll" path="system.private.xml.linq.dll" reason="no_symbols" />
+    <skipped_module name="system.io.memorymappedfiles.dll" path="system.io.memorymappedfiles.dll" reason="no_symbols" />
+    <skipped_module name="system.net.primitives.dll" path="system.net.primitives.dll" reason="no_symbols" />
+    <skipped_module name="system.componentmodel.dll" path="system.componentmodel.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.win32.registry.dll" path="microsoft.win32.registry.dll" reason="no_symbols" />
+    <skipped_module name="system.net.networkinformation.dll" path="system.net.networkinformation.dll" reason="no_symbols" />
+    <skipped_module name="system.collections.dll" path="system.collections.dll" reason="no_symbols" />
+    <skipped_module name="system.threading.thread.dll" path="system.threading.thread.dll" reason="no_symbols" />
+    <skipped_module name="system.memory.dll" path="system.memory.dll" reason="no_symbols" />
+    <skipped_module name="system.runtime.serialization.formatters.dll" path="system.runtime.serialization.formatters.dll" reason="no_symbols" />
+    <skipped_module name="dotnet.dll" path="dotnet.dll" reason="no_symbols" />
+    <skipped_module name="system.net.security.dll" path="system.net.security.dll" reason="no_symbols" />
+    <skipped_module name="system.text.encoding.codepages.dll" path="system.text.encoding.codepages.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.dotnet.internalabstractions.dll" path="microsoft.dotnet.internalabstractions.dll" reason="no_symbols" />
+    <skipped_module name="system.text.regularexpressions.dll" path="system.text.regularexpressions.dll" reason="no_symbols" />
+    <skipped_module name="system.security.cryptography.dll" path="system.security.cryptography.dll" reason="no_symbols" />
+    <skipped_module name="system.linq.dll" path="system.linq.dll" reason="no_symbols" />
+    <skipped_module name="system.numerics.vectors.dll" path="system.numerics.vectors.dll" reason="no_symbols" />
+    <skipped_module name="system.reflection.metadata.dll" path="system.reflection.metadata.dll" reason="no_symbols" />
+    <skipped_module name="system.runtime.interopservices.dll" path="system.runtime.interopservices.dll" reason="no_symbols" />
+    <skipped_module name="system.diagnostics.process.dll" path="system.diagnostics.process.dll" reason="no_symbols" />
+    <skipped_module name="system.net.http.dll" path="system.net.http.dll" reason="no_symbols" />
+    <skipped_module name="system.threading.dll" path="system.threading.dll" reason="no_symbols" />
+    <skipped_module name="dotnet.resources.dll" path="dotnet.resources.dll" reason="no_symbols" />
+    <skipped_module name="system.io.compression.dll" path="system.io.compression.dll" reason="no_symbols" />
+    <skipped_module name="system.xml.xdocument.dll" path="system.xml.xdocument.dll" reason="no_symbols" />
+    <skipped_module name="system.text.encoding.extensions.dll" path="system.text.encoding.extensions.dll" reason="no_symbols" />
+    <skipped_module name="system.reflection.primitives.dll" path="system.reflection.primitives.dll" reason="no_symbols" />
+    <skipped_module name="system.diagnostics.tracing.dll" path="system.diagnostics.tracing.dll" reason="no_symbols" />
+    <skipped_module name="microsoft.build.framework.dll" path="microsoft.build.framework.dll" reason="no_symbols" />
+    <skipped_module name="system.xml.readerwriter.dll" path="system.xml.readerwriter.dll" reason="no_symbols" />
+    <skipped_module name="system.console.dll" path="system.console.dll" reason="no_symbols" />
+    <skipped_module name="system.reflection.emit.lightweight.dll" path="system.reflection.emit.lightweight.dll" reason="no_symbols" />
+  </skipped_modules>
+</results>

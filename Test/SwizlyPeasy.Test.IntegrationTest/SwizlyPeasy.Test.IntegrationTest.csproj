@@ -10,12 +10,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Consul" Version="1.6.10.9" />
 		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Ductus.FluentDocker.XUnit" Version="2.10.59" />
+		<PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+		<PackageReference Include="WebMotions.Fake.Authentication.JwtBearer" Version="7.0.0" />
 		<PackageReference Include="xunit" Version="2.5.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,17 +32,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Demo\SwizlyPeasy.Demo.API\SwizlyPeasy.Demo.API.csproj" />
 		<ProjectReference Include="..\..\SwizlyPeasy.Common\SwizlyPeasy.Common.csproj" />
+		<ProjectReference Include="..\..\SwizlyPeasy.Consul\SwizlyPeasy.Consul.csproj" />
+		<ProjectReference Include="..\..\SwizlyPeasy.Gateway.API\SwizlyPeasy.Gateway.API.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Docker\docker-compose.override.yml">
-			<DependentUpon>docker-compose.yml</DependentUpon>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Docker\docker-compose.yml">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+	  <Folder Include="Docker\" />
 	</ItemGroup>
 
 </Project>
