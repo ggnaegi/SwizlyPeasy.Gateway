@@ -32,6 +32,10 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program>>
 
         var content = await response.Content.ReadAsStringAsync();
         var weatherForecasts = JsonConvert.DeserializeObject<WeatherForecast[]>(content);
+
+        Assert.NotNull(weatherForecasts);
+        Assert.NotEmpty(weatherForecasts);
+
         ResetBearerToken();
     }
 
@@ -44,9 +48,33 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program>>
         ResetBearerToken();
     }
 
-    private void SetupBearerToken()
+    [Fact]
+    public async Task Auth_GetRouteAuthenticatedBob_ReturnsOk()
+    {
+        SetupBearerToken(true);
+        var response = await _httpClient.Client.GetAsync("api/v1/demo/weather-with-authorization");
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        var weatherForecasts = JsonConvert.DeserializeObject<WeatherForecast[]>(content);
+
+        Assert.NotNull(weatherForecasts);
+        Assert.NotEmpty(weatherForecasts);
+
+        ResetBearerToken();
+    }
+
+    private void SetupBearerToken(bool isBob = false)
     {
         var currentUser = new TestUser();
+
+        if (isBob)
+        {
+            currentUser.Sub = "2";
+            currentUser.Name = "Bob";
+            currentUser.FamilyName = "Bob";
+        }
+
         _httpClient.Client.SetFakeBearerToken(currentUser.GetClaims());
     }
 
