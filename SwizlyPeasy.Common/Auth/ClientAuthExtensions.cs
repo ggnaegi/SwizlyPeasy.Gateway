@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SwizlyPeasy.Common.Dtos;
 
 namespace SwizlyPeasy.Common.Auth;
 
@@ -11,19 +10,13 @@ public static class ClientAuthExtensions
     ///     Setting "dummy" authentication
     /// </summary>
     /// <param name="services"></param>
-    public static void SetSwizlyPeasyAuthentication(this IServiceCollection services)
+    /// <param name="config"></param>
+    public static void SetSwizlyPeasyAuthentication(this IServiceCollection services, IConfiguration config)
     {
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
-                options.Events.OnRedirectToLogin = UnAuthorizedResponse;
-            });
-    }
-
-    private static Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
-    {
-        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-        return Task.CompletedTask;
+        services.Configure<ClaimsConfig>(config.GetSection(Constants.ClaimsConfigSection));
+        services.AddAuthentication(SwizlyPeasyAuthenticationOptions.DefaultScheme)
+            .AddScheme<SwizlyPeasyAuthenticationOptions, SwizlyPeasyClientAuthenticationHandler>
+            (SwizlyPeasyAuthenticationOptions.DefaultScheme,
+                _ => { });
     }
 }
