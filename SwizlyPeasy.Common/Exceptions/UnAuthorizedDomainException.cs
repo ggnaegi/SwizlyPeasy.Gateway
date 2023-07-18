@@ -1,5 +1,8 @@
-﻿namespace SwizlyPeasy.Common.Exceptions;
+﻿using System.Runtime.Serialization;
 
+namespace SwizlyPeasy.Common.Exceptions;
+
+[Serializable]
 public class UnAuthorizedDomainException : DomainException
 {
     /// <summary>
@@ -9,5 +12,16 @@ public class UnAuthorizedDomainException : DomainException
     /// <param name="innerException"></param>
     public UnAuthorizedDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
+    }
+
+    /// <summary>
+    ///     For serialization purposes
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    private UnAuthorizedDomainException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        // ...
     }
 }
