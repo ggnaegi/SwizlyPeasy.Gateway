@@ -1,7 +1,8 @@
-﻿namespace SwizlyPeasy.Common.Exceptions;
+﻿using System.Runtime.Serialization;
 
-/// <summary>
-/// </summary>
+namespace SwizlyPeasy.Common.Exceptions;
+
+[Serializable]
 public class NotFoundDomainException : DomainException
 {
     /// <summary>
@@ -11,5 +12,16 @@ public class NotFoundDomainException : DomainException
     /// <param name="innerException"></param>
     public NotFoundDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
+    }
+
+    /// <summary>
+    ///     For serialization purposes
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="context"></param>
+    private NotFoundDomainException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        // ...
     }
 }
