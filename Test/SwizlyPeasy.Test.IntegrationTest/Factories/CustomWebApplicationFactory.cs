@@ -25,13 +25,6 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     {
         webHostBuilder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(AuthenticationBuilder));
-
-            if(descriptor != null)
-                services.Remove(descriptor);
-
             services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme).AddFakeJwtBearer();
         });
 

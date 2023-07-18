@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Exceptions;
 
@@ -46,18 +48,23 @@ public static class OpenIdConnectExtensions
     /// <param name="configuration"></param>
     public static void AddSwizlyPeasyOpenIdConnect(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<OidcConfig>(configuration.GetSection(Constants.OidcConfigSection));
+
         var config = new OidcConfig();
         configuration.GetSection(Constants.OidcConfigSection).Bind(config);
 
-        services.ConfigureDiscoveryCache(config);
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = Constants.CookiesAuthenticationProviderKey;
-                options.DefaultSignInScheme = Constants.CookiesAuthenticationProviderKey;
-                options.DefaultChallengeScheme = Constants.OpenIdConnect;
-            })
-            .ConfigureCookies(config)
-            .ConfigureOpenIdConnect(config);
+        if (!config.DisableOidc)
+        {
+            services.ConfigureDiscoveryCache(config);
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = Constants.CookiesAuthenticationProviderKey;
+                    options.DefaultSignInScheme = Constants.CookiesAuthenticationProviderKey;
+                    options.DefaultChallengeScheme = Constants.OpenIdConnect;
+                })
+                .ConfigureCookies(config)
+                .ConfigureOpenIdConnect(config);
+        }
 
         services.ConfigureCors(config);
     }
@@ -259,6 +266,13 @@ public static class OpenIdConnectExtensions
     /// <param name="app"></param>
     public static void UseSwizlyPeasyOidc(this IApplicationBuilder app)
     {
+        var oidcConfig = app.ApplicationServices.GetService<IOptions<OidcConfig>>();
+        if (oidcConfig is { Value.DisableOidc: true })
+        {
+            var logger = app.ApplicationServices.GetRequiredService<ILogger<OidcConfig>>();
+            logger.LogWarning("Open ID Connect authentication has been deactivated, you should only do this during tests!");
+        }
+
         app.UseCookiePolicy(new CookiePolicyOptions
         {
             MinimumSameSitePolicy = SameSiteMode.None,
