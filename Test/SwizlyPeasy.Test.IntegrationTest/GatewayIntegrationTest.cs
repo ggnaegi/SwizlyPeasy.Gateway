@@ -3,15 +3,16 @@ using Newtonsoft.Json;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Dtos.Status;
 using SwizlyPeasy.Demo.API.Dtos;
+using SwizlyPeasy.Gateway.API;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Gateway.API.Program>>
+public class GatewayIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
 {
-    private readonly TestHttpClient<Gateway.API.Program> _httpClient;
+    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient;
 
-    public GatewayIntegrationTest(TestHttpClient<Gateway.API.Program> httpClient)
+    public GatewayIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
