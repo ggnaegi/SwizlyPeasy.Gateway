@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -197,6 +198,11 @@ public static class OpenIdConnectExtensions
 
             //options.Events.OnMessageReceived
             options.BackchannelHttpHandler = new HttpClientHandler { UseCookies = false };
+
+            //avoiding having the jwt claim types mapped to identity
+            var jwtHandler = new JwtSecurityTokenHandler();
+            jwtHandler.InboundClaimTypeMap.Clear();
+            options.SecurityTokenValidator = jwtHandler;
         });
 
         return builder;
