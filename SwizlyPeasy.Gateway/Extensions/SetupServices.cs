@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Security.Claims;
-using IdentityModel;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -110,26 +109,17 @@ public static class SetupServices
     }
 
     /// <summary>
-    /// Adding claim to request's header
-    /// reducing methods complexity
+    ///     Adding claim to request's header
+    ///     reducing methods complexity
     /// </summary>
     /// <param name="userClaims"></param>
     /// <param name="claimAsHeader"></param>
     /// <param name="transformContext"></param>
     /// <param name="claimHeaderPrefix"></param>
-    private static void AddClaimToHeader(Claim[] userClaims, string claimAsHeader,
+    private static void AddClaimToHeader(IEnumerable<Claim> userClaims, string claimAsHeader,
         RequestTransformContext transformContext, string claimHeaderPrefix)
     {
         var foundClaim = userClaims.FirstOrDefault(x => x.Type == claimAsHeader);
-
-        if (claimAsHeader == JwtClaimTypes.Subject)
-        {
-            foundClaim = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-            if (foundClaim == null) return;
-
-            foundClaim = new Claim(JwtClaimTypes.Subject, foundClaim.Value);
-        }
 
         if (foundClaim == null) return;
 
