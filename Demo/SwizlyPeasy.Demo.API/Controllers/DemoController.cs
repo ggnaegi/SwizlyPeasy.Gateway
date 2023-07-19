@@ -49,4 +49,22 @@ public class DemoController : ControllerBase
             })
             .ToArray();
     }
+
+    [Authorize]
+    [HttpGet("user-claims")]
+    public Dictionary<string, List<string>> GetClaims()
+    {
+        var claimsDictionary = new Dictionary<string, List<string>>();
+        var userClaims = HttpContext.User.Claims;
+        foreach (var userClaim in userClaims)
+        {
+            if (!claimsDictionary.ContainsKey(userClaim.Type))
+            {
+                claimsDictionary.Add(userClaim.Type, new List<string>());
+            }
+
+            claimsDictionary[userClaim.Type].Add(userClaim.Value);
+        }
+        return claimsDictionary;
+    }
 }
