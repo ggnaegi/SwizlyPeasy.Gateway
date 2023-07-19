@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using SwizlyPeasy.Demo.API.Dtos;
 using SwizlyPeasy.Gateway.API;
-using SwizlyPeasy.Test.IntegrationTest.Auth;
+using SwizlyPeasy.Test.IntegrationTest.Extensions;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -27,7 +27,7 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.AP
     [Fact]
     public async Task Auth_GetRouteAuthenticated_ReturnsOk()
     {
-        SetupBearerToken();
+        _httpClient.Client.SetupBearerToken();
         var response = await _httpClient.Client.GetAsync("api/v1/demo/weather");
         response.EnsureSuccessStatusCode();
 
@@ -37,22 +37,22 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.AP
         Assert.NotNull(weatherForecasts);
         Assert.NotEmpty(weatherForecasts);
 
-        ResetBearerToken();
+        _httpClient.Client.ResetBearerToken();
     }
 
     [Fact]
     public async Task Auth_GetRouteAuthenticatedButNotBob_ReturnsForbidden()
     {
-        SetupBearerToken();
+        _httpClient.Client.SetupBearerToken();
         var response = await _httpClient.Client.GetAsync("api/v1/demo/weather-with-authorization");
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-        ResetBearerToken();
+        _httpClient.Client.ResetBearerToken();
     }
 
     [Fact]
     public async Task Auth_GetRouteAuthenticatedBob_ReturnsOk()
     {
-        SetupBearerToken(true);
+        _httpClient.Client.SetupBearerToken(true);
         var response = await _httpClient.Client.GetAsync("api/v1/demo/weather-with-authorization");
         response.EnsureSuccessStatusCode();
 
@@ -62,25 +62,6 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.AP
         Assert.NotNull(weatherForecasts);
         Assert.NotEmpty(weatherForecasts);
 
-        ResetBearerToken();
-    }
-
-    private void SetupBearerToken(bool isBob = false)
-    {
-        var currentUser = new TestUser();
-
-        if (isBob)
-        {
-            currentUser.Sub = "2";
-            currentUser.Name = "Bob";
-            currentUser.FamilyName = "Bob";
-        }
-
-        _httpClient.Client.SetFakeBearerToken(currentUser.GetClaims());
-    }
-
-    private void ResetBearerToken()
-    {
-        _httpClient.Client.DefaultRequestHeaders.Authorization = null;
+        _httpClient.Client.ResetBearerToken();
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using SwizlyPeasy.Demo.API;
 using SwizlyPeasy.Demo.API.Dtos;
-using SwizlyPeasy.Test.IntegrationTest.Auth;
+using SwizlyPeasy.Test.IntegrationTest.Extensions;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -40,16 +39,16 @@ public class ClientMicroServiceTest : IClassFixture<TestHttpClient<Program, Prog
     [Fact]
     public async Task ClientService_AuthenticatedButNotAsBob_ReturnsForbidden()
     {
-        SetHeaders();
+        _httpClient.DemoClient.SetHeaders();
         var response = await _httpClient.DemoClient.GetAsync("/api/v1/demo/weather-with-authorization");
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-        ResetHeaders();
+        _httpClient.DemoClient.ResetHeaders();
     }
 
     [Fact]
     public async Task ClientService_AuthenticatedAsBob_ReturnsOk()
     {
-        SetHeaders(true);
+        _httpClient.DemoClient.SetHeaders(true);
         var response = await _httpClient.DemoClient.GetAsync("/api/v1/demo/weather-with-authorization");
         response.EnsureSuccessStatusCode();
 
@@ -59,27 +58,6 @@ public class ClientMicroServiceTest : IClassFixture<TestHttpClient<Program, Prog
         Assert.NotNull(weatherForecasts);
         Assert.NotEmpty(weatherForecasts);
 
-        ResetHeaders();
-    }
-
-
-    private void SetHeaders(bool isBob = false)
-    {
-        var user = isBob ? new TestUser { Sub = "2", Name = "Bob", FamilyName = "Bob" } : new TestUser();
-        var claimsDic = user.GetClaims();
-        foreach (var claimKeyValue in claimsDic)
-        {
-            var headerKey = $"SWIZLY-PEASY-{claimKeyValue.Key}";
-            _httpClient.DemoClient.DefaultRequestHeaders.Add(headerKey, claimKeyValue.Value.ToString());
-        }
-    }
-
-    private void ResetHeaders()
-    {
-        _httpClient.DemoClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", "your_token");
-        var claimsDic = new TestUser().GetClaims();
-        foreach (var headerKey in claimsDic.Select(claimKeyValue => $"SWIZLY-PEASY-{claimKeyValue.Key}"))
-            _httpClient.DemoClient.DefaultRequestHeaders.Remove(headerKey);
+        _httpClient.DemoClient.ResetHeaders();
     }
 }

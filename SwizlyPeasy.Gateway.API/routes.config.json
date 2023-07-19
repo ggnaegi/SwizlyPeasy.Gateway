@@ -37,6 +37,14 @@
           "Set": "de-CH"
         }
       ]
+    },
+    "route4": {
+      "ClusterId": "DemoAPI",
+      "AuthorizationPolicy": "oidc",
+      "Match": {
+        "Path": "/api/v1/demo/user-claims"
+      },
+      "Transforms": []
     }
   }
 }
