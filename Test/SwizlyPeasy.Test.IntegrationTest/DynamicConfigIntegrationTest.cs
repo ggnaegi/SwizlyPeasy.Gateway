@@ -9,11 +9,11 @@ using SwizlyPeasy.Gateway.API;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class DynamicConfigIntegrationTest : IClassFixture<TestHttpClient<Program>>
+public class DynamicConfigIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
 {
-    private readonly TestHttpClient<Program> _httpClient;
+    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient;
 
-    public DynamicConfigIntegrationTest(TestHttpClient<Program> httpClient)
+    public DynamicConfigIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }

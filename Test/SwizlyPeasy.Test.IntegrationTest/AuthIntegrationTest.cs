@@ -6,11 +6,12 @@ using SwizlyPeasy.Test.IntegrationTest.Auth;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
-public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program>>
+[Collection("TestHttpClient")]
+public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
 {
-    private readonly TestHttpClient<Program> _httpClient;
+    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient;
 
-    public AuthIntegrationTest(TestHttpClient<Program> httpClient)
+    public AuthIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
