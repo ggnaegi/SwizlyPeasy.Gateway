@@ -19,6 +19,7 @@ namespace SwizlyPeasy.Common.Auth;
 public static class OpenIdConnectExtensions
 {
     /// <summary>
+    /// 401
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
@@ -26,6 +27,18 @@ public static class OpenIdConnectExtensions
     {
         context.Response.Headers["Location"] = context.RedirectUri;
         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 403
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    private static Task ForbiddenResponse(RedirectContext<CookieAuthenticationOptions> context)
+    {
+        context.Response.Headers["Location"] = context.RedirectUri;
+        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
         return Task.CompletedTask;
     }
 
