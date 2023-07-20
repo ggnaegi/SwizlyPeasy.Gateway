@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Security.Claims;
-using MediatR;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -15,8 +13,6 @@ using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.ClientConfig;
 using SwizlyPeasy.Consul.Health;
-using SwizlyPeasy.Gateway.Mediator;
-using SwizlyPeasy.Gateway.Mediator.handler;
 using SwizlyPeasy.Gateway.Services;
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
@@ -55,9 +51,12 @@ public static class SetupServices
             .AddAuthorizationHeaders(configuration)
             .AddStatusService();
 
-        services.AddTransient<IRequestHandler<LoginRequest, UserDto>, LoginHandler>();
-        services.AddTransient<IRequestHandler<LogoutRequest, Unit>, LogoutHandler>();
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddSwizlyPeasyAuthRedirections(configuration);
+    }
+
+    private static void AddSwizlyPeasyAuthRedirections(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AuthRedirectionConfig>(configuration.GetSection(Constants.AuthRedirectionConfigSection));
     }
 
     /// <summary>
