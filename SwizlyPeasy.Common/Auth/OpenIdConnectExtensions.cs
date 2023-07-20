@@ -19,7 +19,7 @@ namespace SwizlyPeasy.Common.Auth;
 public static class OpenIdConnectExtensions
 {
     /// <summary>
-    /// 401
+    ///     401
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
@@ -31,7 +31,7 @@ public static class OpenIdConnectExtensions
     }
 
     /// <summary>
-    /// 403
+    ///     403
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
@@ -115,8 +115,8 @@ public static class OpenIdConnectExtensions
             options.SlidingExpiration = true;
 
             //we don't want any redirection, front end
-            //will redirect the end user, so we return 401 if unauthorized, that's it
-            options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
+            //will redirect the end user, so we return 401 if unauthorized or 403 if forbidden (access denied), that's it
+            options.Events.OnRedirectToAccessDenied = ForbiddenResponse;
             options.Events.OnRedirectToLogin = UnAuthorizedResponse;
 
             //Here we need to address the refresh token issue
@@ -289,7 +289,8 @@ public static class OpenIdConnectExtensions
         if (oidcConfig is { Value.DisableOidc: true })
         {
             var logger = app.ApplicationServices.GetRequiredService<ILogger<OidcConfig>>();
-            logger.LogWarning("Open ID Connect authentication has been deactivated, you should only do this during tests!");
+            logger.LogWarning(
+                "Open ID Connect authentication has been deactivated, you should only do this during tests!");
         }
 
         app.UseCookiePolicy(new CookiePolicyOptions
