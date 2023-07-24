@@ -64,4 +64,11 @@ public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.AP
 
         _httpClient.Client.ResetBearerToken();
     }
+
+    [Fact]
+    public async Task OidcAuth_GetAjaxRouteNotAuthenticated_ReturnsUnauthorized()
+    {
+        var response = await _httpClient.AjaxClient.GetAsync("api/v1/demo/weather");
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
 }
