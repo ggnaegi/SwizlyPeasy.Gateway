@@ -11,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Exceptions;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace SwizlyPeasy.Common.Auth;
 
@@ -201,13 +203,8 @@ public static class OpenIdConnectExtensions
             options.GetClaimsFromUserInfoEndpoint = true;
 
             //fix for production environment
-            options.Events.OnRedirectToIdentityProvider = async n =>
-            {
-                var redirectUri = config.RedirectUri;
-                if (!string.IsNullOrEmpty(redirectUri)) n.ProtocolMessage.RedirectUri = redirectUri;
-
-                await Task.CompletedTask;
-            };
+            options.Events.OnRedirectToIdentityProvider =
+                async context => await CustomRedirectToIdentityProvider(context, config);
 
             //options.Events.OnMessageReceived
             options.BackchannelHttpHandler = new HttpClientHandler { UseCookies = false };
@@ -219,6 +216,41 @@ public static class OpenIdConnectExtensions
         });
 
         return builder;
+    }
+
+    /// <summary>
+    ///     Avoiding redirection to the identity provider if ajax/api call
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    private static async Task CustomRedirectToIdentityProvider(RedirectContext context, OidcConfig config)
+    {
+        if (IsAjaxRequest(context.Request))
+        {
+            context.Response.Headers[HeaderNames.Location] = context.ProtocolMessage.RedirectUri;
+            context.Response.StatusCode = 401;
+            context.HandleResponse();
+            return;
+        }
+
+        var redirectUri = config.RedirectUri;
+        if (!string.IsNullOrEmpty(redirectUri)) context.ProtocolMessage.RedirectUri = redirectUri;
+
+        await Task.CompletedTask;
+    }
+
+
+    /// <summary>
+    ///     Checking if current request is an ajax request
+    ///     https://github.com/dotnet/aspnetcore/blob/v7.0.9/src/Security/Authentication/Cookies/src/CookieAuthenticationEvents.cs#L105
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    private static bool IsAjaxRequest(HttpRequest request)
+    {
+        return string.Equals(request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
+               string.Equals(request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal);
     }
 
     /// <summary>

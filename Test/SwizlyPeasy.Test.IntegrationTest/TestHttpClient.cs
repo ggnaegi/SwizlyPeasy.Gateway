@@ -32,16 +32,29 @@ public class TestHttpClient<TProgram, TProgram2> : IDisposable
             AllowAutoRedirect = false
         });
 
+        var ajaxFactory = new CustomWebApplicationFactory<TProgram>(true);
+
+        AjaxClient = ajaxFactory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+
         Client.DefaultRequestHeaders.Accept.Clear();
         Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         DemoClient.DefaultRequestHeaders.Accept.Clear();
         DemoClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        AjaxClient.DefaultRequestHeaders.Accept.Clear();
+        AjaxClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        AjaxClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
     }
 
     public HttpClient Client { get; }
 
     public HttpClient DemoClient { get; }
+
+    public HttpClient AjaxClient { get; }
 
     public void Dispose()
     {

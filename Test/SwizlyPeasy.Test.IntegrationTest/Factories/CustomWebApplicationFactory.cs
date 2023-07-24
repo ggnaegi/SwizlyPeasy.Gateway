@@ -17,12 +17,25 @@ namespace SwizlyPeasy.Test.IntegrationTest.Factories;
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
     where TProgram : class
 {
+    private bool _useOidc;
+
+    public CustomWebApplicationFactory(bool useOidc = false)
+    {
+        _useOidc = useOidc;
+    }
+
     /// <summary>
     /// </summary>
     /// <param name="webHostBuilder"></param>
     /// <exception cref="Exception"></exception>
     protected override void ConfigureWebHost(IWebHostBuilder webHostBuilder)
     {
+        if (_useOidc)
+        {
+            webHostBuilder.UseEnvironment("IntegrationTest2");
+            return;
+        }
+
         webHostBuilder.ConfigureServices(services =>
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
