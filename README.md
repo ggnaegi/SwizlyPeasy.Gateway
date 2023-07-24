@@ -185,7 +185,8 @@ Example:
 ```
 // swizly peasy consul & health checks
 builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
-builder.Services.SetSwizlyPeasyAuthentication();
+builder.Services.SetSwizlyPeasyAuthentication(builder.Configuration);
+builder.Services.SetAuthorization();
 
 ...
 
@@ -199,8 +200,6 @@ app.UseAuthentication();
 //--------- Swizly Peasy MiddleWares ----------
 // swizly peasy health checks middleware
 app.UseSwizlyPeasyHealthChecks();
-// mapping the headers as claims
-app.UseMiddleware<HeaderToClaimsMiddleware>();
 //---------------------------------------------
 app.UseAuthorization();
 app.MapControllers();
