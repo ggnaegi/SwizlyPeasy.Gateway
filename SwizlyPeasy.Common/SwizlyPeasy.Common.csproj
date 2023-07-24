@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>SwizlyPeasy.Common</PackageId>
-		<Version>0.0.5-alpha</Version>
+		<Version>0.0.6-alpha</Version>
 		<Authors>Guillaume Gnaegi</Authors>
 		<PackageDescription>This package contains the common classes (Exceptions) and Extension methods (health checks and OIDC configuration) for SwizlyPeasy.Gateway.</PackageDescription>
 		<RepositoryUrl>https://github.com/ggnaegi/SwizlyPeasy.Gateway</RepositoryUrl>
