@@ -174,12 +174,11 @@ Production: Make sure you can't reached the client from the web (encapsulated li
 The setup is a bit more complicated than for the gateway itself, because of the middlewares ordering...
 
 First, use the extension method ```RegisterServiceToSwizlyPeasyGateway```, this will configure the consul client, the service registration to consul and configure the health checks.
-Then, add a "dummy" authentication method using ```SetSwizlyPeasyAuthentication```, as the claims will be provided as headers.
+Then, add a "custom" authentication method using ```SetSwizlyPeasyAuthentication```, as the claims will be provided as headers.
 
 MiddleWares:
 - ```app.UseSwizlyPeasyExceptions();``` Handling exceptions and returning them in RFC 7807 format
 - ```app.UseSwizlyPeasyHealthChecks();``` Formating the output from health endpoint
-- ```app.UseMiddleware<HeaderToClaimsMiddleware>();``` Middleware transforming the auth headers to claims and then signing in the user
 
 Example:
 ```
