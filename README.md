@@ -77,6 +77,21 @@ And with weather-with-authorization...
 
 You're obviously not Bob...
 
+### And Try to modify the routes configuration on the fly
+
+Open the Consul administration page, which should be accessible at ```http://localhost:8500```, and choose _Key/Value_, there you should find the routes configuration...
+
+![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/8bc0e428-09bf-4c55-93ff-4824a7cb95f3)
+
+Now, let's change the configuration and wait for the gateway configuration refresh - by default every 120 seconds, but this parameter can be modified in ServiceDiscovery parameters -.
+
+![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/f2954576-a9e1-456c-b802-91c32c119818)
+
+magic...
+
+![image](https://github.com/ggnaegi/SwizlyPeasy.Gateway/assets/58469901/0a4610f7-1f9c-46a9-adbf-2221d4aaa438)
+
+
 ## Configuring the gateway
 
 You should have a look at the SwizlyPeasy.Gateway.API project.
@@ -169,7 +184,7 @@ The syntax is the same as YARP configuration for routes.
 
 You should have a look at the SwizlyPeasy.DEMO.API project.
 
-Production: Make sure you can't reached the client from the web (encapsulated like in docker), otherwise all this makes no sense.
+Production: Make sure you can't reach the client from the web (encapsulated like in docker), otherwise all this makes no sense.
 
 The setup is a bit more complicated than for the gateway itself, because of the middlewares ordering...
 
