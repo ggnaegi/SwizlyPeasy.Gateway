@@ -3,7 +3,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ggnaegi_SwizlyPeasy.Gateway&metric=security_rating)](https://sonarcloud.io/project/overview?id=ggnaegi_SwizlyPeasy.Gateway)
 
 # SwizlyPeasy.Gateway
-SwizlyPeasy.Gateway is a small API gateway based on YARP Reverse Proxy. This gateway should support OIDC authentication and service discovery with Consul.
+SwizlyPeasy.Gateway is a simple API gateway based on YARP Reverse Proxy. This gateway should support OIDC authentication and service discovery with Consul.
 
 ## Introduction
 Currently, YARP is the most advanced reverse proxy in .NET. The version 1 of this proxy was introduced by Microsoft at the end of 2021 (on my birthday...). Until now, I have used various API Gateways, including Ocelot. I wondered if it was possible to graft the minimal functionalities to propose an API Gateway based on YARP.
