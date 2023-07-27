@@ -20,6 +20,7 @@ The solution proposed here, "SwizlyPeasy.Gateway", is for now a PoC (Proof of Co
 - The microservices are registered to consul. The gateway retrieve their addresses by using the service names.
 - The cluster configuration is populated automatically, using service data retrieved from consul.
 - The routes configuration is stored in consul KV store
+- YARP / .NET 7 Rate limiting is supported (2023.07.27, on going)
 
 ## Structure
 - Demo: In this folder, there is a very simple demonstration API - SwizlyPeasy.Demo.API - that allows testing of the service registration in Consul, authorization with policies, and the routes configuration in "SwizlyPeasy.Gateway".
