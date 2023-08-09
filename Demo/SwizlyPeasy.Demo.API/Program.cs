@@ -1,7 +1,6 @@
 using SwizlyPeasy.Common.Auth;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.HealthChecks;
-using SwizlyPeasy.Common.Middlewares;
 using SwizlyPeasy.Consul.ServiceRegistration;
 using SwizlyPeasy.Demo.API.Extensions;
 
@@ -42,10 +41,9 @@ app.Run();
 namespace SwizlyPeasy.Demo.API
 {
     /// <summary>
-    /// For Integration Tests...
+    ///     For Integration Tests...
     /// </summary>
     public partial class Program
     {
-
     }
 }

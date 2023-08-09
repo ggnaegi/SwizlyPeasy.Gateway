@@ -27,9 +27,9 @@ finally
 namespace SwizlyPeasy.Gateway.API
 {
     /// <summary>
-    /// For Integration Tests...
+    ///     For Integration Tests...
     /// </summary>
-    public partial class Program
+    public class Program
     {
     }
 }

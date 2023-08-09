@@ -36,6 +36,7 @@ public static class SetupServices
     {
         services.AddHttpContextAccessor();
         services.AddHttpClient();
+        services.AddSwizlyPeasyRateLimiters(configuration);
         services.AddControllers(options =>
         {
             options.ReturnHttpNotAcceptable = true;
@@ -68,6 +69,7 @@ public static class SetupServices
         app.UseMiddleware<ExceptionsHandlerMiddleware>();
         app.Use404AsException();
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseSwizlyPeasyOidc();
         app.UseAuthentication();
         app.UseAuthorization();

@@ -14,6 +14,7 @@ public static class Constants
     public const string ServiceDiscoveryConfigSection = "ServiceDiscovery";
     public const string ServiceRegistrationConfigSection = "ServiceRegistration";
     public const string ClaimsConfigSection = "ClaimsConfig";
+    public const string RateLimiterPoliciesSection = "RateLimiterPolicies";
     public const string OidcPolicy = "oidc";
     public const string SubClaim = "sub";
     public const string EmailClaim = "email";

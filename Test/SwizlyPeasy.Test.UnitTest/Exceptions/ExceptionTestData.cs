@@ -14,6 +14,7 @@ public class ExceptionTestData : IEnumerable<object[]>
         yield return new object[] { new NotFoundDomainException("test", null), 404 };
         yield return new object[] { new UnAuthorizedDomainException("test", null), 401 };
         yield return new object[] { new UnprocessableEntityDomainException("test", null), 422 };
+        yield return new object[] { new TooManyRequestsException("test", null), 429 };
     }
 
     IEnumerator IEnumerable.GetEnumerator()

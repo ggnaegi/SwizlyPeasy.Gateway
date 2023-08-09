@@ -132,6 +132,7 @@ The syntax is the same as YARP configuration for routes.
     "route2": {
       "ClusterId": "DemoAPI",
       "AuthorizationPolicy": "oidc",
+      "RateLimiterPolicy": "swizly1",
       "Match": {
         "Path": "/api/v1/demo/weather-with-authorization"
       },
@@ -148,6 +149,10 @@ The syntax is the same as YARP configuration for routes.
 - Define your configuration in appsettings
 ```
 {
+  "AuthRedirectionConfig": {
+    "MainUrl": "/",
+    "IdpLogoutUrl": "https://demo.duendesoftware.com/Account/Logout/LoggedOut"
+  },
   "OidcConfig": {
     "RefreshThresholdMinutes": 1,
     "Origins": [],
@@ -156,14 +161,15 @@ The syntax is the same as YARP configuration for routes.
     "ClientId": "interactive.confidential.short",
     "ClientSecret": "secret",
     "RedirectUri": "",
-    "Scopes": [ "openid", "profile", "email", "offline_access" ]
+    "Scopes": [ "openid", "profile", "email", "offline_access" ],
+    "DisableOidc": true
   },
   "ServiceDiscovery": {
     "Scheme": "http",
-    "RefreshIntervalInSeconds": 120,
+    "RefreshIntervalInSeconds": 20,
     "LoadBalancingPolicy": "Random",
     "KeyValueStoreKey": "SwizlyPeasy.Gateway",
-    "ServiceDiscoveryAddress": "http://consul:8500"
+    "ServiceDiscoveryAddress": "http://localhost:8500"
   },
   "ClaimsConfig": {
     "ClaimsHeaderPrefix": "SWIZLY-PEASY",
@@ -177,9 +183,53 @@ The syntax is the same as YARP configuration for routes.
       "sub": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
       "email": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
     }
-  }
+  },
+  "RateLimiterPolicies": [
+    {
+      "PolicyName": "swizly1",
+      "RateLimiterType": "FixedWindowRateLimiter",
+      "AutoReplenishment": true,
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "Window": 12
+    },
+    {
+      "PolicyName": "swizly2",
+      "RateLimiterType": "SlidingWindowRateLimiter",
+      "AutoReplenishment": true,
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "Window": 12,
+      "SegmentsPerWindow": 3
+    },
+    {
+      "PolicyName": "swizly3",
+      "RateLimiterType": "ConcurrencyLimiter",
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1
+    },
+    {
+      "PolicyName": "swizly4",
+      "RateLimiterType": "TokenBucketRateLimiter",
+      "AutoReplenishment": true,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "ReplenishmentPeriod": 60,
+      "TokenLimit": 20,
+      "TokensPerPeriod": 10
+    }
+  ]
 }
 ```
+### Configure the rate limiter
+
+Please read the documentation for more information about the rate limiting algorithms used: https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-7.0
+
+The current solution only supports the 4 algorithms proposed by Microsoft. At the minute, it is not possible to combine them and the policies configuration must be defined in gateway's app settings.
+
 
 ## Registering a client
 
