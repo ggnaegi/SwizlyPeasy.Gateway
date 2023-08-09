@@ -28,6 +28,7 @@
     },
     "route3": {
       "ClusterId": "DemoAPI",
+      "RateLimiterPolicy": "swizly1",
       "Match": {
         "Path": "/api/v1/demo/weather-anonymous"
       },

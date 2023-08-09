@@ -56,6 +56,11 @@ public static class Rfc7807
                 currentException.Status = 403;
                 currentException.Type = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403";
                 break;
+            case TooManyRequestsException:
+                currentException.Title = "Too Many Requests Exception";
+                currentException.Status = 429;
+                currentException.Type = "https://developer.mozilla.org/fr/docs/Web/HTTP/Status/429";
+                break;
         }
 
         return currentException;
