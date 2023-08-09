@@ -57,7 +57,7 @@ public static class RateLimiterExtensions
                     opt.SegmentsPerWindow = config.SegmentsPerWindow;
                 });
                 return;
-            case nameof(ConcurrencyLimiterOptions):
+            case nameof(ConcurrencyLimiter):
                 options.AddConcurrencyLimiter(config.PolicyName, opt =>
                 {
                     opt.PermitLimit = config.PermitLimit;
