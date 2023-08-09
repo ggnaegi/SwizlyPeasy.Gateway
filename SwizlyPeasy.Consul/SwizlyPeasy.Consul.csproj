@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>SwizlyPeasy.Consul</PackageId>
-		<Version>0.0.7-alpha</Version>
+		<Version>0.0.8-alpha</Version>
 		<Authors>Guillaume Gnaegi</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageDescription>This package contains the extension methods for service registration to consul and other consul services (agents, health, kv)</PackageDescription>
