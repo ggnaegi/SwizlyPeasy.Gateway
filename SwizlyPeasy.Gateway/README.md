@@ -79,6 +79,10 @@ The syntax is the same as YARP configuration for routes.
       "Microsoft.AspNetCore": "Warning"
     }
   },
+  "AuthRedirectionConfig": {
+    "MainUrl": "/",
+    "IdpLogoutUrl": "https://demo.duendesoftware.com/Account/Logout/LoggedOut"
+  },
   "OidcConfig": {
     "RefreshThresholdMinutes": 1,
     "Origins": [],
@@ -87,14 +91,66 @@ The syntax is the same as YARP configuration for routes.
     "ClientId": "interactive.confidential.short",
     "ClientSecret": "secret",
     "RedirectUri": "",
-    "Scopes": [ "openid", "profile", "email", "offline_access" ]
+    "Scopes": [ "openid", "profile", "email", "offline_access" ],
+    "DisableOidc": true
   },
   "ServiceDiscovery": {
     "Scheme": "http",
-    "RefreshIntervalInSeconds": 120,
+    "RefreshIntervalInSeconds": 20,
     "LoadBalancingPolicy": "Random",
     "KeyValueStoreKey": "SwizlyPeasy.Gateway",
-    "ServiceDiscoveryAddress": "http://consul:8500"
-  }
+    "ServiceDiscoveryAddress": "http://localhost:8500"
+  },
+  "ClaimsConfig": {
+    "ClaimsHeaderPrefix": "SWIZLY-PEASY",
+    "ClaimsAsHeaders": [
+      "sub",
+      "email",
+      "name",
+      "family_name"
+    ],
+    "JwtToIdentityClaimsMappings": {
+      "sub": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+      "email": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+    }
+  },
+  "RateLimiterPolicies": [
+    {
+      "PolicyName": "swizly1",
+      "RateLimiterType": "FixedWindowRateLimiter",
+      "AutoReplenishment": true,
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "Window": 12
+    },
+    {
+      "PolicyName": "swizly2",
+      "RateLimiterType": "SlidingWindowRateLimiter",
+      "AutoReplenishment": true,
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "Window": 12,
+      "SegmentsPerWindow": 3
+    },
+    {
+      "PolicyName": "swizly3",
+      "RateLimiterType": "ConcurrencyLimiter",
+      "PermitLimit": 5,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1
+    },
+    {
+      "PolicyName": "swizly4",
+      "RateLimiterType": "TokenBucketRateLimiter",
+      "AutoReplenishment": true,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 1,
+      "ReplenishmentPeriod": 60,
+      "TokenLimit": 20,
+      "TokensPerPeriod": 10
+    }
+  ]
 }
 ```

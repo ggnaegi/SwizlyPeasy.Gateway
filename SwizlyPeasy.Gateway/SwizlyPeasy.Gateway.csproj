@@ -7,7 +7,7 @@
 		<UserSecretsId>fc61b5e3-488e-4be2-a3ea-236cd64c6123</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<PackageId>SwizlyPeasy.Gateway</PackageId>
-		<Version>0.0.6-alpha</Version>
+		<Version>0.0.7-alpha</Version>
 		<Authors>Guillaume Gnaegi</Authors>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageDescription>This package contains the extensions methods to configure and use the SwizlyPeasy.Gateway, a YARP-based gateway with OIDC authentication and Consul service discovery.</PackageDescription>
