@@ -21,5 +21,6 @@ public class TooManyRequestsException : DomainException
     /// <param name="context"></param>
     public TooManyRequestsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
+        // ...
     }
 }
