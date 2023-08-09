@@ -11,11 +11,15 @@ namespace SwizlyPeasy.Common.Extensions;
 
 public static class RateLimiterExtensions
 {
+    public static string ResolveClientIpAddress(this HttpContext httpContext)
+    {
+        return httpContext.Connection.RemoteIpAddress?.ToString();
+    }
+
     public static void AddSwizlyPeasyRateLimiters(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRateLimiter(options =>
         {
-            options.RejectionStatusCode = 429;
             options.OnRejected = (context, _) =>
             {
                 if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
@@ -37,44 +41,64 @@ public static class RateLimiterExtensions
         switch (config.RateLimiterType)
         {
             case nameof(FixedWindowRateLimiter):
-                options.AddFixedWindowLimiter(config.PolicyName, opt =>
-                {
-                    opt.AutoReplenishment = config.AutoReplenishment;
-                    opt.PermitLimit = config.PermitLimit;
-                    opt.QueueLimit = config.QueueLimit;
-                    opt.QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder;
-                    opt.Window = TimeSpan.FromSeconds(config.Window);
-                });
+                options.AddPolicy(config.PolicyName, context =>
+                    {
+                        return RateLimitPartition.GetFixedWindowLimiter(context.ResolveClientIpAddress(), _ =>
+                            new FixedWindowRateLimiterOptions
+                            {
+                                AutoReplenishment = config.AutoReplenishment,
+                                PermitLimit = config.PermitLimit,
+                                QueueLimit = config.QueueLimit,
+                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                                Window = TimeSpan.FromSeconds(config.Window)
+                            });
+                    }
+                );
                 return;
             case nameof(SlidingWindowRateLimiter):
-                options.AddSlidingWindowLimiter(config.PolicyName, opt =>
-                {
-                    opt.AutoReplenishment = config.AutoReplenishment;
-                    opt.PermitLimit = config.PermitLimit;
-                    opt.QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder;
-                    opt.QueueLimit = config.QueueLimit;
-                    opt.Window = TimeSpan.FromSeconds(config.Window);
-                    opt.SegmentsPerWindow = config.SegmentsPerWindow;
-                });
+                options.AddPolicy(config.PolicyName, context =>
+                    {
+                        return RateLimitPartition.GetSlidingWindowLimiter(context.ResolveClientIpAddress(), _ =>
+                            new SlidingWindowRateLimiterOptions
+                            {
+                                AutoReplenishment = config.AutoReplenishment,
+                                PermitLimit = config.PermitLimit,
+                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                                QueueLimit = config.QueueLimit,
+                                Window = TimeSpan.FromSeconds(config.Window),
+                                SegmentsPerWindow = config.SegmentsPerWindow
+                            });
+                    }
+                );
                 return;
             case nameof(ConcurrencyLimiter):
-                options.AddConcurrencyLimiter(config.PolicyName, opt =>
-                {
-                    opt.PermitLimit = config.PermitLimit;
-                    opt.QueueLimit = config.QueueLimit;
-                    opt.QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder;
-                });
+                options.AddPolicy(config.PolicyName, context =>
+                    {
+                        return RateLimitPartition.GetConcurrencyLimiter(context.ResolveClientIpAddress(), _ =>
+                            new ConcurrencyLimiterOptions
+                            {
+                                PermitLimit = config.PermitLimit,
+                                QueueLimit = config.QueueLimit,
+                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder
+                            });
+                    }
+                );
                 return;
             case nameof(TokenBucketRateLimiter):
-                options.AddTokenBucketLimiter(config.PolicyName, opt =>
-                {
-                    opt.AutoReplenishment = config.AutoReplenishment;
-                    opt.QueueLimit = config.QueueLimit;
-                    opt.QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder;
-                    opt.ReplenishmentPeriod = TimeSpan.FromSeconds(config.ReplenishmentPeriod);
-                    opt.TokenLimit = config.TokenLimit;
-                    opt.TokensPerPeriod = config.TokensPerPeriod;
-                });
+                options.AddPolicy(config.PolicyName, context =>
+                    {
+                        return RateLimitPartition.GetTokenBucketLimiter(context.ResolveClientIpAddress(), _ =>
+                            new TokenBucketRateLimiterOptions
+                            {
+                                AutoReplenishment = config.AutoReplenishment,
+                                QueueLimit = config.QueueLimit,
+                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                                ReplenishmentPeriod = TimeSpan.FromSeconds(config.ReplenishmentPeriod),
+                                TokenLimit = config.TokenLimit,
+                                TokensPerPeriod = config.TokensPerPeriod
+                            });
+                    }
+                );
                 return;
             default:
                 throw new InternalDomainException(
