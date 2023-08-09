@@ -19,7 +19,7 @@ public class TooManyRequestsException : DomainException
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
-    public TooManyRequestsException(SerializationInfo info, StreamingContext context) : base(info, context)
+    protected TooManyRequestsException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
         // ...
     }
