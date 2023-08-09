@@ -5,7 +5,7 @@ using SwizlyPeasy.Consul.ClientConfig;
 
 namespace SwizlyPeasy.Consul.ServiceRegistration
 {
-    public static class RegisterServiceExtensions
+    public static class ClientServiceRegistrationExtensions
     {
         public static void RegisterServiceToSwizlyPeasyGateway(this IServiceCollection services, IConfiguration configuration)
         {
