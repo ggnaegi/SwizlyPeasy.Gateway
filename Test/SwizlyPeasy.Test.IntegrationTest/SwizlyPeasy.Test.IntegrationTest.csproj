@@ -17,7 +17,7 @@
 		</PackageReference>
 		<PackageReference Include="Ductus.FluentDocker.XUnit" Version="2.10.59" />
 		<PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.10" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
 		<PackageReference Include="WebMotions.Fake.Authentication.JwtBearer" Version="7.0.0" />
 		<PackageReference Include="xunit" Version="2.5.0" />
