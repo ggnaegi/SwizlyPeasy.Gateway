@@ -11,11 +11,23 @@ namespace SwizlyPeasy.Common.Extensions;
 
 public static class RateLimiterExtensions
 {
+    /// <summary>
+    /// Retrieving the client IP Address
+    /// The result is null if the connection isn't a TCP connection, e.g., a Unix Domain Socket or a transport that isn't TCP based.
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <returns></returns>
     public static string ResolveClientIpAddress(this HttpContext httpContext)
     {
-        return httpContext.Connection.RemoteIpAddress?.ToString();
+        return httpContext.Connection.RemoteIpAddress == null ? "unknown" : httpContext.Connection.RemoteIpAddress.ToString();
     }
 
+    /// <summary>
+    /// Adding custom rate limiters
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <exception cref="TooManyRequestsException"></exception>
     public static void AddSwizlyPeasyRateLimiters(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRateLimiter(options =>
@@ -36,6 +48,12 @@ public static class RateLimiterExtensions
         });
     }
 
+    /// <summary>
+    /// Using client IP address as partition key
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="config"></param>
+    /// <exception cref="InternalDomainException"></exception>
     private static void AddSwizlyPeasyPolicy(this RateLimiterOptions options, RateLimiterPolicyConfig config)
     {
         switch (config.RateLimiterType)
