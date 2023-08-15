@@ -2,7 +2,7 @@
   "Routes": {
     "route1": {
       "ClusterId": "DemoAPI",
-      "RateLimiterPolicy": "swizly3",
+      "RateLimiterPolicy": "swizly4",
       "AuthorizationPolicy": "oidc",
       "Match": {
         "Path": "/api/v1/demo/weather"
