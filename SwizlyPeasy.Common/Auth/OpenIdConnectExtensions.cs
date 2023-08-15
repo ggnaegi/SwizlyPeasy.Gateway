@@ -137,6 +137,11 @@ public static class OpenIdConnectExtensions
     /// <param name="config"></param>
     private static void ConfigureCors(this IServiceCollection services, OidcConfig config)
     {
+        if (!config.AllowCors)
+        {
+            return;
+        }
+
         //specify origins
         services.AddCors(options =>
         {
@@ -318,20 +323,32 @@ public static class OpenIdConnectExtensions
     public static void UseSwizlyPeasyOidc(this IApplicationBuilder app)
     {
         var oidcConfig = app.ApplicationServices.GetService<IOptions<OidcConfig>>();
-        if (oidcConfig is { Value.DisableOidc: true })
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<OidcConfig>>();
+
+        if (oidcConfig == null)
         {
-            var logger = app.ApplicationServices.GetRequiredService<ILogger<OidcConfig>>();
+            const string errorMessage = "OIDC Config can't be found, please check the app settings!";
+            logger.LogCritical(errorMessage);
+            throw new InternalDomainException(errorMessage, null);
+        }
+
+        if (oidcConfig.Value.DisableOidc)
             logger.LogWarning(
                 "Open ID Connect authentication has been deactivated, you should only do this during tests!");
-        }
 
         app.UseCookiePolicy(new CookiePolicyOptions
         {
-            MinimumSameSitePolicy = SameSiteMode.None,
+            MinimumSameSitePolicy = oidcConfig.Value.MinimumSameSiteMode,
             Secure = CookieSecurePolicy.Always,
             HttpOnly = HttpOnlyPolicy.Always
         });
 
+        if (!oidcConfig.Value.AllowCors)
+        {
+            return;
+        }
+
+        logger.LogWarning("Since AllowCors parameter is true, allowing CORS requests");
         app.UseCors(Constants.CorsPolicy);
     }
 }

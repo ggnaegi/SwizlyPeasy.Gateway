@@ -1,4 +1,6 @@
-﻿namespace SwizlyPeasy.Common.Dtos;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace SwizlyPeasy.Common.Dtos;
 
 /// <summary>
 ///     Open Id Connect configuration section.
@@ -7,7 +9,9 @@
 public class OidcConfig
 {
     public int RefreshTokenExpirationInHours { get; set; } = 1;
+    public SameSiteMode MinimumSameSiteMode { get; set; } = SameSiteMode.None;
     public int RefreshThresholdMinutes { get; set; } = 1;
+    public bool AllowCors { get; set; } = true;
     public string[] Origins { get; set; } = Array.Empty<string>();
     public string Authority { get; set; } = "https://demo.duendesoftware.com/";
     public string CallbackUri { get; set; } = "/signin-oidc";
