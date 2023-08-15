@@ -2,6 +2,7 @@
   "Routes": {
     "route1": {
       "ClusterId": "DemoAPI",
+      "RateLimiterPolicy": "swizly3",
       "AuthorizationPolicy": "oidc",
       "Match": {
         "Path": "/api/v1/demo/weather"
@@ -15,6 +16,7 @@
     },
     "route2": {
       "ClusterId": "DemoAPI",
+      "RateLimiterPolicy": "swizly2",
       "AuthorizationPolicy": "oidc",
       "Match": {
         "Path": "/api/v1/demo/weather-with-authorization"
@@ -41,6 +43,7 @@
     },
     "route4": {
       "ClusterId": "DemoAPI",
+      "RateLimiterPolicy": "swizly4",
       "AuthorizationPolicy": "oidc",
       "Match": {
         "Path": "/api/v1/demo/user-claims"
