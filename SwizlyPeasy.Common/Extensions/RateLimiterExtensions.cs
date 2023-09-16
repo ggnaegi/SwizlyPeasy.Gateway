@@ -58,6 +58,8 @@ public static class RateLimiterExtensions
     {
         switch (config.RateLimiterType)
         {
+            case Constants.ChainedRateLimiter:
+                throw new NotImplementedException("Chained rate limiters not yet implemented...");
             case nameof(FixedWindowRateLimiter):
                 options.AddPolicy(config.PolicyName, context =>
                     {
