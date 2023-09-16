@@ -13,15 +13,17 @@ about consul: https://developer.hashicorp.com/consul/download
 
 The solution proposed here, "SwizlyPeasy.Gateway", is for now a PoC (Proof of Concept), but who knows, the results are promising so far, maybe I will be able to propose something more robust later on.
 
-## Requirements
+## Requirements V 0.1
 - The user must be able to authenticate using OpenID Connect.
 - Two convenience endpoints for login/logout allow the user's redirection if the action was carried out correctly.
 - Claims are transmitted to the microservices as headers. The microservices use the headers information for user authorization.
 - The microservices are registered to consul. The gateway retrieve their addresses by using the service names.
 - The cluster configuration is populated automatically, using service data retrieved from consul.
 - The routes configuration is stored in consul KV store
-- YARP / .NET 7 Rate limiting is supported (Basic settings)
-- YARP / .NET 7 Rate limiting is supported (Combining algorithms, on going)
+- YARP / .NET 7 Rate limiting is supported (Basic settings, with client ip as partition key)
+
+## Requirements V 0.2 (later...)
+- [.NET 8] Policies supporting chained rate limiters. As of 16.09.2023, the feature isn't available yet - https://github.com/dotnet/aspnetcore/issues/42691, https://github.com/dotnet/aspnetcore/milestone/221)
 
 ## Structure
 - Demo: In this folder, there is a very simple demonstration API - SwizlyPeasy.Demo.API - that allows testing of the service registration in Consul, authorization with policies, and the routes configuration in "SwizlyPeasy.Gateway".
