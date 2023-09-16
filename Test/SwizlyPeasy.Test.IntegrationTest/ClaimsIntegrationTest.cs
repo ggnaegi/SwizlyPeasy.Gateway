@@ -1,9 +1,8 @@
-﻿using SwizlyPeasy.Demo.API;
-using SwizlyPeasy.Test.IntegrationTest.Extensions;
-using System.Net;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Newtonsoft.Json;
+using SwizlyPeasy.Demo.API;
 using SwizlyPeasy.Test.IntegrationTest.Auth;
+using SwizlyPeasy.Test.IntegrationTest.Extensions;
 
 namespace SwizlyPeasy.Test.IntegrationTest;
 
@@ -82,6 +81,5 @@ public class ClaimsIntegrationTest : IClassFixture<TestHttpClient<Program, Progr
         }
 
         _httpClient.Client.ResetBearerToken();
-
     }
 }

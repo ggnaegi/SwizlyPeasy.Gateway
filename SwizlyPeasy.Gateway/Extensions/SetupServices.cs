@@ -44,6 +44,7 @@ public static class SetupServices
         }).AddNewtonsoftJson(opt => { opt.UseMemberCasing(); });
 
         services.AddAuthorizationPolicy();
+        services.AddKnownProxiesAndNetworks(configuration);
         services.AddSwizlyPeasyOpenIdConnect(configuration);
         services.ConfigureConsulClient(configuration);
         services
@@ -66,6 +67,7 @@ public static class SetupServices
     /// <param name="app"></param>
     public static void UseSwizlyPeasyGateway(this WebApplication app)
     {
+        app.UseKnownProxiesAndNetworks();
         app.UseMiddleware<ExceptionsHandlerMiddleware>();
         app.Use404AsException();
         app.UseRouting();
