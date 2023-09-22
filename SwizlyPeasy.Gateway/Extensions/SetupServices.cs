@@ -32,7 +32,7 @@ public static class SetupServices
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
-    public static void AddSwizlyPeasyGateway(this IServiceCollection services, IConfiguration configuration)
+    public static IReverseProxyBuilder AddSwizlyPeasyGateway(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
         services.AddHttpClient();
@@ -47,13 +47,15 @@ public static class SetupServices
         services.AddKnownProxiesAndNetworks(configuration);
         services.AddSwizlyPeasyOpenIdConnect(configuration);
         services.ConfigureConsulClient(configuration);
-        services
+        var reverseProxyBuilder = services
             .AddReverseProxy()
             .LoadFromConsul()
             .AddAuthorizationHeaders(configuration)
             .AddStatusService();
 
         services.AddSwizlyPeasyAuthRedirections(configuration);
+
+        return reverseProxyBuilder;
     }
 
     private static void AddSwizlyPeasyAuthRedirections(this IServiceCollection services, IConfiguration configuration)
