@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SwizlyPeasy.Utils": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\dev\\repositories\\Zoom\\Partner\\Zoom.Services.Gateway\\ocelot.json\" \"D:\\dev\\repositories\\SwizlyPeasy.Gateway\\SwizlyPeasy.Gateway.API\\routes.config.json\""
+    }
+  }
+}
