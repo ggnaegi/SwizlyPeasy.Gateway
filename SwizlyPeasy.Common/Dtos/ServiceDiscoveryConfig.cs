@@ -34,4 +34,10 @@ public class ServiceDiscoveryConfig
     ///     consul service address
     /// </summary>
     public Uri ServiceDiscoveryAddress { get; set; } = new("http://localhost:8500");
+
+    /// <summary>
+    ///  Depending on the service discovery used and for performance reasons, a list
+    ///  of known services names can be provided.
+    /// </summary>
+    public string[] KnownServicesNames { get; set; } = Array.Empty<string>();
 }
