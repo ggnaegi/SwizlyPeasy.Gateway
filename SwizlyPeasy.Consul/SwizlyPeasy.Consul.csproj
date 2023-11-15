@@ -18,7 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Consul" Version="1.7.14.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
