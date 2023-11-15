@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Exceptions;
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 namespace SwizlyPeasy.Common.Extensions;
 
