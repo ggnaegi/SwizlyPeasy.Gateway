@@ -20,14 +20,14 @@ public static class ConsulClientConfigurationExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static void ConfigureConsulClient(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+        ArgumentNullException.ThrowIfNull(configuration);
 
         services.Configure<ServiceDiscoveryConfig>(configuration.GetSection(Constants.ServiceDiscoveryConfigSection));
         var serviceDiscoveryConfig = new ServiceDiscoveryConfig();
         configuration.GetSection(Constants.ServiceDiscoveryConfigSection).Bind(serviceDiscoveryConfig);
 
         var consulClient = CreateConsulClient(serviceDiscoveryConfig);
-        services.AddSingleton<IConsulClient, ConsulClient>(p => consulClient);
+        services.AddSingleton<IConsulClient, ConsulClient>(_ => consulClient);
         services.AddSingleton<IRetrieveAgentsService, RetrieveAgentsService>();
         services.AddSingleton<IKeyValueService, KeyValueService>();
     }

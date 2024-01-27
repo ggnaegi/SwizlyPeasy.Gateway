@@ -233,7 +233,7 @@ public static class OpenIdConnectExtensions
     {
         if (IsAjaxRequest(context.Request))
         {
-            context.Response.Headers[HeaderNames.Location] = context.ProtocolMessage.RedirectUri;
+            context.Response.Headers.Location = context.ProtocolMessage.RedirectUri;
             context.Response.StatusCode = 401;
             context.HandleResponse();
             return;
@@ -255,7 +255,7 @@ public static class OpenIdConnectExtensions
     private static bool IsAjaxRequest(HttpRequest request)
     {
         return string.Equals(request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal) ||
-               string.Equals(request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.Ordinal);
+               string.Equals(request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal);
     }
 
     /// <summary>

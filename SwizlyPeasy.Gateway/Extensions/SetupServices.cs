@@ -32,7 +32,8 @@ public static class SetupServices
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
-    public static IReverseProxyBuilder AddSwizlyPeasyGateway(this IServiceCollection services, IConfiguration configuration)
+    public static IReverseProxyBuilder AddSwizlyPeasyGateway(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
         services.AddHttpClient();
@@ -166,10 +167,8 @@ public static class SetupServices
     /// <param name="services"></param>
     public static void AddAuthorizationPolicy(this IServiceCollection services)
     {
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(Constants.OidcPolicy, policy => { policy.RequireAuthenticatedUser(); });
-        });
+        services.AddAuthorizationBuilder()
+            .AddPolicy(Constants.OidcPolicy, policy => { policy.RequireAuthenticatedUser(); });
     }
 
     /// <summary>
