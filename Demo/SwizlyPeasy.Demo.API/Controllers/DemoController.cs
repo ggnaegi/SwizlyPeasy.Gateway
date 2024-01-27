@@ -58,14 +58,13 @@ public class DemoController : ControllerBase
         var userClaims = HttpContext.User.Claims;
         foreach (var userClaim in userClaims)
         {
-            if (!claimsDictionary.TryGetValue(userClaim.Type, out var value))
+            if (!claimsDictionary.ContainsKey(userClaim.Type))
             {
-                claimsDictionary.Add(userClaim.Type, value);
+                claimsDictionary.Add(userClaim.Type, new List<string>());
             }
 
-            value.Add(userClaim.Value);
+            claimsDictionary[userClaim.Type].Add(userClaim.Value);
         }
-
         return claimsDictionary;
     }
 }
