@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace SwizlyPeasy.Common.Exceptions;
+﻿namespace SwizlyPeasy.Common.Exceptions;
 
 [Serializable]
 public class TooManyRequestsException : DomainException
@@ -12,15 +10,5 @@ public class TooManyRequestsException : DomainException
     /// <param name="innerException"></param>
     public TooManyRequestsException(string? msg, Exception? innerException) : base(msg, innerException)
     {
-    }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected TooManyRequestsException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-        // ...
     }
 }

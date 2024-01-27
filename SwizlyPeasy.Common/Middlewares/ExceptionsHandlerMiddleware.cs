@@ -8,20 +8,13 @@ namespace SwizlyPeasy.Common.Middlewares;
 ///     Middleware for exception handling, returning
 ///     user friendly exceptions, according to the RFC 7807 standard.
 /// </summary>
-public class ExceptionsHandlerMiddleware
+public class ExceptionsHandlerMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public ExceptionsHandlerMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception e)
         {

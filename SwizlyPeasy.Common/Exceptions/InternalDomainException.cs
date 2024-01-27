@@ -13,15 +13,4 @@ public class InternalDomainException : DomainException
     public InternalDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
     }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected InternalDomainException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        // ...
-    }
 }

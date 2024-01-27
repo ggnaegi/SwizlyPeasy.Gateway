@@ -5,14 +5,9 @@ using SwizlyPeasy.Gateway.Services;
 namespace SwizlyPeasy.Gateway.Controllers;
 
 [ApiController]
-public class StatusController : ControllerBase
+public class StatusController(IStatusService statusService) : ControllerBase
 {
-    private readonly IStatusService _statusService;
-
-    public StatusController(IStatusService statusService)
-    {
-        _statusService = statusService ?? throw new ArgumentNullException(nameof(statusService));
-    }
+    private readonly IStatusService _statusService = statusService ?? throw new ArgumentNullException(nameof(statusService));
 
     [HttpGet("")]
     public async Task<ActionResult<StatusDto>> GetStatus()

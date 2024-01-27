@@ -4,14 +4,9 @@ using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Demo.API.Authorization;
 
-public class AppAuthorizationHandler : AuthorizationHandler<BobRequirement>
+public class AppAuthorizationHandler(IServiceProvider serviceProvider) : AuthorizationHandler<BobRequirement>
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public AppAuthorizationHandler(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-    }
+    private readonly IServiceProvider _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BobRequirement requirement)
     {

@@ -13,15 +13,4 @@ public class NotFoundDomainException : DomainException
     public NotFoundDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
     }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected NotFoundDomainException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        // ...
-    }
 }

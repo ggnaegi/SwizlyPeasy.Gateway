@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace SwizlyPeasy.Common.Exceptions;
+﻿namespace SwizlyPeasy.Common.Exceptions;
 
 public abstract class DomainException : Exception
 {
@@ -18,18 +16,6 @@ public abstract class DomainException : Exception
     protected DomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
     }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected DomainException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        // ...
-    }
-
 
     public object? Context { get; set; }
 }

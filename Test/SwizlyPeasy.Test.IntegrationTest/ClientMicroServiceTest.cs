@@ -7,14 +7,10 @@ using SwizlyPeasy.Test.IntegrationTest.Extensions;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class ClientMicroServiceTest : IClassFixture<TestHttpClient<Program, Program>>
+public class ClientMicroServiceTest(TestHttpClient<Program, Program> httpClient)
+    : IClassFixture<TestHttpClient<Program, Program>>
 {
-    private readonly TestHttpClient<Program, Program> _httpClient;
-
-    public ClientMicroServiceTest(TestHttpClient<Program, Program> httpClient)
-    {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    }
+    private readonly TestHttpClient<Program, Program> _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
     [Fact]
     public async Task ClientService_NotAuthenticatedOnAnonymousEndpoint_ReturnsOk()

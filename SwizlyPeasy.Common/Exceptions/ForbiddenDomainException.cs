@@ -13,15 +13,4 @@ public class ForbiddenDomainException : DomainException
     public ForbiddenDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
     }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected ForbiddenDomainException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        // ...
-    }
 }
