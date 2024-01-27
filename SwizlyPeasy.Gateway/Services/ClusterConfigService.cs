@@ -15,7 +15,10 @@ public class ClusterConfigService(IRetrieveAgentsService agentsService, IOptions
     {
         var agentsDic = await _agentsService.RetrieveAgents();
 
-        if (!agentsDic.Any()) return new List<ClusterConfig>();
+        if (agentsDic.Count == 0)
+        {
+            return [];
+        }
 
         return agentsDic.Keys
             .Select(serviceName => new ClusterConfig

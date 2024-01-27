@@ -23,11 +23,11 @@ public class RoutesConfigService(IKeyValueService keyValueService) : IRoutesConf
 
         var configDic = JsonConvert.DeserializeObject<Dictionary<string, object>>(configString);
 
-        if (configDic == null || !configDic.ContainsKey("Routes"))
+        if (configDic == null || !configDic.TryGetValue("Routes", out var routeValue))
             throw new InternalDomainException("Please check the routes.config.json file, Routes key couldn't be found.",
                 null);
 
-        var routesDic = JObject.FromObject(configDic["Routes"]).ToObject<Dictionary<string, RouteConfig>>();
+        var routesDic = JObject.FromObject(routeValue).ToObject<Dictionary<string, RouteConfig>>();
 
         return routesDic == null
             ? throw new InternalDomainException("Please check the routes.config.json files, no routes defined.", null)
