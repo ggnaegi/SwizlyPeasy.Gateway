@@ -9,14 +9,10 @@ using SwizlyPeasy.Gateway.API;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class DynamicConfigIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
+public class DynamicConfigIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
+    : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
 {
-    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient;
-
-    public DynamicConfigIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
-    {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    }
+    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
     [Fact]
     public async Task Config_ModifyingConfigInKvStore_AfterElapsedTimeNewConfigLoadedAndEndpointReachable()

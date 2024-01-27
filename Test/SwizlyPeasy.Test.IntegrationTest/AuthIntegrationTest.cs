@@ -7,14 +7,10 @@ using SwizlyPeasy.Test.IntegrationTest.Extensions;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class AuthIntegrationTest : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
+public class AuthIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
+    : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
 {
-    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient;
-
-    public AuthIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
-    {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    }
+    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
 
     [Fact]

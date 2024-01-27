@@ -5,16 +5,11 @@ using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Gateway.Services;
 
-public class ClusterConfigService : IClusterConfigService
+public class ClusterConfigService(IRetrieveAgentsService agentsService, IOptions<ServiceDiscoveryConfig> config)
+    : IClusterConfigService
 {
-    private readonly IRetrieveAgentsService _agentsService;
-    private readonly IOptions<ServiceDiscoveryConfig> _config;
-
-    public ClusterConfigService(IRetrieveAgentsService agentsService, IOptions<ServiceDiscoveryConfig> config)
-    {
-        _agentsService = agentsService ?? throw new ArgumentNullException(nameof(agentsService));
-        _config = config ?? throw new ArgumentNullException(nameof(config));
-    }
+    private readonly IRetrieveAgentsService _agentsService = agentsService ?? throw new ArgumentNullException(nameof(agentsService));
+    private readonly IOptions<ServiceDiscoveryConfig> _config = config ?? throw new ArgumentNullException(nameof(config));
 
     public async Task<List<ClusterConfig>> RetrieveClustersConfig()
     {

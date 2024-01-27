@@ -5,15 +5,8 @@ using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Consul.Health;
 
-public class HealthCheckService : IHealthCheckService
+public class HealthCheckService(IConsulClient consulClient) : IHealthCheckService
 {
-    private readonly IConsulClient _consulClient;
-
-    public HealthCheckService(IConsulClient consulClient)
-    {
-        _consulClient = consulClient;
-    }
-
     public async Task<bool> IsServiceHealthy(string serviceId)
     {
         QueryResult<dynamic>? serviceHealth;
@@ -22,7 +15,7 @@ public class HealthCheckService : IHealthCheckService
         // consul could throw a ConsulRequestException with status 503
         try
         {
-            serviceHealth = await _consulClient.Raw.Query($"/v1/agent/health/service/id/{serviceId}", new QueryOptions());
+            serviceHealth = await consulClient.Raw.Query($"/v1/agent/health/service/id/{serviceId}", new QueryOptions());
         }
         catch (ConsulRequestException)
         {

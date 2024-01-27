@@ -7,14 +7,9 @@ using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Gateway.Services;
 
-public class RoutesConfigService : IRoutesConfigService
+public class RoutesConfigService(IKeyValueService keyValueService) : IRoutesConfigService
 {
-    private readonly IKeyValueService _keyValueService;
-
-    public RoutesConfigService(IKeyValueService keyValueService)
-    {
-        _keyValueService = keyValueService ?? throw new ArgumentNullException(nameof(keyValueService));
-    }
+    private readonly IKeyValueService _keyValueService = keyValueService ?? throw new ArgumentNullException(nameof(keyValueService));
 
     public async Task LoadRoutes(string key, string sectionString)
     {

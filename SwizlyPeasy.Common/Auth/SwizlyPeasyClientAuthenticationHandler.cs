@@ -10,13 +10,12 @@ using SwizlyPeasy.Common.Dtos;
 
 namespace SwizlyPeasy.Common.Auth;
 
-public class SwizlyPeasyClientAuthenticationHandler : AuthenticationHandler<SwizlyPeasyAuthenticationOptions>
+public class SwizlyPeasyClientAuthenticationHandler(
+    IOptionsMonitor<SwizlyPeasyAuthenticationOptions> options,
+    ILoggerFactory logger,
+    UrlEncoder encoder)
+    : AuthenticationHandler<SwizlyPeasyAuthenticationOptions>(options, logger, encoder)
 {
-    public SwizlyPeasyClientAuthenticationHandler(IOptionsMonitor<SwizlyPeasyAuthenticationOptions> options,
-        ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
-    {
-    }
-
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var claimsConfig = Context.RequestServices.GetService<IOptions<ClaimsConfig>>();

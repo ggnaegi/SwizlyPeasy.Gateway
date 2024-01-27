@@ -13,15 +13,4 @@ public class UnprocessableEntityDomainException : DomainException
     public UnprocessableEntityDomainException(string? msg, Exception? innerException) : base(msg, innerException)
     {
     }
-
-    /// <summary>
-    ///     For serialization purposes
-    /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
-    protected UnprocessableEntityDomainException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-        // ...
-    }
 }

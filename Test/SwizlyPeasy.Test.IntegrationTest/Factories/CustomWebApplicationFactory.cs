@@ -14,23 +14,16 @@ namespace SwizlyPeasy.Test.IntegrationTest.Factories;
 ///     Factory that can be used to to create a TestServer instance
 /// </summary>
 /// <typeparam name="TProgram">Type of the entry point assembly</typeparam>
-public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
+public class CustomWebApplicationFactory<TProgram>(bool useOidc = false) : WebApplicationFactory<TProgram>
     where TProgram : class
 {
-    private bool _useOidc;
-
-    public CustomWebApplicationFactory(bool useOidc = false)
-    {
-        _useOidc = useOidc;
-    }
-
     /// <summary>
     /// </summary>
     /// <param name="webHostBuilder"></param>
     /// <exception cref="Exception"></exception>
     protected override void ConfigureWebHost(IWebHostBuilder webHostBuilder)
     {
-        if (_useOidc)
+        if (useOidc)
         {
             webHostBuilder.UseEnvironment("IntegrationTest2");
             return;

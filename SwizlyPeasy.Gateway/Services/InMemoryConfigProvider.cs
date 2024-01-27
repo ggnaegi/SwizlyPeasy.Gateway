@@ -8,27 +8,22 @@ using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Gateway.Services;
 
-public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDisposable
+public class InMemoryConfigProvider(
+    IClusterConfigService clusterConfigService,
+    IRoutesConfigService routesConfigService,
+    IOptions<ServiceDiscoveryConfig> serviceDiscoveryConfig)
+    : IProxyConfigProvider, IHostedService, IDisposable
 {
-    private readonly IClusterConfigService _clusterConfigService;
+    private readonly IClusterConfigService _clusterConfigService = clusterConfigService ?? throw new ArgumentNullException(nameof(clusterConfigService));
 
     private readonly object _lockObject = new();
-    private readonly IRoutesConfigService _routesConfigService;
-    private readonly IOptions<ServiceDiscoveryConfig> _serviceDiscoveryConfig;
+    private readonly IRoutesConfigService _routesConfigService = routesConfigService ?? throw new ArgumentNullException(nameof(routesConfigService));
+    private readonly IOptions<ServiceDiscoveryConfig> _serviceDiscoveryConfig = serviceDiscoveryConfig ?? throw new ArgumentNullException(nameof(serviceDiscoveryConfig));
 
     // To detect redundant calls
     private bool _disposedValue;
     private volatile InMemoryConfig? _inMemoryConfig;
     private Timer? _timer;
-
-    public InMemoryConfigProvider(IClusterConfigService clusterConfigService, IRoutesConfigService routesConfigService,
-        IOptions<ServiceDiscoveryConfig> serviceDiscoveryConfig)
-    {
-        _clusterConfigService = clusterConfigService ?? throw new ArgumentNullException(nameof(clusterConfigService));
-        _routesConfigService = routesConfigService ?? throw new ArgumentNullException(nameof(routesConfigService));
-        _serviceDiscoveryConfig =
-            serviceDiscoveryConfig ?? throw new ArgumentNullException(nameof(serviceDiscoveryConfig));
-    }
 
     public void Dispose()
     {
