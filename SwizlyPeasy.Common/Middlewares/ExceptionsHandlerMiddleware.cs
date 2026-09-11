@@ -25,7 +25,7 @@ public class ExceptionsHandlerMiddleware(RequestDelegate next)
             response.StatusCode = rfc7807Exception.Status;
 
             var result = JsonConvert.SerializeObject(rfc7807Exception);
-            await response.WriteAsync(result);
+            await response.WriteAsync(result, context.RequestAborted);
         }
     }
 }

@@ -16,7 +16,7 @@ if (!File.Exists(args[1]))
     throw new FileNotFoundException("Swizly configuration file couldn't be found.");
 }
 
-var input = File.ReadAllText(args[0]);
+var input = await File.ReadAllTextAsync(args[0]);
 var swizlyConfigurationString = OcelotConverter.ConvertOcelotConfigurationFile(input);
 
-File.WriteAllText(args[1], swizlyConfigurationString);
+await File.WriteAllTextAsync(args[1], swizlyConfigurationString);

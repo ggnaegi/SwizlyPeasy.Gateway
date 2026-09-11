@@ -7,7 +7,7 @@ namespace SwizlyPeasy.Test.UnitTest;
 
 internal class ConsulClientFactory
 {
-    internal static IConsulClient GetKvConsulClient()
+    internal static (IConsulClient Client, Mock<IKVEndpoint> KeyValueEndpoint) GetKvConsulClient()
     {
         var clientMock = new Mock<IConsulClient>();
         var keyValueMock = new Mock<IKVEndpoint>();
@@ -37,7 +37,7 @@ internal class ConsulClientFactory
 
 
         clientMock.SetupGet(x => x.KV).Returns(keyValueMock.Object);
-        return clientMock.Object;
+        return (clientMock.Object, keyValueMock);
     }
 
     internal static IConsulClient GetAgentsConsulClient(Dictionary<string, AgentService> agentsDic)
