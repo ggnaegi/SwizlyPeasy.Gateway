@@ -77,7 +77,7 @@ public class TestHttpClient<TProgram, TProgram2> : IDisposable
 }
 
 [CollectionDefinition("TestHttpClient")]
-public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<Program, Demo.API.Program>>
+public class TestHttpClientCollection : ICollectionFixture<TestHttpClient<global::SwizlyPeasy.Gateway.API.Program, global::SwizlyPeasy.Demo.API.Program>>
 {
     // This class has no code, and is never created. Its purpose is simply
     // to be the place to apply [CollectionDefinition] and all the

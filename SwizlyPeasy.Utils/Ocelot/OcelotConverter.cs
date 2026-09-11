@@ -27,7 +27,7 @@ public static class OcelotConverter
             var routeId = $"route{id}";
             RouteConfig newConfig;
 
-            if (route.AuthenticationOptions is { AuthenticationProviderKey: not null })
+            if (route.AuthenticationOptions is { AuthenticationProviderKeys.Length: > 0 })
                 newConfig = new RouteConfig
                 {
                     ClusterId = route.ServiceName,

@@ -13,13 +13,13 @@ public class KeyValueService(IConsulClient consulClient) : IKeyValueService
             Value = value
         };
 
-        var writeResult = await consulClient.KV.Put(kvPair);
+        var writeResult = await consulClient.KV.Put(kvPair, CancellationToken.None);
         if (!writeResult.Response) throw new InternalDomainException("Unable to save data to key value store...", null);
     }
 
     public async Task<byte[]> GetFromKeyValueStore(string key)
     {
-        var result = await consulClient.KV.Get(key);
+        var result = await consulClient.KV.Get(key, CancellationToken.None);
 
         if (result.StatusCode == HttpStatusCode.NotFound)
             throw new InternalDomainException($"Key: {key} not found in key value store...", null);

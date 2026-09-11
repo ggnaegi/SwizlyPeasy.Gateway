@@ -10,8 +10,9 @@ internal class ConsulClientFactory
     internal static IConsulClient GetKvConsulClient()
     {
         var clientMock = new Mock<IConsulClient>();
+        var keyValueMock = new Mock<IKVEndpoint>();
 
-        clientMock.Setup(x => x.KV.Put(It.IsAny<KVPair>(), It.IsAny<CancellationToken>())).ReturnsAsync(
+        keyValueMock.Setup(x => x.Put(It.IsAny<KVPair>(), It.IsAny<CancellationToken>())).ReturnsAsync(
             new WriteResult<bool>
             {
                 RequestTime = new TimeSpan(0, 0, 0, 1),
@@ -19,36 +20,39 @@ internal class ConsulClientFactory
                 StatusCode = HttpStatusCode.OK
             });
 
-        clientMock.Setup(x =>
-                x.KV.Get(It.Is<string>(s => s.Equals(TestFactories.RouteConfigKey)), It.IsAny<CancellationToken>()))
+        keyValueMock.Setup(x =>
+                x.Get(It.Is<string>(s => s.Equals(TestFactories.RouteConfigKey)), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new QueryResult<KVPair>
             {
                 StatusCode = HttpStatusCode.OK,
                 Response = TestFactories.GetKvPair()
             });
 
-        clientMock.Setup(x =>
-                x.KV.Get(It.Is<string>(s => !s.Equals(TestFactories.RouteConfigKey)), It.IsAny<CancellationToken>()))
+        keyValueMock.Setup(x =>
+                x.Get(It.Is<string>(s => !s.Equals(TestFactories.RouteConfigKey)), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new QueryResult<KVPair>
             {
                 StatusCode = HttpStatusCode.NotFound
             });
 
 
+        clientMock.SetupGet(x => x.KV).Returns(keyValueMock.Object);
         return clientMock.Object;
     }
 
     internal static IConsulClient GetAgentsConsulClient(Dictionary<string, AgentService> agentsDic)
     {
         var clientMock = new Mock<IConsulClient>();
+        var agentMock = new Mock<IAgentEndpoint>();
 
-        clientMock.Setup(x => x.Agent.Services(It.IsAny<CancellationToken>())).ReturnsAsync(
+        agentMock.Setup(x => x.Services(It.IsAny<CancellationToken>())).ReturnsAsync(
             new QueryResult<Dictionary<string, AgentService>>
             {
                 StatusCode = HttpStatusCode.OK,
                 Response = agentsDic
             });
 
+        clientMock.SetupGet(x => x.Agent).Returns(agentMock.Object);
         return clientMock.Object;
     }
 

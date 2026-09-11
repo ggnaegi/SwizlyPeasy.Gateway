@@ -8,10 +8,10 @@ using SwizlyPeasy.Gateway.API;
 namespace SwizlyPeasy.Test.IntegrationTest;
 
 [Collection("TestHttpClient")]
-public class GatewayIntegrationTest(TestHttpClient<Program, Demo.API.Program> httpClient)
-    : IClassFixture<TestHttpClient<Program, Demo.API.Program>>
+public class GatewayIntegrationTest(TestHttpClient<global::SwizlyPeasy.Gateway.API.Program, global::SwizlyPeasy.Demo.API.Program> httpClient)
+    : IClassFixture<TestHttpClient<global::SwizlyPeasy.Gateway.API.Program, global::SwizlyPeasy.Demo.API.Program>>
 {
-    private readonly TestHttpClient<Program, Demo.API.Program> _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly TestHttpClient<global::SwizlyPeasy.Gateway.API.Program, global::SwizlyPeasy.Demo.API.Program> _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
 
     [Fact]
     public async Task Gateway_GetRoot_OkAndReturnsClusters()
