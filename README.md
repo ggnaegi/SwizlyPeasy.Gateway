@@ -162,10 +162,14 @@ The syntax is the same as YARP configuration for routes.
     "Authority": "https://demo.duendesoftware.com/",
     "CallbackUri": "/signin-oidc",
     "ClientId": "interactive.confidential.short",
-    "ClientSecret": "secret",
+    "ClientSecret": "",
     "RedirectUri": "",
     "Scopes": [ "openid", "profile", "email", "offline_access" ],
     "DisableOidc": true
+  },
+  "DataProtection": {
+    "ApplicationName": "SwizlyPeasy.Gateway",
+    "KeyRingPath": "/var/lib/swizlypeasy/data-protection-keys"
   },
   "ServiceDiscovery": {
     "Scheme": "http",
@@ -227,6 +231,8 @@ The syntax is the same as YARP configuration for routes.
   ]
 }
 ```
+
+When OIDC is enabled, configure a HTTPS authority, client ID, and client secret through environment variables or a secret store; do not commit production credentials. For multiple replicas, mount the same persistent volume at `DataProtection:KeyRingPath` so cookie-encryption keys survive restarts and are shared by every gateway instance.
 ### Configure the rate limiter
 
 Please read the documentation for more information about the rate limiting algorithms used: https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit

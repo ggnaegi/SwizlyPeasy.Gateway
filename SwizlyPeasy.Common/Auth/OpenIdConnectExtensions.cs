@@ -1,5 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+﻿using System.Net;
+using Microsoft.AspNetCore.DataProtection;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -52,9 +52,8 @@ public static class OpenIdConnectExtensions
     /// <returns></returns>
     private static bool HasExpired(string expiresAt, int refreshThresholdMinutes)
     {
-        return DateTimeOffset
-            .Parse(expiresAt)
-            .Subtract(DateTimeOffset.UtcNow) < TimeSpan.FromMinutes(refreshThresholdMinutes);
+        return !DateTimeOffset.TryParse(expiresAt, out var expiration) ||
+               expiration.Subtract(DateTimeOffset.UtcNow) < TimeSpan.FromMinutes(refreshThresholdMinutes);
     }
 
     /// <summary>
@@ -64,13 +63,17 @@ public static class OpenIdConnectExtensions
     /// <param name="configuration"></param>
     public static void AddSwizlyPeasyOpenIdConnect(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<OidcConfig>(configuration.GetSection(Constants.OidcConfigSection));
+        services.AddOptions<OidcConfig>()
+            .BindConfiguration(Constants.OidcConfigSection)
+            .Validate(ValidateOidcConfiguration)
+            .ValidateOnStart();
 
         var config = new OidcConfig();
         configuration.GetSection(Constants.OidcConfigSection).Bind(config);
 
         if (!config.DisableOidc)
         {
+            services.ConfigureDataProtection(configuration);
             services.ConfigureDiscoveryCache(config);
             services.AddAuthentication(options =>
                 {
@@ -83,6 +86,40 @@ public static class OpenIdConnectExtensions
         }
 
         services.ConfigureCors(config);
+    }
+
+    private static bool ValidateOidcConfiguration(OidcConfig config)
+    {
+        if (config.DisableOidc) return true;
+
+        if (!Uri.TryCreate(config.Authority, UriKind.Absolute, out var authority) ||
+            authority.Scheme != Uri.UriSchemeHttps ||
+            string.IsNullOrWhiteSpace(config.ClientId) ||
+            string.IsNullOrWhiteSpace(config.ClientSecret) ||
+            !config.CallbackUri.StartsWith('/'))
+            return false;
+
+        if (config.RefreshTokenExpirationInHours <= 0 || config.RefreshThresholdMinutes <= 0) return false;
+
+        if (!string.IsNullOrWhiteSpace(config.RedirectUri) &&
+            (!Uri.TryCreate(config.RedirectUri, UriKind.Absolute, out var redirectUri) ||
+             redirectUri.Scheme != Uri.UriSchemeHttps))
+            return false;
+
+        return !config.AllowCors ||
+               config.Origins.Length > 0 &&
+               config.Origins.All(origin => Uri.TryCreate(origin, UriKind.Absolute, out var originUri) &&
+                                            originUri.Scheme == Uri.UriSchemeHttps);
+    }
+
+    private static void ConfigureDataProtection(this IServiceCollection services, IConfiguration configuration)
+    {
+        var config = new DataProtectionConfig();
+        configuration.GetSection(Constants.DataProtectionConfigSection).Bind(config);
+
+        var builder = services.AddDataProtection().SetApplicationName(config.ApplicationName);
+        if (!string.IsNullOrWhiteSpace(config.KeyRingPath))
+            builder.PersistKeysToFileSystem(new DirectoryInfo(config.KeyRingPath));
     }
 
 
@@ -206,6 +243,7 @@ public static class OpenIdConnectExtensions
             foreach (var scope in scopes) options.Scope.Add(scope);
 
             options.GetClaimsFromUserInfoEndpoint = true;
+            options.MapInboundClaims = false;
 
             //fix for production environment
             options.Events.OnRedirectToIdentityProvider =
@@ -214,10 +252,6 @@ public static class OpenIdConnectExtensions
             //options.Events.OnMessageReceived
             options.BackchannelHttpHandler = new HttpClientHandler { UseCookies = false };
 
-            //avoiding having the jwt claim types mapped to identity
-            var jwtHandler = new JwtSecurityTokenHandler();
-            jwtHandler.InboundClaimTypeMap.Clear();
-            options.SecurityTokenValidator = jwtHandler;
         });
 
         return builder;
@@ -266,9 +300,17 @@ public static class OpenIdConnectExtensions
     /// <returns></returns>
     private static async Task OnValidatePrincipal(CookieValidatePrincipalContext context, OidcConfig config)
     {
-        if (HasExpired(context.Properties.GetTokenValue("expires_at") ?? throw new InvalidOperationException(),
-                config.RefreshThresholdMinutes))
+        var expiresAt = context.Properties.GetTokenValue("expires_at");
+        if (string.IsNullOrWhiteSpace(expiresAt) || HasExpired(expiresAt, config.RefreshThresholdMinutes))
         {
+            var refreshToken = context.Properties.GetTokenValue("refresh_token");
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                context.RejectPrincipal();
+                await context.HttpContext.SignOutAsync();
+                return;
+            }
+
             //getting discovery document, avoiding hard coding the token endpoint uri
             //somewhere, using discovery cache to improve performance
             //avoiding not needed calls to the discovery endpoint.
@@ -276,13 +318,17 @@ public static class OpenIdConnectExtensions
             if (discoveryCache == null) throw new InternalDomainException("Discovery cache misconfiguration", null);
 
             var discoveryDocument = await discoveryCache.GetAsync();
+            if (discoveryDocument.IsError || string.IsNullOrWhiteSpace(discoveryDocument.TokenEndpoint))
+            {
+                context.RejectPrincipal();
+                await context.HttpContext.SignOutAsync();
+                return;
+            }
 
 
             //creating new http client
             //with custom handler to avoid cookies usage
-            var currentClient = new HttpClient(
-                new HttpClientHandler { UseCookies = false }
-            );
+            var currentClient = context.HttpContext.RequestServices.GetRequiredService<IHttpClientFactory>().CreateClient();
 
             //requesting new tokens using the refresh token
             var response = await currentClient.RequestRefreshTokenAsync(new RefreshTokenRequest
@@ -291,11 +337,11 @@ public static class OpenIdConnectExtensions
                 ClientId = config.ClientId,
                 ClientSecret = config.ClientSecret,
                 GrantType = "refresh_token",
-                RefreshToken = context.Properties.GetTokenValue("refresh_token")
+                RefreshToken = refreshToken
             });
 
 
-            if (!response.IsError)
+            if (!response.IsError && !string.IsNullOrWhiteSpace(response.AccessToken))
             {
                 var expiresInSeconds = response.ExpiresIn;
                 var updatedExpiresAt = DateTimeOffset.UtcNow.AddSeconds(expiresInSeconds);
@@ -303,7 +349,8 @@ public static class OpenIdConnectExtensions
                 //refresh token is a single usage token, so we have to update it as well.
                 context.Properties.UpdateTokenValue("expires_at", updatedExpiresAt.ToString());
                 context.Properties.UpdateTokenValue("access_token", response.AccessToken);
-                context.Properties.UpdateTokenValue("refresh_token", response.RefreshToken);
+                if (!string.IsNullOrWhiteSpace(response.RefreshToken))
+                    context.Properties.UpdateTokenValue("refresh_token", response.RefreshToken);
 
                 context.ShouldRenew = true;
             }

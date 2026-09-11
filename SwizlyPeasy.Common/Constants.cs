@@ -12,6 +12,7 @@ public static class Constants
     public const string Cookie = "SwizlyPeasyCookie";
     public const string CookiesAuthenticationProviderKey = "CookiesAuthentication";
     public const string OidcConfigSection = "OidcConfig";
+    public const string DataProtectionConfigSection = "DataProtection";
     public const string AuthRedirectionConfigSection = "AuthRedirectionConfig";
     public const string ServiceDiscoveryConfigSection = "ServiceDiscovery";
     public const string ServiceRegistrationConfigSection = "ServiceRegistration";
