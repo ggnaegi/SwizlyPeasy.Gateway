@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Consul;
+using Moq;
 using SwizlyPeasy.Consul.Agents;
 using SwizlyPeasy.Consul.Health;
 using SwizlyPeasy.Consul.KeyValueStore;
@@ -30,7 +31,14 @@ public static class TestFactories
 
     public static KeyValueService GetKeyValueService()
     {
-        var consulClient = ConsulClientFactory.GetKvConsulClient();
+        var (consulClient, _) = ConsulClientFactory.GetKvConsulClient();
+        return new KeyValueService(consulClient);
+    }
+
+    public static KeyValueService GetKeyValueService(out Mock<IKVEndpoint> keyValueEndpoint)
+    {
+        var (consulClient, endpoint) = ConsulClientFactory.GetKvConsulClient();
+        keyValueEndpoint = endpoint;
         return new KeyValueService(consulClient);
     }
 

@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using Consul;
+using Moq;
 using SwizlyPeasy.Common.Exceptions;
 
 namespace SwizlyPeasy.Test.UnitTest.Consul;
@@ -8,9 +10,17 @@ public class KeyValueStoreTest
     [Fact]
     public async Task SaveToKeyValueStore_DoesNotThrowException()
     {
-        var keyValueService = TestFactories.GetKeyValueService();
-        await keyValueService.SaveToKeyValueStore(TestFactories.RouteConfigKey,
-            Encoding.UTF8.GetBytes(TestFactories.RouteConfigString));
+        var keyValueService = TestFactories.GetKeyValueService(out var keyValueEndpoint);
+        var value = Encoding.UTF8.GetBytes(TestFactories.RouteConfigString);
+
+        await keyValueService.SaveToKeyValueStore(TestFactories.RouteConfigKey, value);
+
+        keyValueEndpoint.Verify(
+            endpoint => endpoint.Put(
+                It.Is<KVPair>(pair => pair.Key == TestFactories.RouteConfigKey &&
+                                      pair.Value.SequenceEqual(value)),
+                CancellationToken.None),
+            Times.Once);
     }
 
     [Fact]
