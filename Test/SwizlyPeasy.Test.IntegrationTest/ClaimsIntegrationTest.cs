@@ -63,7 +63,7 @@ public class ClaimsIntegrationTest(TestHttpClient<global::SwizlyPeasy.Gateway.AP
         Assert.NotNull(claimsDic);
         Assert.NotEmpty(claimsDic);
 
-        Assert.Equal(4, claimsDic.Keys.Count);
+        Assert.Equal(6, claimsDic.Keys.Count);
 
         var testUser = new TestUser();
         var testUserDic = testUser.GetClaims();
@@ -75,6 +75,9 @@ public class ClaimsIntegrationTest(TestHttpClient<global::SwizlyPeasy.Gateway.AP
             Assert.NotNull(value);
             Assert.Equal(testUserDic[key].ToString(), value);
         }
+
+        Assert.Contains(ClaimTypes.NameIdentifier, claimsDic.Keys);
+        Assert.Contains(ClaimTypes.Email, claimsDic.Keys);
 
         _httpClient.Client.ResetBearerToken();
     }
