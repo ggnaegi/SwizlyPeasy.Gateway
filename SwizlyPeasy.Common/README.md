@@ -7,7 +7,7 @@ In this package, some extension methods are provided for OIDC configuration, Hea
 To configure OIDC, you should use the extension method ``` AddSwizlyPeasyOpenIdConnect(this IServiceCollection services, IConfiguration configuration) ```
 in ``` program.cs ``` like this ``` services.AddSwizlyPeasyOpenIdConnect(configuration); ```
 
-Without any settings set in appsettings, the default values will be loaded, configuring OIDC for a demo IDP (duendesoftware).
+OIDC is disabled only when `DisableOidc` is set. When enabled, a HTTPS authority, client ID, and client secret are required.
 
 Below you can find the OIDC configuration parameters (in appsettings).
 ``` json
@@ -17,7 +17,7 @@ Below you can find the OIDC configuration parameters (in appsettings).
     "Authority": "https://demo.duendesoftware.com/",
     "CallbackUri": "/signin-oidc",
     "ClientId": "interactive.confidential.short",
-    "ClientSecret": "secret",
+    "ClientSecret": "",
     "RedirectUri": "",
     "Scopes": [ "openid", "profile", "email", "offline_access" ]
   }
