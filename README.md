@@ -22,8 +22,8 @@ The solution proposed here, "SwizlyPeasy.Gateway", is for now a PoC (Proof of Co
 - The routes configuration is stored in consul KV store
 - YARP / .NET 7 Rate limiting is supported (Basic settings, with client ip as partition key)
 
-## Requirements V 0.2 (later...)
-- [.NET 8] Policies supporting chained rate limiters. As of 16.09.2023, the feature isn't available yet - https://github.com/dotnet/aspnetcore/issues/42691, https://github.com/dotnet/aspnetcore/milestone/221)
+## Requirements V 0.2
+- Chained rate limiter policies are supported.
 
 ## Structure
 - Demo: In this folder, there is a very simple demonstration API - SwizlyPeasy.Demo.API - that allows testing of the service registration in Consul, authorization with policies, and the routes configuration in "SwizlyPeasy.Gateway".
@@ -229,9 +229,35 @@ The syntax is the same as YARP configuration for routes.
 ```
 ### Configure the rate limiter
 
-Please read the documentation for more information about the rate limiting algorithms used: https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-7.0
+Please read the documentation for more information about the rate limiting algorithms used: https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit
 
-The current solution only supports the 4 algorithms proposed by Microsoft. At the minute, it is not possible to combine them and the policies configuration must be defined in gateway's app settings.
+The gateway supports the four Microsoft algorithms and chained policies. Each policy is partitioned by client IP address. Configure a chain in `ChainedRateLimiterPolicies` and reference its policy name from the YARP route:
+
+```json
+{
+  "ChainedRateLimiterPolicies": [
+    {
+      "PolicyName": "api-burst-protection",
+      "RateLimiterConfigs": [
+        {
+          "RateLimiterType": "FixedWindowRateLimiter",
+          "AutoReplenishment": true,
+          "PermitLimit": 100,
+          "QueueLimit": 0,
+          "QueueProcessingOrder": 0,
+          "Window": 60
+        },
+        {
+          "RateLimiterType": "ConcurrencyLimiter",
+          "PermitLimit": 10,
+          "QueueLimit": 0,
+          "QueueProcessingOrder": 0
+        }
+      ]
+    }
+  ]
+}
+```
 
 
 ## Registering a client

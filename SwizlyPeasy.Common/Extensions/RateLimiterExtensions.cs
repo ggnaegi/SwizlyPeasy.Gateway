@@ -47,7 +47,14 @@ public static class RateLimiterExtensions
             var rateLimiterPolicyConfigs = new List<RateLimiterPolicyConfig>();
             configuration.GetSection(Constants.RateLimiterPoliciesSection).Bind(rateLimiterPolicyConfigs);
 
+            var chainedRateLimiterPolicyConfigs = new List<ChainedRateLimiterPolicyConfig>();
+            configuration.GetSection(Constants.ChainedRateLimiterPoliciesSection).Bind(chainedRateLimiterPolicyConfigs);
+
+            ValidatePolicyNames(rateLimiterPolicyConfigs.Cast<IRateLimiterPolicyConfig>()
+                .Concat(chainedRateLimiterPolicyConfigs));
             foreach (var policyConfig in rateLimiterPolicyConfigs) options.AddSwizlyPeasyPolicy(policyConfig);
+            foreach (var chainedPolicyConfig in chainedRateLimiterPolicyConfigs)
+                options.AddSwizlyPeasyChainedPolicy(chainedPolicyConfig);
         });
     }
 
@@ -59,75 +66,108 @@ public static class RateLimiterExtensions
     /// <exception cref="InternalDomainException"></exception>
     private static void AddSwizlyPeasyPolicy(this RateLimiterOptions options, RateLimiterPolicyConfig config)
     {
-        switch (config.RateLimiterType)
+        ValidatePolicyName(config.PolicyName);
+        ValidateRateLimiterConfig(config, config.PolicyName);
+        options.AddPolicy(config.PolicyName, context =>
         {
-            case Constants.ChainedRateLimiter:
-                // https://github.com/dotnet/aspnetcore/issues/42691
-                throw new NotImplementedException("Chained rate limiters not yet implemented...");
-            case nameof(FixedWindowRateLimiter):
-                options.AddPolicy(config.PolicyName, context =>
-                    {
-                        return RateLimitPartition.GetFixedWindowLimiter(context.ResolveClientIpAddress(), _ =>
-                            new FixedWindowRateLimiterOptions
-                            {
-                                AutoReplenishment = config.AutoReplenishment,
-                                PermitLimit = config.PermitLimit,
-                                QueueLimit = config.QueueLimit,
-                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
-                                Window = TimeSpan.FromSeconds(config.Window)
-                            });
-                    }
-                );
-                return;
-            case nameof(SlidingWindowRateLimiter):
-                options.AddPolicy(config.PolicyName, context =>
-                    {
-                        return RateLimitPartition.GetSlidingWindowLimiter(context.ResolveClientIpAddress(), _ =>
-                            new SlidingWindowRateLimiterOptions
-                            {
-                                AutoReplenishment = config.AutoReplenishment,
-                                PermitLimit = config.PermitLimit,
-                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
-                                QueueLimit = config.QueueLimit,
-                                Window = TimeSpan.FromSeconds(config.Window),
-                                SegmentsPerWindow = config.SegmentsPerWindow
-                            });
-                    }
-                );
-                return;
-            case nameof(ConcurrencyLimiter):
-                options.AddPolicy(config.PolicyName, context =>
-                    {
-                        return RateLimitPartition.GetConcurrencyLimiter(context.ResolveClientIpAddress(), _ =>
-                            new ConcurrencyLimiterOptions
-                            {
-                                PermitLimit = config.PermitLimit,
-                                QueueLimit = config.QueueLimit,
-                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder
-                            });
-                    }
-                );
-                return;
-            case nameof(TokenBucketRateLimiter):
-                options.AddPolicy(config.PolicyName, context =>
-                    {
-                        return RateLimitPartition.GetTokenBucketLimiter(context.ResolveClientIpAddress(), _ =>
-                            new TokenBucketRateLimiterOptions
-                            {
-                                AutoReplenishment = config.AutoReplenishment,
-                                QueueLimit = config.QueueLimit,
-                                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
-                                ReplenishmentPeriod = TimeSpan.FromSeconds(config.ReplenishmentPeriod),
-                                TokenLimit = config.TokenLimit,
-                                TokensPerPeriod = config.TokensPerPeriod
-                            });
-                    }
-                );
-                return;
-            default:
-                throw new InternalDomainException(
-                    $"The rate limiter type {config.RateLimiterType} is unknown, please check the app settings.",
-                    null);
-        }
+            return RateLimitPartition.Get(context.ResolveClientIpAddress(), _ => CreateRateLimiter(config));
+        });
+    }
+
+    private static void AddSwizlyPeasyChainedPolicy(this RateLimiterOptions options,
+        ChainedRateLimiterPolicyConfig config)
+    {
+        ValidatePolicyName(config.PolicyName);
+        if (config.RateLimiterConfigs.Count < 2)
+            throw new InternalDomainException(
+                $"The chained rate limiter policy {config.PolicyName} must contain at least two limiter configurations, please check the app settings.",
+                null);
+
+        foreach (var rateLimiterConfig in config.RateLimiterConfigs)
+            ValidateRateLimiterConfig(rateLimiterConfig, config.PolicyName);
+
+        options.AddPolicy(config.PolicyName, context =>
+            RateLimitPartition.Get(context.ResolveClientIpAddress(), _ =>
+                RateLimiter.CreateChained(config.RateLimiterConfigs.Select(CreateRateLimiter).ToArray())));
+    }
+
+    private static RateLimiter CreateRateLimiter(RateLimiterConfig config)
+    {
+        return config.RateLimiterType switch
+        {
+            nameof(FixedWindowRateLimiter) => new FixedWindowRateLimiter(new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = config.AutoReplenishment,
+                PermitLimit = config.PermitLimit,
+                QueueLimit = config.QueueLimit,
+                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                Window = TimeSpan.FromSeconds(config.Window)
+            }),
+            nameof(SlidingWindowRateLimiter) => new SlidingWindowRateLimiter(new SlidingWindowRateLimiterOptions
+            {
+                AutoReplenishment = config.AutoReplenishment,
+                PermitLimit = config.PermitLimit,
+                QueueLimit = config.QueueLimit,
+                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                Window = TimeSpan.FromSeconds(config.Window),
+                SegmentsPerWindow = config.SegmentsPerWindow
+            }),
+            nameof(ConcurrencyLimiter) => new ConcurrencyLimiter(new ConcurrencyLimiterOptions
+            {
+                PermitLimit = config.PermitLimit,
+                QueueLimit = config.QueueLimit,
+                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder
+            }),
+            nameof(TokenBucketRateLimiter) => new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
+            {
+                AutoReplenishment = config.AutoReplenishment,
+                QueueLimit = config.QueueLimit,
+                QueueProcessingOrder = (QueueProcessingOrder)config.QueueProcessingOrder,
+                ReplenishmentPeriod = TimeSpan.FromSeconds(config.ReplenishmentPeriod),
+                TokenLimit = config.TokenLimit,
+                TokensPerPeriod = config.TokensPerPeriod
+            }),
+            _ => throw new InternalDomainException(
+                $"The rate limiter type {config.RateLimiterType} is unknown, please check the app settings.", null)
+        };
+    }
+
+    private static void ValidatePolicyNames(IEnumerable<IRateLimiterPolicyConfig> policies)
+    {
+        var duplicatePolicy = policies.GroupBy(policy => policy.PolicyName, StringComparer.Ordinal)
+            .FirstOrDefault(group => group.Count() > 1);
+
+        if (duplicatePolicy != null)
+            throw new InternalDomainException(
+                $"The rate limiter policy name {duplicatePolicy.Key} is duplicated, please check the app settings.", null);
+    }
+
+    private static void ValidatePolicyName(string policyName)
+    {
+        if (string.IsNullOrWhiteSpace(policyName))
+            throw new InternalDomainException("A rate limiter policy name is required, please check the app settings.", null);
+    }
+
+    private static void ValidateRateLimiterConfig(RateLimiterConfig config, string policyName)
+    {
+        if (config.PermitLimit <= 0 || config.QueueLimit < 0 ||
+            !Enum.IsDefined((QueueProcessingOrder)config.QueueProcessingOrder))
+            throw new InternalDomainException(
+                $"The rate limiter policy {policyName} has invalid permit, queue, or queue processing settings, please check the app settings.",
+                null);
+
+        if (config.RateLimiterType is nameof(FixedWindowRateLimiter) or nameof(SlidingWindowRateLimiter) &&
+            config.Window <= 0)
+            throw new InternalDomainException(
+                $"The rate limiter policy {policyName} must have a positive window, please check the app settings.", null);
+
+        if (config.RateLimiterType == nameof(SlidingWindowRateLimiter) && config.SegmentsPerWindow <= 0)
+            throw new InternalDomainException(
+                $"The sliding window policy {policyName} must have at least one segment, please check the app settings.", null);
+
+        if (config.RateLimiterType == nameof(TokenBucketRateLimiter) &&
+            (config.ReplenishmentPeriod <= 0 || config.TokenLimit <= 0 || config.TokensPerPeriod <= 0))
+            throw new InternalDomainException(
+                $"The token bucket policy {policyName} has invalid token settings, please check the app settings.", null);
     }
 }
