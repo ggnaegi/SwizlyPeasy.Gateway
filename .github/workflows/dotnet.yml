@@ -18,8 +18,13 @@ on:
 jobs:
   CI_Pipeline:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -40,7 +45,8 @@ jobs:
     - name: Rename paths in coverage file (Integration Test)
       run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.IntegrationTest/TestResults/coverage.opencover.xml
     - name: SonarScanner for .NET 10 with pull request decoration support
-      uses: highbyte/sonarscan-dotnet@v2.3.1
+      if: ${{ env.SONAR_TOKEN != '' }}
+      uses: highbyte/sonarscan-dotnet@v2.5.1
       with:
         sonarProjectKey: ggnaegi_SwizlyPeasy.Gateway
         sonarProjectName:  SwizlyPeasy.Gateway
@@ -48,7 +54,4 @@ jobs:
         dotnetBuildArguments: SwizlyPeasy.Gateway.sln
         dotnetDisableTests: true
         sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/*.opencover.xml" /d:sonar.verbose=true /d:sonar.scm.exclusions.disabled=true /d:sonar.coverage.exclusions="**Test*.cs"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
