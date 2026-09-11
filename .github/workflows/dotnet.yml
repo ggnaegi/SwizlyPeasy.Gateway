@@ -46,7 +46,7 @@ jobs:
       run: sed -i 's|/home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway|/github/workspace|g' /home/runner/work/SwizlyPeasy.Gateway/SwizlyPeasy.Gateway/Test/SwizlyPeasy.Test.IntegrationTest/TestResults/coverage.opencover.xml
     - name: SonarScanner for .NET 10 with pull request decoration support
       if: ${{ env.SONAR_TOKEN != '' }}
-      uses: highbyte/sonarscan-dotnet@v2.5.1
+      uses: highbyte/sonarscan-dotnet@8642efb8793ae4a89bd1e6cdf0a1aef1e582f9bb # v2.5.1
       with:
         sonarProjectKey: ggnaegi_SwizlyPeasy.Gateway
         sonarProjectName:  SwizlyPeasy.Gateway
