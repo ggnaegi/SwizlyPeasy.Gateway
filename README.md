@@ -231,29 +231,32 @@ The syntax is the same as YARP configuration for routes.
 
 Please read the documentation for more information about the rate limiting algorithms used: https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit
 
-The gateway supports the four Microsoft algorithms and chained policies. Each policy is partitioned by client IP address. Configure a chain in `ChainedRateLimiterPolicies` and reference its policy name from the YARP route:
+The gateway supports the four Microsoft algorithms and chained policies. Each policy is partitioned by client IP address. Define reusable limiters in `RateLimiterPolicies`, then configure a chain in `ChainedRateLimiterPolicies` by referencing their policy names:
 
 ```json
 {
+  "RateLimiterPolicies": [
+    {
+      "PolicyName": "burst",
+      "RateLimiterType": "FixedWindowRateLimiter",
+      "AutoReplenishment": true,
+      "PermitLimit": 100,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 0,
+      "Window": 60
+    },
+    {
+      "PolicyName": "concurrency",
+      "RateLimiterType": "ConcurrencyLimiter",
+      "PermitLimit": 10,
+      "QueueLimit": 0,
+      "QueueProcessingOrder": 0
+    }
+  ],
   "ChainedRateLimiterPolicies": [
     {
       "PolicyName": "api-burst-protection",
-      "RateLimiterConfigs": [
-        {
-          "RateLimiterType": "FixedWindowRateLimiter",
-          "AutoReplenishment": true,
-          "PermitLimit": 100,
-          "QueueLimit": 0,
-          "QueueProcessingOrder": 0,
-          "Window": 60
-        },
-        {
-          "RateLimiterType": "ConcurrencyLimiter",
-          "PermitLimit": 10,
-          "QueueLimit": 0,
-          "QueueProcessingOrder": 0
-        }
-      ]
+      "RateLimiterPolicyNames": [ "burst", "concurrency" ]
     }
   ]
 }

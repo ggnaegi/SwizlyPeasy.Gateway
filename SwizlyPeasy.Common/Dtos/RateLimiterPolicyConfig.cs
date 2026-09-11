@@ -29,5 +29,5 @@ public class RateLimiterPolicyConfig : RateLimiterConfig, IRateLimiterPolicyConf
 public class ChainedRateLimiterPolicyConfig : IRateLimiterPolicyConfig
 {
     public string PolicyName { get; set; } = "DefaultPolicy";
-    public List<RateLimiterConfig> RateLimiterConfigs { get; set; } = [];
+    public List<string> RateLimiterPolicyNames { get; set; } = [];
 }

@@ -53,8 +53,11 @@ public static class RateLimiterExtensions
             ValidatePolicyNames(rateLimiterPolicyConfigs.Cast<IRateLimiterPolicyConfig>()
                 .Concat(chainedRateLimiterPolicyConfigs));
             foreach (var policyConfig in rateLimiterPolicyConfigs) options.AddSwizlyPeasyPolicy(policyConfig);
+
+            var policiesByName = rateLimiterPolicyConfigs.ToDictionary(policy => policy.PolicyName,
+                StringComparer.Ordinal);
             foreach (var chainedPolicyConfig in chainedRateLimiterPolicyConfigs)
-                options.AddSwizlyPeasyChainedPolicy(chainedPolicyConfig);
+                options.AddSwizlyPeasyChainedPolicy(chainedPolicyConfig, policiesByName);
         });
     }
 
@@ -75,20 +78,28 @@ public static class RateLimiterExtensions
     }
 
     private static void AddSwizlyPeasyChainedPolicy(this RateLimiterOptions options,
-        ChainedRateLimiterPolicyConfig config)
+        ChainedRateLimiterPolicyConfig config, IReadOnlyDictionary<string, RateLimiterPolicyConfig> policiesByName)
     {
         ValidatePolicyName(config.PolicyName);
-        if (config.RateLimiterConfigs.Count < 2)
+        if (config.RateLimiterPolicyNames.Count < 2)
             throw new InternalDomainException(
-                $"The chained rate limiter policy {config.PolicyName} must contain at least two limiter configurations, please check the app settings.",
+                $"The chained rate limiter policy {config.PolicyName} must reference at least two policies, please check the app settings.",
                 null);
 
-        foreach (var rateLimiterConfig in config.RateLimiterConfigs)
-            ValidateRateLimiterConfig(rateLimiterConfig, config.PolicyName);
+        var chainedRateLimiterConfigs = new List<RateLimiterPolicyConfig>();
+        foreach (var policyName in config.RateLimiterPolicyNames)
+        {
+            if (!policiesByName.TryGetValue(policyName, out var rateLimiterConfig))
+                throw new InternalDomainException(
+                    $"The chained rate limiter policy {config.PolicyName} references unknown policy {policyName}, please check the app settings.",
+                    null);
+
+            chainedRateLimiterConfigs.Add(rateLimiterConfig);
+        }
 
         options.AddPolicy(config.PolicyName, context =>
             RateLimitPartition.Get(context.ResolveClientIpAddress(), _ =>
-                RateLimiter.CreateChained(config.RateLimiterConfigs.Select(CreateRateLimiter).ToArray())));
+                RateLimiter.CreateChained(chainedRateLimiterConfigs.Select(CreateRateLimiter).ToArray())));
     }
 
     private static RateLimiter CreateRateLimiter(RateLimiterConfig config)
