@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SwizlyPeasy.Common.Dtos;
 using SwizlyPeasy.Common.Exceptions;
-using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
 namespace SwizlyPeasy.Common.Extensions;
 
@@ -35,13 +34,13 @@ public static class ForwardedHeaderExtensions
             // Only loopback proxies are allowed by default.
             // Clear that restriction because forwarders are enabled by explicit 
             // configuration.
-            options.KnownNetworks.Clear();
+            options.KnownIPNetworks.Clear();
             options.KnownProxies.Clear();
 
             foreach (var proxy in proxiesAndNetworksConfig.Proxies) options.KnownProxies.Add(IPAddress.Parse(proxy));
 
             // assuming prefix length = 24
-            foreach (var network in proxiesAndNetworksConfig.KnownNetworks) options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(network), 24));
+            foreach (var network in proxiesAndNetworksConfig.KnownNetworks) options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse(network), 24));
         });
     }
 
